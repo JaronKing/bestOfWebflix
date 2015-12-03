@@ -250,3 +250,7303 @@ break;case"after":e(this.getRowCells(l)[d],this.createCells(m,1))}else l.insertB
 }}}(wysihtml5),function(a){var b=/(\s|^)background-color\s*:\s*[^;\s]+;?/gi;a.commands.bgColorStyle={exec:function(c,d,e){var f,g=a.quirks.styleParser.parseColor("object"==typeof e?"background-color:"+e.color:"background-color:"+e,"background-color");g&&(f="background-color: rgb("+g[0]+","+g[1]+","+g[2]+");",1!==g[3]&&(f+="background-color: rgba("+g[0]+","+g[1]+","+g[2]+","+g[3]+");"),a.commands.formatInline.execWithToggle(c,d,"span",!1,!1,f,b))},state:function(c,d){return a.commands.formatInline.state(c,d,"span",!1,!1,"background-color",b)},stateValue:function(b,c,d){var e,f=this.state(b,c),g=!1;return f&&a.lang.object(f).isArray()&&(f=f[0]),f&&(e=f.getAttribute("style"),e)?(g=a.quirks.styleParser.parseColor(e,"background-color"),a.quirks.styleParser.unparseColor(g,d)):!1}}}(wysihtml5),function(a){function b(b,c,e){b.className?(d(b,e),b.className=a.lang.string(b.className+" "+c).trim()):b.className=c}function c(b,c,d){e(b,d),b.getAttribute("style")?b.setAttribute("style",a.lang.string(b.getAttribute("style")+" "+c).trim()):b.setAttribute("style",c)}function d(b,c){var d=c.test(b.className);return b.className=b.className.replace(c,""),""==a.lang.string(b.className).trim()&&b.removeAttribute("class"),d}function e(b,c){var d=c.test(b.getAttribute("style"));return b.setAttribute("style",(b.getAttribute("style")||"").replace(c,"")),""==a.lang.string(b.getAttribute("style")||"").trim()&&b.removeAttribute("style"),d}function f(a){var b=a.lastChild;b&&g(b)&&b.parentNode.removeChild(b)}function g(a){return"BR"===a.nodeName}function h(b,c){var d,e,g;for(b.selection.isCollapsed()&&b.selection.selectLine(),d=b.selection.surround(c),e=0,g=d.length;g>e;e++)a.dom.lineBreaks(d[e]).remove(),f(d[e])}function i(b){return!!a.lang.string(b.className).trim()}function j(b){return!!a.lang.string(b.getAttribute("style")||"").trim()}var k=a.dom,l=["H1","H2","H3","H4","H5","H6","P","PRE","DIV"];a.commands.formatBlock={exec:function(f,g,m,n,o,p,q){var r,s,t,u,v,w=(f.doc,this.state(f,g,m,n,o,p,q)),x=f.config.useLineBreaks,y=x?"DIV":"P";return m="string"==typeof m?m.toUpperCase():m,w.length?(f.selection.executeAndRestoreRangy(function(){var b,c,f;for(b=w.length;b--;){if(o&&(s=d(w[b],o)),q&&(u=e(w[b],q)),(u||s)&&null===m&&w[b].nodeName!=y)return;c=i(w[b]),f=j(w[b]),c||f||!x&&"P"!==m?k.renameElement(w[b],"P"===m?"DIV":y):(a.dom.lineBreaks(w[b]).add(),k.replaceWithChildNodes(w[b]))}}),void 0):((null!==m&&!a.lang.array(l).contains(m)||(r=f.selection.findNodesInSelection(l).concat(f.selection.getSelectedOwnNodes()),f.selection.executeAndRestoreRangy(function(){for(var a=r.length;a--;)v=k.getParentElement(r[a],{nodeName:l}),v==f.element&&(v=null),v&&(m&&(v=k.renameElement(v,m)),n&&b(v,n,o),p&&c(v,p,q),t=!0)}),!t))&&h(f,{nodeName:m||y,className:n||null,cssStyle:p||null}),void 0)},state:function(b,c,d,e,f,g,h){var i,j,l,m=b.selection.getSelectedOwnNodes(),n=[];for(d="string"==typeof d?d.toUpperCase():d,j=0,l=m.length;l>j;j++)i=k.getParentElement(m[j],{nodeName:d,className:e,classRegExp:f,cssStyle:g,styleRegExp:h}),i&&-1==a.lang.array(n).indexOf(i)&&n.push(i);return 0==n.length?!1:n}}}(wysihtml5),wysihtml5.commands.formatCode={exec:function(a,b,c){var d,e,f,g=this.state(a);g?a.selection.executeAndRestore(function(){d=g.querySelector("code"),wysihtml5.dom.replaceWithChildNodes(g),d&&wysihtml5.dom.replaceWithChildNodes(d)}):(e=a.selection.getRange(),f=e.extractContents(),g=a.doc.createElement("pre"),d=a.doc.createElement("code"),c&&(d.className=c),g.appendChild(d),d.appendChild(f),e.insertNode(g),a.selection.selectNode(g))},state:function(a){var b=a.selection.getSelectedNode();return b&&b.nodeName&&"PRE"==b.nodeName&&b.firstChild&&b.firstChild.nodeName&&"CODE"==b.firstChild.nodeName?b:wysihtml5.dom.getParentElement(b,{nodeName:"CODE"})&&wysihtml5.dom.getParentElement(b,{nodeName:"PRE"})}},function(a){function b(a){var b=d[a];return b?[a.toLowerCase(),b.toLowerCase()]:[a.toLowerCase()]}function c(c,d,f,g,h,i){var j=c;return d&&(j+=":"+d),g&&(j+=":"+g),e[j]||(e[j]=new a.selection.HTMLApplier(b(c),d,f,!0,g,h,i)),e[j]}var d={strong:"b",em:"i",b:"strong",i:"em"},e={};a.commands.formatInline={exec:function(a,b,d,e,f,g,h,i,j){var k=a.selection.createRange(),l=a.selection.getOwnRanges();return l&&0!=l.length?(a.selection.getSelection().removeAllRanges(),c(d,e,f,g,h,a.element).toggleRange(l),i?j||a.cleanUp():(k.setStart(l[0].startContainer,l[0].startOffset),k.setEnd(l[l.length-1].endContainer,l[l.length-1].endOffset),a.selection.setSelection(k),a.selection.executeAndRestore(function(){j||a.cleanUp()},!0,!0)),void 0):!1},execWithToggle:function(b,c,d,e,f,g,h){var i,j=this;this.state(b,c,d,e,f,g,h)&&b.selection.isCollapsed()&&!b.selection.caretIsLastInSelection()&&!b.selection.caretIsFirstInSelection()?(i=j.state(b,c,d,e,f)[0],b.selection.executeAndRestoreRangy(function(){i.parentNode;b.selection.selectNode(i,!0),a.commands.formatInline.exec(b,c,d,e,f,g,h,!0,!0)})):this.state(b,c,d,e,f,g,h)&&!b.selection.isCollapsed()?b.selection.executeAndRestoreRangy(function(){a.commands.formatInline.exec(b,c,d,e,f,g,h,!0,!0)}):a.commands.formatInline.exec(b,c,d,e,f,g,h)},state:function(b,e,f,g,h,i,j){var k,l,m=b.doc,n=d[f]||f;return a.dom.hasElementWithTagName(m,f)||a.dom.hasElementWithTagName(m,n)?g&&!a.dom.hasElementWithClassName(m,g)?!1:(k=b.selection.getOwnRanges(),k&&0!==k.length?(l=c(f,g,h,i,j,b.element).isAppliedToRange(k),l&&l.elements?l.elements:!1):!1):!1}}}(wysihtml5),function(a){a.commands.insertBlockQuote={exec:function(b,c){var d=this.state(b,c),e=b.selection.isEndToEndInNode(["H1","H2","H3","H4","H5","H6","P"]);b.selection.executeAndRestore(function(){if(d)b.config.useLineBreaks&&a.dom.lineBreaks(d).add(),a.dom.unwrap(d);else if(b.selection.isCollapsed()&&b.selection.selectLine(),e){var c=e.ownerDocument.createElement("blockquote");a.dom.insert(c).after(e),c.appendChild(e)}else b.selection.surround({nodeName:"blockquote"})})},state:function(b){var c=b.selection.getSelectedNode(),d=a.dom.getParentElement(c,{nodeName:"BLOCKQUOTE"},!1,b.element);return d?d:!1}}}(wysihtml5),wysihtml5.commands.insertHTML={exec:function(a,b,c){a.commands.support(b)?a.doc.execCommand(b,!1,c):a.selection.insertHTML(c)},state:function(){return!1}},function(a){var b="IMG";a.commands.insertImage={exec:function(c,d,e){var f,g,h,i,j;if(e="object"==typeof e?e:{src:e},f=c.doc,g=this.state(c),g)return c.selection.setBefore(g),i=g.parentNode,i.removeChild(g),a.dom.removeEmptyTextNodes(i),"A"!==i.nodeName||i.firstChild||(c.selection.setAfter(i),i.parentNode.removeChild(i)),a.quirks.redraw(c.element),void 0;g=f.createElement(b);for(j in e)g.setAttribute("className"===j?"class":j,e[j]);c.selection.insertNode(g),a.browser.hasProblemsSettingCaretAfterImg()?(h=f.createTextNode(a.INVISIBLE_SPACE),c.selection.insertNode(h),c.selection.setAfter(h)):c.selection.setAfter(g)},state:function(c){var d,e,f,g=c.doc;return a.dom.hasElementWithTagName(g,b)?(d=c.selection.getSelectedNode(),d?d.nodeName===b?d:d.nodeType!==a.ELEMENT_NODE?!1:(e=c.selection.getText(),e=a.lang.string(e).trim(),e?!1:(f=c.selection.getNodes(a.ELEMENT_NODE,function(a){return"IMG"===a.nodeName}),1!==f.length?!1:f[0])):!1):!1}}}(wysihtml5),function(a){var b="<br>"+(a.browser.needsSpaceAfterLineBreak()?" ":"");a.commands.insertLineBreak={exec:function(c,d){c.commands.support(d)?(c.doc.execCommand(d,!1,null),a.browser.autoScrollsToCaret()||c.selection.scrollIntoView()):c.commands.exec("insertHTML",b)},state:function(){return!1}}}(wysihtml5),wysihtml5.commands.insertOrderedList={exec:function(a,b){wysihtml5.commands.insertList.exec(a,b,"OL")},state:function(a,b){return wysihtml5.commands.insertList.state(a,b,"OL")}},wysihtml5.commands.insertUnorderedList={exec:function(a,b){wysihtml5.commands.insertList.exec(a,b,"UL")},state:function(a,b){return wysihtml5.commands.insertList.state(a,b,"UL")}},wysihtml5.commands.insertList=function(a){var b=function(a,b){if(a&&a.nodeName){"string"==typeof b&&(b=[b]);for(var c=b.length;c--;)if(a.nodeName===b[c])return!0}return!1},c=function(c,d,e){var f,g,h={el:null,other:!1};return c&&(f=a.dom.getParentElement(c,{nodeName:"LI"}),g="UL"===d?"OL":"UL",b(c,d)?h.el=c:b(c,g)?h={el:c,other:!0}:f&&(b(f.parentNode,d)?h.el=f.parentNode:b(f.parentNode,g)&&(h={el:f.parentNode,other:!0}))),h.el&&!e.element.contains(h.el)&&(h.el=null),h},d=function(b,c,d){var e,g="UL"===c?"OL":"UL";d.selection.executeAndRestore(function(){var h,i,j=f(g,d);if(j.length)for(h=j.length;h--;)a.dom.renameElement(j[h],c.toLowerCase());else{for(e=f(["OL","UL"],d),i=e.length;i--;)a.dom.resolveList(e[i],d.config.useLineBreaks);a.dom.resolveList(b,d.config.useLineBreaks)}})},e=function(b,c,d){var e="UL"===c?"OL":"UL";d.selection.executeAndRestore(function(){var g,h=[b].concat(f(e,d));for(g=h.length;g--;)a.dom.renameElement(h[g],c.toLowerCase())})},f=function(a,c){var d,e=c.selection.getOwnRanges(),f=[];for(d=e.length;d--;)f=f.concat(e[d].getNodes([1],function(c){return b(c,a)}));return f},g=function(b,c){c.selection.executeAndRestoreRangy(function(){var d,e,f="_wysihtml5-temp-"+(new Date).getTime(),g=c.selection.deblockAndSurround({nodeName:"div",className:f}),h=/\uFEFF/g;g.innerHTML=g.innerHTML.replace(h,""),g&&(d=a.lang.array(["","<br>",a.INVISIBLE_SPACE]).contains(g.innerHTML),e=a.dom.convertToList(g,b.toLowerCase(),c.parent.config.uneditableContainerClassname),d&&c.selection.selectNode(e.querySelector("li"),!0))})};return{exec:function(a,b,f){var h=a.doc,i="OL"===f?"insertOrderedList":"insertUnorderedList",j=a.selection.getSelectedNode(),k=c(j,f,a);k.el?k.other?e(k.el,f,a):d(k.el,f,a):a.commands.support(i)?h.execCommand(i,!1,null):g(f,a)},state:function(a,b,d){var e=a.selection.getSelectedNode(),f=c(e,d,a);return f.el&&!f.other?f.el:!1}}}(wysihtml5),wysihtml5.commands.italic={exec:function(a,b){wysihtml5.commands.formatInline.execWithToggle(a,b,"i")},state:function(a,b){return wysihtml5.commands.formatInline.state(a,b,"i")}},function(a){var b="wysiwyg-text-align-center",c=/wysiwyg-text-align-[0-9a-z]+/g;a.commands.justifyCenter={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,b,c)}}}(wysihtml5),function(a){var b="wysiwyg-text-align-left",c=/wysiwyg-text-align-[0-9a-z]+/g;a.commands.justifyLeft={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,b,c)}}}(wysihtml5),function(a){var b="wysiwyg-text-align-right",c=/wysiwyg-text-align-[0-9a-z]+/g;a.commands.justifyRight={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,b,c)}}}(wysihtml5),function(a){var b="wysiwyg-text-align-justify",c=/wysiwyg-text-align-[0-9a-z]+/g;a.commands.justifyFull={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,b,c)}}}(wysihtml5),function(a){var b="text-align: right;",c=/(\s|^)text-align\s*:\s*[^;\s]+;?/gi;a.commands.alignRightStyle={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,null,null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,null,null,b,c)}}}(wysihtml5),function(a){var b="text-align: left;",c=/(\s|^)text-align\s*:\s*[^;\s]+;?/gi;a.commands.alignLeftStyle={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,null,null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,null,null,b,c)}}}(wysihtml5),function(a){var b="text-align: center;",c=/(\s|^)text-align\s*:\s*[^;\s]+;?/gi;a.commands.alignCenterStyle={exec:function(d){return a.commands.formatBlock.exec(d,"formatBlock",null,null,null,b,c)},state:function(d){return a.commands.formatBlock.state(d,"formatBlock",null,null,null,b,c)}}}(wysihtml5),wysihtml5.commands.redo={exec:function(a){return a.undoManager.redo()},state:function(){return!1}},wysihtml5.commands.underline={exec:function(a,b){wysihtml5.commands.formatInline.execWithToggle(a,b,"u")},state:function(a,b){return wysihtml5.commands.formatInline.state(a,b,"u")}},wysihtml5.commands.undo={exec:function(a){return a.undoManager.undo()},state:function(){return!1}},wysihtml5.commands.createTable={exec:function(a,b,c){var d,e,f;if(c&&c.cols&&c.rows&&parseInt(c.cols,10)>0&&parseInt(c.rows,10)>0){for(f=c.tableStyle?'<table style="'+c.tableStyle+'">':"<table>",f+="<tbody>",e=0;e<c.rows;e++){for(f+="<tr>",d=0;d<c.cols;d++)f+="<td>&nbsp;</td>";f+="</tr>"}f+="</tbody></table>",a.commands.exec("insertHTML",f)}},state:function(){return!1}},wysihtml5.commands.mergeTableCells={exec:function(a,b){a.tableSelection&&a.tableSelection.start&&a.tableSelection.end&&(this.state(a,b)?wysihtml5.dom.table.unmergeCell(a.tableSelection.start):wysihtml5.dom.table.mergeCellsBetween(a.tableSelection.start,a.tableSelection.end))},state:function(a){if(a.tableSelection){var b=a.tableSelection.start,c=a.tableSelection.end;if(b&&c&&b==c&&(wysihtml5.dom.getAttribute(b,"colspan")&&parseInt(wysihtml5.dom.getAttribute(b,"colspan"),10)>1||wysihtml5.dom.getAttribute(b,"rowspan")&&parseInt(wysihtml5.dom.getAttribute(b,"rowspan"),10)>1))return[b]}return!1}},wysihtml5.commands.addTableCells={exec:function(a,b,c){if(a.tableSelection&&a.tableSelection.start&&a.tableSelection.end){var d=wysihtml5.dom.table.orderSelectionEnds(a.tableSelection.start,a.tableSelection.end);"before"==c||"above"==c?wysihtml5.dom.table.addCells(d.start,c):("after"==c||"below"==c)&&wysihtml5.dom.table.addCells(d.end,c),setTimeout(function(){a.tableSelection.select(d.start,d.end)},0)}},state:function(){return!1}},wysihtml5.commands.deleteTableCells={exec:function(a,b,c){if(a.tableSelection&&a.tableSelection.start&&a.tableSelection.end){var d,e=wysihtml5.dom.table.orderSelectionEnds(a.tableSelection.start,a.tableSelection.end),f=wysihtml5.dom.table.indexOf(e.start),g=a.tableSelection.table;wysihtml5.dom.table.removeCells(e.start,c),setTimeout(function(){d=wysihtml5.dom.table.findCell(g,f),d||("row"==c&&(d=wysihtml5.dom.table.findCell(g,{row:f.row-1,col:f.col})),"column"==c&&(d=wysihtml5.dom.table.findCell(g,{row:f.row,col:f.col-1}))),d&&a.tableSelection.select(d,d)},0)}},state:function(){return!1}},wysihtml5.commands.indentList={exec:function(a){var b=a.selection.getSelectionParentsByTag("LI");return b?this.tryToPushLiLevel(b,a.selection):!1},state:function(){return!1},tryToPushLiLevel:function(a,b){var c,d,e,f,g,h=!1;return b.executeAndRestoreRangy(function(){for(var b=a.length;b--;)f=a[b],c="OL"===f.parentNode.nodeName?"OL":"UL",d=f.ownerDocument.createElement(c),e=wysihtml5.dom.domNode(f).prev({nodeTypes:[wysihtml5.ELEMENT_NODE]}),g=e?e.querySelector("ul, ol"):null,e&&(g?g.appendChild(f):(d.appendChild(f),e.appendChild(d)),h=!0)}),h}},wysihtml5.commands.outdentList={exec:function(a){var b=a.selection.getSelectionParentsByTag("LI");return b?this.tryToPullLiLevel(b,a):!1},state:function(){return!1},tryToPullLiLevel:function(a,b){var c,d,e,f,g,h=!1,i=this;return b.selection.executeAndRestoreRangy(function(){var j,k;for(j=a.length;j--;)if(f=a[j],f.parentNode&&(c=f.parentNode,"OL"===c.tagName||"UL"===c.tagName)){if(h=!0,d=wysihtml5.dom.getParentElement(c.parentNode,{nodeName:["OL","UL"]},!1,b.element),e=wysihtml5.dom.getParentElement(c.parentNode,{nodeName:["LI"]},!1,b.element),d&&e)f.nextSibling&&(g=i.getAfterList(c,f),f.appendChild(g)),d.insertBefore(f,e.nextSibling);else{for(f.nextSibling&&(g=i.getAfterList(c,f),f.appendChild(g)),k=f.childNodes.length;k--;)c.parentNode.insertBefore(f.childNodes[k],c.nextSibling);c.parentNode.insertBefore(document.createElement("br"),c.nextSibling),f.parentNode.removeChild(f)}0===c.childNodes.length&&c.parentNode.removeChild(c)}}),h},getAfterList:function(a,b){for(var c=a.nodeName,d=document.createElement(c);b.nextSibling;)d.appendChild(b.nextSibling);return d}},function(a){var b=90,c=89,d=8,e=46,f=25,g="data-wysihtml5-selection-node",h="data-wysihtml5-selection-offset",i=('<span id="_wysihtml5-undo" class="_wysihtml5-temp">'+a.INVISIBLE_SPACE+"</span>",'<span id="_wysihtml5-redo" class="_wysihtml5-temp">'+a.INVISIBLE_SPACE+"</span>",a.dom);a.UndoManager=a.lang.Dispatcher.extend({constructor:function(a){this.editor=a,this.composer=a.composer,this.element=this.composer.element,this.position=0,this.historyStr=[],this.historyDom=[],this.transact(),this._observe()},_observe:function(){{var a,f=this;this.composer.sandbox.getDocument()}i.observe(this.element,"keydown",function(a){if(!a.altKey&&(a.ctrlKey||a.metaKey)){var d=a.keyCode,e=d===b&&!a.shiftKey,g=d===b&&a.shiftKey||d===c;e?(f.undo(),a.preventDefault()):g&&(f.redo(),a.preventDefault())}}),i.observe(this.element,"keydown",function(b){var c=b.keyCode;c!==a&&(a=c,(c===d||c===e)&&f.transact())}),this.editor.on("newword:composer",function(){f.transact()}).on("beforecommand:composer",function(){f.transact()})},transact:function(){var b,c,d,e,i,j,k,l=this.historyStr[this.position-1],m=this.composer.getValue(!1,!1),n=this.element.offsetWidth>0&&this.element.offsetHeight>0;m!==l&&(j=this.historyStr.length=this.historyDom.length=this.position,j>f&&(this.historyStr.shift(),this.historyDom.shift(),this.position--),this.position++,n&&(b=this.composer.selection.getRange(),c=b&&b.startContainer?b.startContainer:this.element,d=b&&b.startOffset?b.startOffset:0,c.nodeType===a.ELEMENT_NODE?e=c:(e=c.parentNode,i=this.getChildNodeIndex(e,c)),e.setAttribute(h,d),void 0!==i&&e.setAttribute(g,i)),k=this.element.cloneNode(!!m),this.historyDom.push(k),this.historyStr.push(m),e&&(e.removeAttribute(h),e.removeAttribute(g)))},undo:function(){this.transact(),this.undoPossible()&&(this.set(this.historyDom[--this.position-1]),this.editor.fire("undo:composer"))},redo:function(){this.redoPossible()&&(this.set(this.historyDom[++this.position-1]),this.editor.fire("redo:composer"))},undoPossible:function(){return this.position>1},redoPossible:function(){return this.position<this.historyStr.length},set:function(a){var b,c,d,e,f,i;for(this.element.innerHTML="",b=0,c=a.childNodes,d=a.childNodes.length;d>b;b++)this.element.appendChild(c[b].cloneNode(!0));a.hasAttribute(h)?(e=a.getAttribute(h),i=a.getAttribute(g),f=this.element):(f=this.element.querySelector("["+h+"]")||this.element,e=f.getAttribute(h),i=f.getAttribute(g),f.removeAttribute(h),f.removeAttribute(g)),null!==i&&(f=this.getChildNodeByIndex(f,+i)),this.composer.selection.set(f,e)},getChildNodeIndex:function(a,b){for(var c=0,d=a.childNodes,e=d.length;e>c;c++)if(d[c]===b)return c},getChildNodeByIndex:function(a,b){return a.childNodes[b]}})}(wysihtml5),wysihtml5.views.View=Base.extend({constructor:function(a,b,c){this.parent=a,this.element=b,this.config=c,this.config.noTextarea||this._observeViewChange()},_observeViewChange:function(){var a=this;this.parent.on("beforeload",function(){a.parent.on("change_view",function(b){b===a.name?(a.parent.currentView=a,a.show(),setTimeout(function(){a.focus()},0)):a.hide()})})},focus:function(){if(this.element.ownerDocument.querySelector(":focus")!==this.element)try{this.element.focus()}catch(a){}},hide:function(){this.element.style.display="none"},show:function(){this.element.style.display=""},disable:function(){this.element.setAttribute("disabled","disabled")},enable:function(){this.element.removeAttribute("disabled")}}),function(a){var b=a.dom,c=a.browser;a.views.Composer=a.views.View.extend({name:"composer",CARET_HACK:"<br>",constructor:function(a,b,c){this.base(a,b,c),this.config.noTextarea?this.editableArea=b:this.textarea=this.parent.textarea,this.config.contentEditableMode?this._initContentEditableArea():this._initSandbox()},clear:function(){this.element.innerHTML=c.displaysCaretInEmptyContentEditableCorrectly()?"":this.CARET_HACK},getValue:function(b,c){var d=this.isEmpty()?"":a.quirks.getCorrectInnerHTML(this.element);return b!==!1&&(d=this.parent.parse(d,c===!1?!1:!0)),d},setValue:function(a,b){b&&(a=this.parent.parse(a));try{this.element.innerHTML=a}catch(c){this.element.innerText=a}},cleanUp:function(){this.parent.parse(this.element)},show:function(){this.editableArea.style.display=this._displayStyle||"",this.config.noTextarea||this.textarea.element.disabled||(this.disable(),this.enable())},hide:function(){this._displayStyle=b.getStyle("display").from(this.editableArea),"none"===this._displayStyle&&(this._displayStyle=null),this.editableArea.style.display="none"},disable:function(){this.parent.fire("disable:composer"),this.element.removeAttribute("contentEditable")},enable:function(){this.parent.fire("enable:composer"),this.element.setAttribute("contentEditable","true")},focus:function(b){a.browser.doesAsyncFocus()&&this.hasPlaceholderSet()&&this.clear(),this.base();var c=this.element.lastChild;b&&c&&this.selection&&("BR"===c.nodeName?this.selection.setBefore(this.element.lastChild):this.selection.setAfter(this.element.lastChild))},getTextContent:function(){return b.getTextContent(this.element)},hasPlaceholderSet:function(){return this.getTextContent()==(this.config.noTextarea?this.editableArea.getAttribute("data-placeholder"):this.textarea.element.getAttribute("placeholder"))&&this.placeholderSet},isEmpty:function(){var a=this.element.innerHTML.toLowerCase();return/^(\s|<br>|<\/br>|<p>|<\/p>)*$/i.test(a)||""===a||"<br>"===a||"<p></p>"===a||"<p><br></p>"===a||this.hasPlaceholderSet()},_initContentEditableArea:function(){var a=this;this.config.noTextarea?this.sandbox=new b.ContentEditableArea(function(){a._create()},{},this.editableArea):(this.sandbox=new b.ContentEditableArea(function(){a._create()}),this.editableArea=this.sandbox.getContentEditable(),b.insert(this.editableArea).after(this.textarea.element),this._createWysiwygFormField())},_initSandbox:function(){var a,c=this;this.sandbox=new b.Sandbox(function(){c._create()},{stylesheets:this.config.stylesheets}),this.editableArea=this.sandbox.getIframe(),a=this.textarea.element,b.insert(this.editableArea).after(a),this._createWysiwygFormField()},_createWysiwygFormField:function(){if(this.textarea.element.form){var a=document.createElement("input");a.type="hidden",a.name="_wysihtml5_mode",a.value=1,b.insert(a).after(this.textarea.element)}},_create:function(){var d,e,f=this;this.doc=this.sandbox.getDocument(),this.element=this.config.contentEditableMode?this.sandbox.getContentEditable():this.doc.body,this.config.noTextarea?this.cleanUp():(this.textarea=this.parent.textarea,this.element.innerHTML=this.textarea.getValue(!0,!1)),this.selection=new a.Selection(this.parent,this.element,this.config.uneditableContainerClassname),this.commands=new a.Commands(this.parent),this.config.noTextarea||b.copyAttributes(["className","spellcheck","title","lang","dir","accessKey"]).from(this.textarea.element).to(this.element),b.addClass(this.element,this.config.composerClassName),this.config.style&&!this.config.contentEditableMode&&this.style(),this.observe(),d=this.config.name,d&&(b.addClass(this.element,d),this.config.contentEditableMode||b.addClass(this.editableArea,d)),this.enable(),!this.config.noTextarea&&this.textarea.element.disabled&&this.disable(),e="string"==typeof this.config.placeholder?this.config.placeholder:this.config.noTextarea?this.editableArea.getAttribute("data-placeholder"):this.textarea.element.getAttribute("placeholder"),e&&b.simulatePlaceholder(this.parent,this,e),this.commands.exec("styleWithCSS",!1),this._initAutoLinking(),this._initObjectResizing(),this._initUndoManager(),this._initLineBreaking(),this.config.noTextarea||!this.textarea.element.hasAttribute("autofocus")&&document.querySelector(":focus")!=this.textarea.element||c.isIos()||setTimeout(function(){f.focus(!0)},100),c.clearsContentEditableCorrectly()||a.quirks.ensureProperClearing(this),this.initSync&&this.config.sync&&this.initSync(),this.config.noTextarea||this.textarea.hide(),this.parent.fire("beforeload").fire("load")},_initAutoLinking:function(){var d,e,f,g=this,h=c.canDisableAutoLinking(),i=c.doesAutoLinkingInContentEditable();h&&this.commands.exec("autoUrlDetect",!1),this.config.autoLink&&((!i||i&&h)&&(this.parent.on("newword:composer",function(){b.getTextContent(g.element).match(b.autoLink.URL_REG_EXP)&&g.selection.executeAndRestore(function(c,d){var e,f=g.element.querySelectorAll("."+g.config.uneditableContainerClassname),h=!1;for(e=f.length;e--;)a.dom.contains(f[e],d)&&(h=!0);h||b.autoLink(d.parentNode,[g.config.uneditableContainerClassname])})}),b.observe(this.element,"blur",function(){b.autoLink(g.element,[g.config.uneditableContainerClassname])})),d=this.sandbox.getDocument().getElementsByTagName("a"),e=b.autoLink.URL_REG_EXP,f=function(c){var d=a.lang.string(b.getTextContent(c)).trim();return"www."===d.substr(0,4)&&(d="http://"+d),d},b.observe(this.element,"keydown",function(a){if(d.length){var c,h=g.selection.getSelectedNode(a.target.ownerDocument),i=b.getParentElement(h,{nodeName:"A"},4);i&&(c=f(i),setTimeout(function(){var a=f(i);a!==c&&a.match(e)&&i.setAttribute("href",a)},0))}}))},_initObjectResizing:function(){if(this.commands.exec("enableObjectResizing",!0),c.supportsEvent("resizeend")){var d=["width","height"],e=d.length,f=this.element;b.observe(f,"resizeend",function(b){var c,g=b.target||b.srcElement,h=g.style,i=0;if("IMG"===g.nodeName){for(;e>i;i++)c=d[i],h[c]&&(g.setAttribute(c,parseInt(h[c],10)),h[c]="");a.quirks.redraw(f)}})}},_initUndoManager:function(){this.undoManager=new a.UndoManager(this.parent)},_initLineBreaking:function(){function d(a){var c=b.getParentElement(a,{nodeName:["P","DIV"]},2);c&&b.contains(e.element,c)&&e.selection.executeAndRestore(function(){e.config.useLineBreaks?b.replaceWithChildNodes(c):"P"!==c.nodeName&&b.renameElement(c,"p")})}var e=this,f=["LI","P","H1","H2","H3","H4","H5","H6"],g=["UL","OL","MENU"];this.config.useLineBreaks||b.observe(this.element,["focus","keydown"],function(){if(e.isEmpty()){var a=e.doc.createElement("P");e.element.innerHTML="",e.element.appendChild(a),c.displaysCaretInEmptyContentEditableCorrectly()?e.selection.selectNode(a,!0):(a.innerHTML="<br>",e.selection.setBefore(a.firstChild))}}),b.observe(this.element,"keydown",function(c){var h,i=c.keyCode;if(!c.shiftKey&&(i===a.ENTER_KEY||i===a.BACKSPACE_KEY))return h=b.getParentElement(e.selection.getSelectedNode(),{nodeName:f},4),h?(setTimeout(function(){var c,f=e.selection.getSelectedNode();if("LI"===h.nodeName){if(!f)return;c=b.getParentElement(f,{nodeName:g},2),c||d(f)}i===a.ENTER_KEY&&h.nodeName.match(/^H[1-6]$/)&&d(f)},0),void 0):(e.config.useLineBreaks&&i===a.ENTER_KEY&&!a.browser.insertsLineBreaksOnReturn()&&(c.preventDefault(),e.commands.exec("insertLineBreak")),void 0)})}})}(wysihtml5),function(a){var b=a.dom,c=document,d=window,e=c.createElement("div"),f=["background-color","color","cursor","font-family","font-size","font-style","font-variant","font-weight","line-height","letter-spacing","text-align","text-decoration","text-indent","text-rendering","word-break","word-wrap","word-spacing"],g=["background-color","border-collapse","border-bottom-color","border-bottom-style","border-bottom-width","border-left-color","border-left-style","border-left-width","border-right-color","border-right-style","border-right-width","border-top-color","border-top-style","border-top-width","clear","display","float","margin-bottom","margin-left","margin-right","margin-top","outline-color","outline-offset","outline-width","outline-style","padding-left","padding-right","padding-top","padding-bottom","position","top","left","right","bottom","z-index","vertical-align","text-align","-webkit-box-sizing","-moz-box-sizing","-ms-box-sizing","box-sizing","-webkit-box-shadow","-moz-box-shadow","-ms-box-shadow","box-shadow","-webkit-border-top-right-radius","-moz-border-radius-topright","border-top-right-radius","-webkit-border-bottom-right-radius","-moz-border-radius-bottomright","border-bottom-right-radius","-webkit-border-bottom-left-radius","-moz-border-radius-bottomleft","border-bottom-left-radius","-webkit-border-top-left-radius","-moz-border-radius-topleft","border-top-left-radius","width","height"],h=["html                 { height: 100%; }","body                 { height: 100%; padding: 1px 0 0 0; margin: -1px 0 0 0; }","body > p:first-child { margin-top: 0; }","._wysihtml5-temp     { display: none; }",a.browser.isGecko?"body.placeholder { color: graytext !important; }":"body.placeholder { color: #a9a9a9 !important; }","img:-moz-broken      { -moz-force-broken-image-icon: 1; height: 24px; width: 24px; }"],i=function(a){if(a.setActive)try{a.setActive()}catch(e){}else{var f=a.style,g=c.documentElement.scrollTop||c.body.scrollTop,h=c.documentElement.scrollLeft||c.body.scrollLeft,i={position:f.position,top:f.top,left:f.left,WebkitUserSelect:f.WebkitUserSelect};b.setStyles({position:"absolute",top:"-99999px",left:"-99999px",WebkitUserSelect:"none"}).on(a),a.focus(),b.setStyles(i).on(a),d.scrollTo&&d.scrollTo(h,g)}};a.views.Composer.prototype.style=function(){var d,j,k=this,l=c.querySelector(":focus"),m=this.textarea.element,n=m.hasAttribute("placeholder"),o=n&&m.getAttribute("placeholder"),p=m.style.display,q=m.disabled;return this.focusStylesHost=e.cloneNode(!1),this.blurStylesHost=e.cloneNode(!1),this.disabledStylesHost=e.cloneNode(!1),n&&m.removeAttribute("placeholder"),m===l&&m.blur(),m.disabled=!1,m.style.display=d="none",(m.getAttribute("rows")&&"auto"===b.getStyle("height").from(m)||m.getAttribute("cols")&&"auto"===b.getStyle("width").from(m))&&(m.style.display=d=p),b.copyStyles(g).from(m).to(this.editableArea).andTo(this.blurStylesHost),b.copyStyles(f).from(m).to(this.element).andTo(this.blurStylesHost),b.insertCSS(h).into(this.element.ownerDocument),m.disabled=!0,b.copyStyles(g).from(m).to(this.disabledStylesHost),b.copyStyles(f).from(m).to(this.disabledStylesHost),m.disabled=q,m.style.display=p,i(m),m.style.display=d,b.copyStyles(g).from(m).to(this.focusStylesHost),b.copyStyles(f).from(m).to(this.focusStylesHost),m.style.display=p,b.copyStyles(["display"]).from(m).to(this.editableArea),j=a.lang.array(g).without(["display"]),l?l.focus():m.blur(),n&&m.setAttribute("placeholder",o),this.parent.on("focus:composer",function(){b.copyStyles(j).from(k.focusStylesHost).to(k.editableArea),b.copyStyles(f).from(k.focusStylesHost).to(k.element)}),this.parent.on("blur:composer",function(){b.copyStyles(j).from(k.blurStylesHost).to(k.editableArea),b.copyStyles(f).from(k.blurStylesHost).to(k.element)}),this.parent.observe("disable:composer",function(){b.copyStyles(j).from(k.disabledStylesHost).to(k.editableArea),b.copyStyles(f).from(k.disabledStylesHost).to(k.element)}),this.parent.observe("enable:composer",function(){b.copyStyles(j).from(k.blurStylesHost).to(k.editableArea),b.copyStyles(f).from(k.blurStylesHost).to(k.element)}),this}}(wysihtml5),function(a){var b=a.dom,c=a.browser,d={66:"bold",73:"italic",85:"underline"},e=function(a,b,c){var d,e=a.getPreviousNode(b,!0),f=a.getSelectedNode();if(1!==f.nodeType&&f.parentNode!==c&&(f=f.parentNode),e)if(1==f.nodeType){if(d=f.firstChild,1==e.nodeType)for(;f.firstChild;)e.appendChild(f.firstChild);else for(;f.firstChild;)b.parentNode.insertBefore(f.firstChild,b);f.parentNode&&f.parentNode.removeChild(f),a.setBefore(d)}else 1==e.nodeType?e.appendChild(f):b.parentNode.insertBefore(f,b),a.setBefore(f)},f=function(a,b,c,d){var f,g,h;b.isCollapsed()?b.caretIsInTheBeginnig("LI")?(a.preventDefault(),d.commands.exec("outdentList")):b.caretIsInTheBeginnig()?a.preventDefault():(b.caretIsFirstInSelection()&&b.getPreviousNode()&&b.getPreviousNode().nodeName&&/^H\d$/gi.test(b.getPreviousNode().nodeName)&&(f=b.getPreviousNode(),a.preventDefault(),/^\s*$/.test(f.textContent||f.innerText)?f.parentNode.removeChild(f):(g=f.ownerDocument.createRange(),g.selectNodeContents(f),g.collapse(!1),b.setSelection(g))),h=b.caretIsBeforeUneditable(),h&&(a.preventDefault(),e(b,h,c))):b.containsUneditable()&&(a.preventDefault(),b.deleteContents())},g=function(a){if(a.selection.isCollapsed()){if(a.selection.caretIsInTheBeginnig("LI")&&a.commands.exec("indentList"))return}else a.selection.deleteContents();
 a.commands.exec("insertHTML","&emsp;")};a.views.Composer.prototype.observe=function(){var e,h,i=this,j=this.getValue(!1,!1),k=this.sandbox.getIframe?this.sandbox.getIframe():this.sandbox.getContentEditable(),l=this.element,m=c.supportsEventsInIframeCorrectly()||this.sandbox.getContentEditable?l:this.sandbox.getWindow(),n=["drop","paste","beforepaste"],o=["drop","paste","mouseup","focus","keyup"];b.observe(k,"DOMNodeRemoved",function(){clearInterval(e),i.parent.fire("destroy:composer")}),c.supportsMutationEvents()||(e=setInterval(function(){b.contains(document.documentElement,k)||(clearInterval(e),i.parent.fire("destroy:composer"))},250)),b.observe(m,o,function(){setTimeout(function(){i.parent.fire("interaction").fire("interaction:composer")},0)}),this.config.handleTables&&(!this.tableClickHandle&&this.doc.execCommand&&a.browser.supportsCommand(this.doc,"enableObjectResizing")&&a.browser.supportsCommand(this.doc,"enableInlineTableEditing")&&(this.sandbox.getIframe?this.tableClickHandle=b.observe(k,["focus","mouseup","mouseover"],function(){i.doc.execCommand("enableObjectResizing",!1,"false"),i.doc.execCommand("enableInlineTableEditing",!1,"false"),i.tableClickHandle.stop()}):setTimeout(function(){i.doc.execCommand("enableObjectResizing",!1,"false"),i.doc.execCommand("enableInlineTableEditing",!1,"false")},0)),this.tableSelection=a.quirks.tableCellsSelection(l,i.parent)),b.observe(m,"focus",function(a){i.parent.fire("focus",a).fire("focus:composer",a),setTimeout(function(){j=i.getValue(!1,!1)},0)}),b.observe(m,"blur",function(a){if(j!==i.getValue(!1,!1)){var b=a;"function"==typeof Object.create&&(b=Object.create(a,{type:{value:"change"}})),i.parent.fire("change",b).fire("change:composer",b)}i.parent.fire("blur",a).fire("blur:composer",a)}),b.observe(l,"dragenter",function(){i.parent.fire("unset_placeholder")}),b.observe(l,n,function(a){i.parent.fire(a.type,a).fire(a.type+":composer",a)}),this.config.copyedFromMarking&&b.observe(l,"copy",function(a){a.clipboardData&&(a.clipboardData.setData("text/html",i.config.copyedFromMarking+i.selection.getHtml()),a.preventDefault()),i.parent.fire(a.type,a).fire(a.type+":composer",a)}),b.observe(l,"keyup",function(b){var c=b.keyCode;(c===a.SPACE_KEY||c===a.ENTER_KEY)&&i.parent.fire("newword:composer")}),this.parent.on("paste:composer",function(){setTimeout(function(){i.parent.fire("newword:composer")},0)}),c.canSelectImagesInContentEditable()||b.observe(l,"mousedown",function(b){var c=b.target,d=l.querySelectorAll("img"),e=l.querySelectorAll("."+i.config.uneditableContainerClassname+" img"),f=a.lang.array(d).without(e);"IMG"===c.nodeName&&a.lang.array(f).contains(c)&&i.selection.selectNode(c)}),c.canSelectImagesInContentEditable()||b.observe(l,"drop",function(){setTimeout(function(){i.selection.getSelection().removeAllRanges()},0)}),c.hasHistoryIssue()&&c.supportsSelectionModify()&&b.observe(l,"keydown",function(a){if(a.metaKey||a.ctrlKey){var b=a.keyCode,c=l.ownerDocument.defaultView,d=c.getSelection();(37===b||39===b)&&(37===b&&(d.modify("extend","left","lineboundary"),a.shiftKey||d.collapseToStart()),39===b&&(d.modify("extend","right","lineboundary"),a.shiftKey||d.collapseToEnd()),a.preventDefault())}}),b.observe(l,"keydown",function(a){var b=a.keyCode,c=d[b];(a.ctrlKey||a.metaKey)&&!a.altKey&&c&&(i.commands.exec(c),a.preventDefault()),8===b?f(a,i.selection,l,i):i.config.handleTabKey&&9===b&&(a.preventDefault(),g(i,l))}),b.observe(l,"keydown",function(b){var c,d=i.selection.getSelectedNode(!0),e=b.keyCode;!d||"IMG"!==d.nodeName||e!==a.BACKSPACE_KEY&&e!==a.DELETE_KEY||(c=d.parentNode,c.removeChild(d),"A"!==c.nodeName||c.firstChild||c.parentNode.removeChild(c),setTimeout(function(){a.quirks.redraw(l)},0),b.preventDefault())}),!this.config.contentEditableMode&&c.hasIframeFocusIssue()&&(b.observe(k,"focus",function(){setTimeout(function(){i.doc.querySelector(":focus")!==i.element&&i.focus()},0)}),b.observe(this.element,"blur",function(){setTimeout(function(){i.selection.getSelection().removeAllRanges()},0)})),h={IMG:"Image: ",A:"Link: "},b.observe(l,"mouseover",function(a){var b,c,d=a.target,e=d.nodeName;("A"===e||"IMG"===e)&&(c=d.hasAttribute("title"),c||(b=h[e]+(d.getAttribute("href")||d.getAttribute("src")),d.setAttribute("title",b)))})}}(wysihtml5),function(a){var b=400;a.views.Synchronizer=Base.extend({constructor:function(a,b,c){this.editor=a,this.textarea=b,this.composer=c,this._observe()},fromComposerToTextarea:function(b){this.textarea.setValue(a.lang.string(this.composer.getValue(!1,!1)).trim(),b)},fromTextareaToComposer:function(a){var b=this.textarea.getValue(!1,!1);b?this.composer.setValue(b,a):(this.composer.clear(),this.editor.fire("set_placeholder"))},sync:function(a){"textarea"===this.editor.currentView.name?this.fromTextareaToComposer(a):this.fromComposerToTextarea(a)},_observe:function(){var c,d=this,e=this.textarea.element.form,f=function(){c=setInterval(function(){d.fromComposerToTextarea()},b)},g=function(){clearInterval(c),c=null};f(),e&&(a.dom.observe(e,"submit",function(){d.sync(!0)}),a.dom.observe(e,"reset",function(){setTimeout(function(){d.fromTextareaToComposer()},0)})),this.editor.on("change_view",function(a){"composer"!==a||c?"textarea"===a&&(d.fromComposerToTextarea(!0),g()):(d.fromTextareaToComposer(!0),f())}),this.editor.on("destroy:composer",g)}})}(wysihtml5),wysihtml5.views.Textarea=wysihtml5.views.View.extend({name:"textarea",constructor:function(a,b,c){this.base(a,b,c),this._observe()},clear:function(){this.element.value=""},getValue:function(a){var b=this.isEmpty()?"":this.element.value;return a!==!1&&(b=this.parent.parse(b)),b},setValue:function(a,b){b&&(a=this.parent.parse(a)),this.element.value=a},cleanUp:function(){var a=this.parent.parse(this.element.value);this.element.value=a},hasPlaceholderSet:function(){var a=wysihtml5.browser.supportsPlaceholderAttributeOn(this.element),b=this.element.getAttribute("placeholder")||null,c=this.element.value,d=!c;return a&&d||c===b},isEmpty:function(){return!wysihtml5.lang.string(this.element.value).trim()||this.hasPlaceholderSet()},_observe:function(){var a=this.element,b=this.parent,c={focusin:"focus",focusout:"blur"},d=wysihtml5.browser.supportsEvent("focusin")?["focusin","focusout","change"]:["focus","blur","change"];b.on("beforeload",function(){wysihtml5.dom.observe(a,d,function(a){var d=c[a.type]||a.type;b.fire(d).fire(d+":textarea")}),wysihtml5.dom.observe(a,["paste","drop"],function(){setTimeout(function(){b.fire("paste").fire("paste:textarea")},0)})})}}),function(a){var b,c={name:b,style:!0,toolbar:b,showToolbarAfterInit:!0,autoLink:!0,handleTables:!0,handleTabKey:!0,parserRules:{tags:{br:{},span:{},div:{},p:{}},classes:{}},pasteParserRulesets:null,parser:a.dom.parse,composerClassName:"wysihtml5-editor",bodyClassName:"wysihtml5-supported",useLineBreaks:!0,stylesheets:[],placeholderText:b,supportTouchDevices:!0,cleanUp:!0,contentEditableMode:!1,uneditableContainerClassname:"wysihtml5-uneditable-container",copyedFromMarking:'<meta name="copied-from" content="wysihtml5">'};a.Editor=a.lang.Dispatcher.extend({constructor:function(b,d){if(this.editableElement="string"==typeof b?document.getElementById(b):b,this.config=a.lang.object({}).merge(c).merge(d).get(),this._isCompatible=a.browser.supported(),"textarea"!=this.editableElement.nodeName.toLowerCase()&&(this.config.contentEditableMode=!0,this.config.noTextarea=!0),this.config.noTextarea||(this.textarea=new a.views.Textarea(this,this.editableElement,this.config),this.currentView=this.textarea),!this._isCompatible||!this.config.supportTouchDevices&&a.browser.isTouchDevice()){var e=this;return setTimeout(function(){e.fire("beforeload").fire("load")},0),void 0}a.dom.addClass(document.body,this.config.bodyClassName),this.composer=new a.views.Composer(this,this.editableElement,this.config),this.currentView=this.composer,"function"==typeof this.config.parser&&this._initParser(),this.on("beforeload",this.handleBeforeLoad)},handleBeforeLoad:function(){this.config.noTextarea||(this.synchronizer=new a.views.Synchronizer(this,this.textarea,this.composer)),this.config.toolbar&&(this.toolbar=new a.toolbar.Toolbar(this,this.config.toolbar,this.config.showToolbarAfterInit))},isCompatible:function(){return this._isCompatible},clear:function(){return this.currentView.clear(),this},getValue:function(a,b){return this.currentView.getValue(a,b)},setValue:function(a,b){return this.fire("unset_placeholder"),a?(this.currentView.setValue(a,b),this):this.clear()},cleanUp:function(){this.currentView.cleanUp()},focus:function(a){return this.currentView.focus(a),this},disable:function(){return this.currentView.disable(),this},enable:function(){return this.currentView.enable(),this},isEmpty:function(){return this.currentView.isEmpty()},hasPlaceholderSet:function(){return this.currentView.hasPlaceholderSet()},parse:function(b,c){var d=this.config.contentEditableMode?document:this.composer?this.composer.sandbox.getDocument():null,e=this.config.parser(b,{rules:this.config.parserRules,cleanUp:this.config.cleanUp,context:d,uneditableClass:this.config.uneditableContainerClassname,clearInternals:c});return"object"==typeof b&&a.quirks.redraw(b),e},_initParser:function(){var b,c=this;a.browser.supportsModenPaste()?this.on("paste:composer",function(d){d.preventDefault(),b=a.dom.getPastedHtml(d),b&&c._cleanAndPaste(b)}):this.on("beforepaste:composer",function(b){b.preventDefault(),a.dom.getPastedHtmlWithDiv(c.composer,function(a){a&&c._cleanAndPaste(a)})})},_cleanAndPaste:function(b){var c=a.quirks.cleanPastedHTML(b,{referenceNode:this.composer.element,rules:this.config.pasteParserRulesets||[{set:this.config.parserRules}],uneditableClass:this.config.uneditableContainerClassname});this.composer.selection.deleteContents(),this.composer.selection.insertHTML(c)}})}(wysihtml5),function(a){var b=a.dom,c="wysihtml5-command-dialog-opened",d="input, select, textarea",e="[data-wysihtml5-dialog-field]",f="data-wysihtml5-dialog-field";a.toolbar.Dialog=a.lang.Dispatcher.extend({constructor:function(a,b){this.link=a,this.container=b},_observe:function(){var e,f,g,h,i,j;if(!this._observed){for(e=this,f=function(a){var b=e._serialize();b==e.elementToChange?e.fire("edit",b):e.fire("save",b),e.hide(),a.preventDefault(),a.stopPropagation()},b.observe(e.link,"click",function(){b.hasClass(e.link,c)&&setTimeout(function(){e.hide()},0)}),b.observe(this.container,"keydown",function(b){var c=b.keyCode;c===a.ENTER_KEY&&f(b),c===a.ESCAPE_KEY&&(e.fire("cancel"),e.hide())}),b.delegate(this.container,"[data-wysihtml5-dialog-action=save]","click",f),b.delegate(this.container,"[data-wysihtml5-dialog-action=cancel]","click",function(a){e.fire("cancel"),e.hide(),a.preventDefault(),a.stopPropagation()}),g=this.container.querySelectorAll(d),h=0,i=g.length,j=function(){clearInterval(e.interval)};i>h;h++)b.observe(g[h],"change",j);this._observed=!0}},_serialize:function(){for(var a=this.elementToChange||{},b=this.container.querySelectorAll(e),c=b.length,d=0;c>d;d++)a[b[d].getAttribute(f)]=b[d].value;return a},_interpolate:function(a){for(var b,c,d,g=document.querySelector(":focus"),h=this.container.querySelectorAll(e),i=h.length,j=0;i>j;j++)b=h[j],b!==g&&(a&&"hidden"===b.type||(c=b.getAttribute(f),d=this.elementToChange&&"boolean"!=typeof this.elementToChange?this.elementToChange.getAttribute(c)||"":b.defaultValue,b.value=d))},show:function(a){if(!b.hasClass(this.link,c)){var e=this,f=this.container.querySelector(d);if(this.elementToChange=a,this._observe(),this._interpolate(),a&&(this.interval=setInterval(function(){e._interpolate(!0)},500)),b.addClass(this.link,c),this.container.style.display="",this.fire("show"),f&&!a)try{f.focus()}catch(g){}}},hide:function(){clearInterval(this.interval),this.elementToChange=null,b.removeClass(this.link,c),this.container.style.display="none",this.fire("hide")}})}(wysihtml5),function(a){var b=a.dom,c={position:"relative"},d={left:0,margin:0,opacity:0,overflow:"hidden",padding:0,position:"absolute",top:0,zIndex:1},e={cursor:"inherit",fontSize:"50px",height:"50px",marginTop:"-25px",outline:0,padding:0,position:"absolute",right:"-4px",top:"50%"},f={"x-webkit-speech":"",speech:""};a.toolbar.Speech=function(g,h){var i,j,k,l=document.createElement("input");return a.browser.supportsSpeechApiOn(l)?(i=g.editor.textarea.element.getAttribute("lang"),i&&(f.lang=i),j=document.createElement("div"),a.lang.object(d).merge({width:h.offsetWidth+"px",height:h.offsetHeight+"px"}),b.insert(l).into(j),b.insert(j).into(h),b.setStyles(e).on(l),b.setAttributes(f).on(l),b.setStyles(d).on(j),b.setStyles(c).on(h),k="onwebkitspeechchange"in l?"webkitspeechchange":"speechchange",b.observe(l,k,function(){g.execCommand("insertText",l.value),l.value=""}),b.observe(l,"click",function(a){b.hasClass(h,"wysihtml5-command-disabled")&&a.preventDefault(),a.stopPropagation()}),void 0):(h.style.display="none",void 0)}}(wysihtml5),function(a){var b="wysihtml5-command-disabled",c="wysihtml5-commands-disabled",d="wysihtml5-command-active",e="wysihtml5-action-active",f=a.dom;a.toolbar.Toolbar=Base.extend({constructor:function(f,g,h){this.editor=f,this.container="string"==typeof g?document.getElementById(g):g,this.composer=f.composer,this._getLinks("command"),this._getLinks("action"),this._observe(),h&&this.show(),null!=f.config.classNameCommandDisabled&&(b=f.config.classNameCommandDisabled),null!=f.config.classNameCommandsDisabled&&(c=f.config.classNameCommandsDisabled),null!=f.config.classNameCommandActive&&(d=f.config.classNameCommandActive),null!=f.config.classNameActionActive&&(e=f.config.classNameActionActive);for(var i=this.container.querySelectorAll("[data-wysihtml5-command=insertSpeech]"),j=i.length,k=0;j>k;k++)new a.toolbar.Speech(this,i[k])},_getLinks:function(b){for(var c,d,e,f,g,h=this[b+"Links"]=a.lang.array(this.container.querySelectorAll("[data-wysihtml5-"+b+"]")).get(),i=h.length,j=0,k=this[b+"Mapping"]={};i>j;j++)c=h[j],e=c.getAttribute("data-wysihtml5-"+b),f=c.getAttribute("data-wysihtml5-"+b+"-value"),d=this.container.querySelector("[data-wysihtml5-"+b+"-group='"+e+"']"),g=this._getDialog(c,e),k[e+":"+f]={link:c,group:d,name:e,value:f,dialog:g,state:!1}},_getDialog:function(b,c){var d,e,f=this,g=this.container.querySelector("[data-wysihtml5-dialog='"+c+"']");return g&&(d=a.toolbar["Dialog_"+c]?new a.toolbar["Dialog_"+c](b,g):new a.toolbar.Dialog(b,g),d.on("show",function(){e=f.composer.selection.getBookmark(),f.editor.fire("show:dialog",{command:c,dialogContainer:g,commandLink:b})}),d.on("save",function(a){e&&f.composer.selection.setBookmark(e),f._execCommand(c,a),f.editor.fire("save:dialog",{command:c,dialogContainer:g,commandLink:b})}),d.on("cancel",function(){f.editor.focus(!1),f.editor.fire("cancel:dialog",{command:c,dialogContainer:g,commandLink:b})})),d},execCommand:function(a,b){if(!this.commandsDisabled){var c=this.commandMapping[a+":"+b];c&&c.dialog&&!c.state?c.dialog.show():this._execCommand(a,b)}},_execCommand:function(a,b){this.editor.focus(!1),this.composer.commands.exec(a,b),this._updateLinkStates()},execAction:function(a){var b=this.editor;"change_view"===a&&b.textarea&&(b.currentView===b.textarea?b.fire("change_view","composer"):b.fire("change_view","textarea")),"showSource"==a&&b.fire("showSource")},_observe:function(){for(var a=this,b=this.editor,d=this.container,e=this.commandLinks.concat(this.actionLinks),g=e.length,h=0;g>h;h++)"A"===e[h].nodeName?f.setAttributes({href:"javascript:;",unselectable:"on"}).on(e[h]):f.setAttributes({unselectable:"on"}).on(e[h]);f.delegate(d,"[data-wysihtml5-command], [data-wysihtml5-action]","mousedown",function(a){a.preventDefault()}),f.delegate(d,"[data-wysihtml5-command]","click",function(b){var c=this,d=c.getAttribute("data-wysihtml5-command"),e=c.getAttribute("data-wysihtml5-command-value");a.execCommand(d,e),b.preventDefault()}),f.delegate(d,"[data-wysihtml5-action]","click",function(b){var c=this.getAttribute("data-wysihtml5-action");a.execAction(c),b.preventDefault()}),b.on("interaction:composer",function(){a._updateLinkStates()}),b.on("focus:composer",function(){a.bookmark=null}),this.editor.config.handleTables&&(b.on("tableselect:composer",function(){a.container.querySelectorAll('[data-wysihtml5-hiddentools="table"]')[0].style.display=""}),b.on("tableunselect:composer",function(){a.container.querySelectorAll('[data-wysihtml5-hiddentools="table"]')[0].style.display="none"})),b.on("change_view",function(e){b.textarea&&setTimeout(function(){a.commandsDisabled="composer"!==e,a._updateLinkStates(),a.commandsDisabled?f.addClass(d,c):f.removeClass(d,c)},0)})},_updateLinkStates:function(){var c,g,h,i,j=this.commandMapping,k=this.actionMapping;for(c in j)i=j[c],this.commandsDisabled?(g=!1,f.removeClass(i.link,d),i.group&&f.removeClass(i.group,d),i.dialog&&i.dialog.hide()):(g=this.composer.commands.state(i.name,i.value),f.removeClass(i.link,b),i.group&&f.removeClass(i.group,b)),i.state!==g&&(i.state=g,g?(f.addClass(i.link,d),i.group&&f.addClass(i.group,d),i.dialog&&("object"==typeof g||a.lang.object(g).isArray()?(!i.dialog.multiselect&&a.lang.object(g).isArray()&&(g=1===g.length?g[0]:!0,i.state=g),i.dialog.show(g)):i.dialog.hide())):(f.removeClass(i.link,d),i.group&&f.removeClass(i.group,d),i.dialog&&i.dialog.hide()));for(c in k)h=k[c],"change_view"===h.name&&(h.state=this.editor.currentView===this.editor.textarea,h.state?f.addClass(h.link,e):f.removeClass(h.link,e))},show:function(){this.container.style.display=""},hide:function(){this.container.style.display="none"}})}(wysihtml5),function(a){a.toolbar.Dialog_createTable=a.toolbar.Dialog.extend({show:function(a){this.base(a)}})}(wysihtml5),function(a){var b=(a.dom,"[data-wysihtml5-dialog-field]"),c="data-wysihtml5-dialog-field";a.toolbar.Dialog_foreColorStyle=a.toolbar.Dialog.extend({multiselect:!0,_serialize:function(){for(var a={},d=this.container.querySelectorAll(b),e=d.length,f=0;e>f;f++)a[d[f].getAttribute(c)]=d[f].value;return a},_interpolate:function(d){for(var e,f=document.querySelector(":focus"),g=this.container.querySelectorAll(b),h=g.length,i=0,j=this.elementToChange?a.lang.object(this.elementToChange).isArray()?this.elementToChange[0]:this.elementToChange:null,k=j?j.getAttribute("style"):null,l=k?a.quirks.styleParser.parseColor(k,"color"):null;h>i;i++)e=g[i],e!==f&&(d&&"hidden"===e.type||"color"===e.getAttribute(c)&&(e.value=l?l[3]&&1!=l[3]?"rgba("+l[0]+","+l[1]+","+l[2]+","+l[3]+");":"rgb("+l[0]+","+l[1]+","+l[2]+");":"rgb(0,0,0);"))}})}(wysihtml5),function(a){a.dom;a.toolbar.Dialog_fontSizeStyle=a.toolbar.Dialog.extend({multiselect:!0,_serialize:function(){return{size:this.container.querySelector('[data-wysihtml5-dialog-field="size"]').value}},_interpolate:function(){var b=document.querySelector(":focus"),c=this.container.querySelector("[data-wysihtml5-dialog-field='size']"),d=this.elementToChange?a.lang.object(this.elementToChange).isArray()?this.elementToChange[0]:this.elementToChange:null,e=d?d.getAttribute("style"):null,f=e?a.quirks.styleParser.parseFontSize(e):null;c&&c!==b&&f&&!/^\s*$/.test(f)&&(c.value=f)}})}(wysihtml5),Handlebars=function(){var a=function(){"use strict";function a(a){this.string=a}var b;return a.prototype.toString=function(){return""+this.string},b=a}(),b=function(a){"use strict";function b(a){return k[a]||"&amp;"}function c(a,b){for(var c in b)Object.prototype.hasOwnProperty.call(b,c)&&(a[c]=b[c])}function d(a){return a instanceof j?""+a:a||0===a?(a=""+a,m.test(a)?a.replace(l,b):a):""}function e(a){return a||0===a?h(a)&&0===a.length?!0:!1:!0}var f,g,h,i={},j=a,k={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;"},l=/[&<>"'`]/g,m=/[&<>"'`]/;return i.extend=c,f=Object.prototype.toString,i.toString=f,g=function(a){return"function"==typeof a},g(/x/)&&(g=function(a){return"function"==typeof a&&"[object Function]"===f.call(a)}),i.isFunction=g,h=Array.isArray||function(a){return a&&"object"==typeof a?"[object Array]"===f.call(a):!1},i.isArray=h,i.escapeExpression=d,i.isEmpty=e,i}(a),c=function(){"use strict";function a(a,b){var d,e,f;for(b&&b.firstLine&&(d=b.firstLine,a+=" - "+d+":"+b.firstColumn),e=Error.prototype.constructor.call(this,a),f=0;f<c.length;f++)this[c[f]]=e[c[f]];d&&(this.lineNumber=d,this.column=b.firstColumn)}var b,c=["description","fileName","lineNumber","message","name","number","stack"];return a.prototype=Error(),b=a}(),d=function(a,b){"use strict";function c(a,b){this.helpers=a||{},this.partials=b||{},d(this)}function d(a){a.registerHelper("helperMissing",function(a){if(2===arguments.length)return void 0;throw new p("Missing helper: '"+a+"'")}),a.registerHelper("blockHelperMissing",function(b,c){var d=c.inverse||function(){},e=c.fn;return i(b)&&(b=b.call(this)),b===!0?e(this):b===!1||null==b?d(this):h(b)?b.length>0?a.helpers.each(b,c):d(this):e(b)}),a.registerHelper("each",function(a,b){var c,d,e,f=b.fn,g=b.inverse,j=0,k="";if(i(a)&&(a=a.call(this)),b.data&&(c=m(b.data)),a&&"object"==typeof a)if(h(a))for(d=a.length;d>j;j++)c&&(c.index=j,c.first=0===j,c.last=j===a.length-1),k+=f(a[j],{data:c});else for(e in a)a.hasOwnProperty(e)&&(c&&(c.key=e,c.index=j,c.first=0===j),k+=f(a[e],{data:c}),j++);return 0===j&&(k=g(this)),k}),a.registerHelper("if",function(a,b){return i(a)&&(a=a.call(this)),!b.hash.includeZero&&!a||o.isEmpty(a)?b.inverse(this):b.fn(this)}),a.registerHelper("unless",function(b,c){return a.helpers["if"].call(this,b,{fn:c.inverse,inverse:c.fn,hash:c.hash})}),a.registerHelper("with",function(a,b){return i(a)&&(a=a.call(this)),o.isEmpty(a)?void 0:b.fn(a)}),a.registerHelper("log",function(b,c){var d=c.data&&null!=c.data.level?parseInt(c.data.level,10):1;a.log(d,b)})}function e(a,b){l.log(a,b)}var f,g,h,i,j,k,l,m,n={},o=a,p=b,q="1.3.0";return n.VERSION=q,f=4,n.COMPILER_REVISION=f,g={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:">= 1.0.0"},n.REVISION_CHANGES=g,h=o.isArray,i=o.isFunction,j=o.toString,k="[object Object]",n.HandlebarsEnvironment=c,c.prototype={constructor:c,logger:l,log:e,registerHelper:function(a,b,c){if(j.call(a)===k){if(c||b)throw new p("Arg not supported with multiple helpers");o.extend(this.helpers,a)}else c&&(b.not=c),this.helpers[a]=b},registerPartial:function(a,b){j.call(a)===k?o.extend(this.partials,a):this.partials[a]=b}},l={methodMap:{0:"debug",1:"info",2:"warn",3:"error"},DEBUG:0,INFO:1,WARN:2,ERROR:3,level:3,log:function(a,b){if(l.level<=a){var c=l.methodMap[a];"undefined"!=typeof console&&console[c]&&console[c].call(console,b)}}},n.logger=l,n.log=e,m=function(a){var b={};return o.extend(b,a),b},n.createFrame=m,n}(b,c),e=function(a,b,c){"use strict";function d(a){var b,c,d=a&&a[0]||1,e=m;if(d!==e){if(e>d)throw b=n[e],c=n[d],new l("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+b+") or downgrade your runtime to an older version ("+c+").");throw new l("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+a[1]+").")}}function e(a,b){if(!b)throw new l("No environment passed to template");var c=function(a,c,d,e,f,g){var h,i=b.VM.invokePartial.apply(this,arguments);if(null!=i)return i;if(b.compile)return h={helpers:e,partials:f,data:g},f[c]=b.compile(a,{data:void 0!==g},b),f[c](d,h);throw new l("The partial "+c+" could not be compiled when running in runtime-only mode")},d={escapeExpression:k.escapeExpression,invokePartial:c,programs:[],program:function(a,b,c){var d=this.programs[a];return c?d=g(a,b,c):d||(d=this.programs[a]=g(a,b)),d},merge:function(a,b){var c=a||b;return a&&b&&a!==b&&(c={},k.extend(c,b),k.extend(c,a)),c},programWithDepth:b.VM.programWithDepth,noop:b.VM.noop,compilerInfo:null};return function(c,e){var f,g,h,i;return e=e||{},h=e.partial?e:b,e.partial||(f=e.helpers,g=e.partials),i=a.call(d,h,c,f,g,e.data),e.partial||b.VM.checkRevision(d.compilerInfo),i}}function f(a,b,c){var d=Array.prototype.slice.call(arguments,3),e=function(a,e){return e=e||{},b.apply(this,[a,e.data||c].concat(d))};return e.program=a,e.depth=d.length,e}function g(a,b,c){var d=function(a,d){return d=d||{},b(a,d.data||c)};return d.program=a,d.depth=0,d}function h(a,b,c,d,e,f){var g={partial:!0,helpers:d,partials:e,data:f};if(void 0===a)throw new l("The partial "+b+" could not be found");return a instanceof Function?a(c,g):void 0}function i(){return""}var j={},k=a,l=b,m=c.COMPILER_REVISION,n=c.REVISION_CHANGES;return j.checkRevision=d,j.template=e,j.programWithDepth=f,j.program=g,j.invokePartial=h,j.noop=i,j}(b,c,d),f=function(a,b,c,d,e){"use strict";var f,g=a,h=b,i=c,j=d,k=e,l=function(){var a=new g.HandlebarsEnvironment;return j.extend(a,g),a.SafeString=h,a.Exception=i,a.Utils=j,a.VM=k,a.template=function(b){return k.template(b,a)},a},m=l();return m.create=l,f=m}(d,a,c,b,e);return f}(),this.wysihtml5=this.wysihtml5||{},this.wysihtml5.tpl=this.wysihtml5.tpl||{},this.wysihtml5.tpl.blockquote=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+l((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===k?b.apply(a):b)),c}function g(){return' \n      <span class="fa fa-quote-left"></span>\n    '}function h(){return'\n      <span class="glyphicon glyphicon-quote"></span>\n    '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var i,j="",k="function",l=this.escapeExpression,m=this;return j+='<li>\n  <a class="btn ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.size),{hash:{},inverse:m.noop,fn:m.program(1,f,e),data:e}),(i||0===i)&&(j+=i),j+=' btn-default" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="blockquote" data-wysihtml5-display-format-name="false" tabindex="-1">\n    ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.fa),{hash:{},inverse:m.program(5,h,e),fn:m.program(3,g,e),data:e}),(i||0===i)&&(j+=i),j+="\n  </a>\n</li>\n",j}),this.wysihtml5.tpl.color=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+j((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===i?b.apply(a):b)),c}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var g,h="",i="function",j=this.escapeExpression,k=this;return h+='<li class="dropdown">\n  <a class="btn btn-default dropdown-toggle ',g=c["if"].call(b,(g=b&&b.options,g=null==g||g===!1?g:g.toolbar,null==g||g===!1?g:g.size),{hash:{},inverse:k.noop,fn:k.program(1,f,e),data:e}),(g||0===g)&&(h+=g),h+='" data-toggle="dropdown" tabindex="-1">\n    <span class="current-color">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.black,typeof g===i?g.apply(b):g))+'</span>\n    <b class="caret"></b>\n  </a>\n  <ul class="dropdown-menu">\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="black"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="black">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.black,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="silver"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="silver">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.silver,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="gray"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="gray">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.gray,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="maroon"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="maroon">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.maroon,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="red"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="red">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.red,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="purple"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="purple">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.purple,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="green"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="green">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.green,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="olive"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="olive">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.olive,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="navy"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="navy">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.navy,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="blue"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="blue">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.blue,typeof g===i?g.apply(b):g))+'</a></li>\n    <li><div class="wysihtml5-colors" data-wysihtml5-command-value="orange"></div><a class="wysihtml5-colors-title" data-wysihtml5-command="foreColor" data-wysihtml5-command-value="orange">'+j((g=b&&b.locale,g=null==g||g===!1?g:g.colours,g=null==g||g===!1?g:g.orange,typeof g===i?g.apply(b):g))+"</a></li>\n  </ul>\n</li>\n",h}),this.wysihtml5.tpl.emphasis=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+k((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===j?b.apply(a):b)),c}function g(a,b){var d,e="";return e+='\n    <a class="btn ',d=c["if"].call(a,(d=a&&a.options,d=null==d||d===!1?d:d.toolbar,null==d||d===!1?d:d.size),{hash:{},inverse:l.noop,fn:l.program(1,f,b),data:b}),(d||0===d)&&(e+=d),e+=' btn-default" data-wysihtml5-command="small" title="CTRL+S" tabindex="-1">'+k((d=a&&a.locale,d=null==d||d===!1?d:d.emphasis,d=null==d||d===!1?d:d.small,typeof d===j?d.apply(a):d))+"</a>\n    ",e}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var h,i="",j="function",k=this.escapeExpression,l=this;return i+='<li>\n  <div class="btn-group">\n    <a class="btn ',h=c["if"].call(b,(h=b&&b.options,h=null==h||h===!1?h:h.toolbar,null==h||h===!1?h:h.size),{hash:{},inverse:l.noop,fn:l.program(1,f,e),data:e}),(h||0===h)&&(i+=h),i+=' btn-default" data-wysihtml5-command="bold" title="CTRL+B" tabindex="-1">'+k((h=b&&b.locale,h=null==h||h===!1?h:h.emphasis,h=null==h||h===!1?h:h.bold,typeof h===j?h.apply(b):h))+'</a>\n    <a class="btn ',h=c["if"].call(b,(h=b&&b.options,h=null==h||h===!1?h:h.toolbar,null==h||h===!1?h:h.size),{hash:{},inverse:l.noop,fn:l.program(1,f,e),data:e}),(h||0===h)&&(i+=h),i+=' btn-default" data-wysihtml5-command="italic" title="CTRL+I" tabindex="-1">'+k((h=b&&b.locale,h=null==h||h===!1?h:h.emphasis,h=null==h||h===!1?h:h.italic,typeof h===j?h.apply(b):h))+'</a>\n    <a class="btn ',h=c["if"].call(b,(h=b&&b.options,h=null==h||h===!1?h:h.toolbar,null==h||h===!1?h:h.size),{hash:{},inverse:l.noop,fn:l.program(1,f,e),data:e}),(h||0===h)&&(i+=h),i+=' btn-default" data-wysihtml5-command="underline" title="CTRL+U" tabindex="-1">'+k((h=b&&b.locale,h=null==h||h===!1?h:h.emphasis,h=null==h||h===!1?h:h.underline,typeof h===j?h.apply(b):h))+"</a>\n    ",h=c["if"].call(b,(h=b&&b.options,h=null==h||h===!1?h:h.toolbar,h=null==h||h===!1?h:h.emphasis,null==h||h===!1?h:h.small),{hash:{},inverse:l.noop,fn:l.program(3,g,e),data:e}),(h||0===h)&&(i+=h),i+="\n  </div>\n</li>\n",i
 }),this.wysihtml5.tpl["font-styles"]=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+l((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===k?b.apply(a):b)),c}function g(){return'\n      <span class="fa fa-font"></span>\n    '}function h(){return'\n      <span class="glyphicon glyphicon-font"></span>\n    '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var i,j="",k="function",l=this.escapeExpression,m=this;return j+='<li class="dropdown">\n  <a class="btn btn-default dropdown-toggle ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.size),{hash:{},inverse:m.noop,fn:m.program(1,f,e),data:e}),(i||0===i)&&(j+=i),j+='" data-toggle="dropdown">\n    ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.fa),{hash:{},inverse:m.program(5,h,e),fn:m.program(3,g,e),data:e}),(i||0===i)&&(j+=i),j+='\n    <span class="current-font">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.normal,typeof i===k?i.apply(b):i))+'</span>\n    <b class="caret"></b>\n  </a>\n  <ul class="dropdown-menu">\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.normal,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h1,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h2" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h2,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h3,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h4" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h4,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h5" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h5,typeof i===k?i.apply(b):i))+'</a></li>\n    <li><a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h6" tabindex="-1">'+l((i=b&&b.locale,i=null==i||i===!1?i:i.font_styles,i=null==i||i===!1?i:i.h6,typeof i===k?i.apply(b):i))+"</a></li>\n  </ul>\n</li>\n",j}),this.wysihtml5.tpl.html=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+l((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===k?b.apply(a):b)),c}function g(){return'\n        <span class="fa fa-pencil"></span>\n      '}function h(){return'\n        <span class="glyphicon glyphicon-pencil"></span>\n      '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var i,j="",k="function",l=this.escapeExpression,m=this;return j+='<li>\n  <div class="btn-group">\n    <a class="btn ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.size),{hash:{},inverse:m.noop,fn:m.program(1,f,e),data:e}),(i||0===i)&&(j+=i),j+=' btn-default" data-wysihtml5-action="change_view" title="'+l((i=b&&b.locale,i=null==i||i===!1?i:i.html,i=null==i||i===!1?i:i.edit,typeof i===k?i.apply(b):i))+'" tabindex="-1">\n      ',i=c["if"].call(b,(i=b&&b.options,i=null==i||i===!1?i:i.toolbar,null==i||i===!1?i:i.fa),{hash:{},inverse:m.program(5,h,e),fn:m.program(3,g,e),data:e}),(i||0===i)&&(j+=i),j+="\n    </a>\n  </div>\n</li>\n",j}),this.wysihtml5.tpl.image=Handlebars.template(function(a,b,c,d,e){function f(){return"modal-sm"}function g(a){var b,c="";return c+="btn-"+m((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===l?b.apply(a):b)),c}function h(){return'\n      <span class="fa fa-file-image-o"></span>\n    '}function i(){return'\n      <span class="glyphicon glyphicon-picture"></span>\n    '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var j,k="",l="function",m=this.escapeExpression,n=this;return k+='<li>\n  <div class="bootstrap-wysihtml5-insert-image-modal modal fade" data-wysihtml5-dialog="insertImage">\n    <div class="modal-dialog ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.smallmodals),{hash:{},inverse:n.noop,fn:n.program(1,f,e),data:e}),(j||0===j)&&(k+=j),k+='">\n      <div class="modal-content">\n        <div class="modal-header">\n          <a class="close" data-dismiss="modal">&times;</a>\n          <h3>'+m((j=b&&b.locale,j=null==j||j===!1?j:j.image,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'</h3>\n        </div>\n        <div class="modal-body">\n          <div class="form-group">\n            <input value="http://" class="bootstrap-wysihtml5-insert-image-url form-control" data-wysihtml5-dialog-field="src">\n          </div> \n        </div>\n        <div class="modal-footer">\n          <a class="btn btn-default" data-dismiss="modal" data-wysihtml5-dialog-action="cancel" href="#">'+m((j=b&&b.locale,j=null==j||j===!1?j:j.image,j=null==j||j===!1?j:j.cancel,typeof j===l?j.apply(b):j))+'</a>\n          <a class="btn btn-primary" data-dismiss="modal"  data-wysihtml5-dialog-action="save" href="#">'+m((j=b&&b.locale,j=null==j||j===!1?j:j.image,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'</a>\n        </div>\n      </div>\n    </div>\n  </div>\n  <a class="btn ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.size),{hash:{},inverse:n.noop,fn:n.program(3,g,e),data:e}),(j||0===j)&&(k+=j),k+=' btn-default" data-wysihtml5-command="insertImage" title="'+m((j=b&&b.locale,j=null==j||j===!1?j:j.image,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'" tabindex="-1">\n    ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.fa),{hash:{},inverse:n.program(7,i,e),fn:n.program(5,h,e),data:e}),(j||0===j)&&(k+=j),k+="\n  </a>\n</li>\n",k}),this.wysihtml5.tpl.link=Handlebars.template(function(a,b,c,d,e){function f(){return"modal-sm"}function g(a){var b,c="";return c+="btn-"+m((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===l?b.apply(a):b)),c}function h(){return'\n      <span class="fa fa-share-square-o"></span>\n    '}function i(){return'\n      <span class="glyphicon glyphicon-share"></span>\n    '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var j,k="",l="function",m=this.escapeExpression,n=this;return k+='<li>\n  <div class="bootstrap-wysihtml5-insert-link-modal modal fade" data-wysihtml5-dialog="createLink">\n    <div class="modal-dialog ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.smallmodals),{hash:{},inverse:n.noop,fn:n.program(1,f,e),data:e}),(j||0===j)&&(k+=j),k+='">\n      <div class="modal-content">\n        <div class="modal-header">\n          <a class="close" data-dismiss="modal">&times;</a>\n          <h3>'+m((j=b&&b.locale,j=null==j||j===!1?j:j.link,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'</h3>\n        </div>\n        <div class="modal-body">\n          <div class="form-group">\n            <input value="http://" class="bootstrap-wysihtml5-insert-link-url form-control" data-wysihtml5-dialog-field="href">\n          </div> \n          <div class="checkbox">\n            <label> \n              <input type="checkbox" class="bootstrap-wysihtml5-insert-link-target" checked>'+m((j=b&&b.locale,j=null==j||j===!1?j:j.link,j=null==j||j===!1?j:j.target,typeof j===l?j.apply(b):j))+'\n            </label>\n          </div>\n        </div>\n        <div class="modal-footer">\n          <a class="btn btn-default" data-dismiss="modal" data-wysihtml5-dialog-action="cancel" href="#">'+m((j=b&&b.locale,j=null==j||j===!1?j:j.link,j=null==j||j===!1?j:j.cancel,typeof j===l?j.apply(b):j))+'</a>\n          <a href="#" class="btn btn-primary" data-dismiss="modal" data-wysihtml5-dialog-action="save">'+m((j=b&&b.locale,j=null==j||j===!1?j:j.link,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'</a>\n        </div>\n      </div>\n    </div>\n  </div>\n  <a class="btn ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.size),{hash:{},inverse:n.noop,fn:n.program(3,g,e),data:e}),(j||0===j)&&(k+=j),k+=' btn-default" data-wysihtml5-command="createLink" title="'+m((j=b&&b.locale,j=null==j||j===!1?j:j.link,j=null==j||j===!1?j:j.insert,typeof j===l?j.apply(b):j))+'" tabindex="-1">\n    ',j=c["if"].call(b,(j=b&&b.options,j=null==j||j===!1?j:j.toolbar,null==j||j===!1?j:j.fa),{hash:{},inverse:n.program(7,i,e),fn:n.program(5,h,e),data:e}),(j||0===j)&&(k+=j),k+="\n  </a>\n</li>\n",k}),this.wysihtml5.tpl.lists=Handlebars.template(function(a,b,c,d,e){function f(a){var b,c="";return c+="btn-"+r((b=a&&a.options,b=null==b||b===!1?b:b.toolbar,b=null==b||b===!1?b:b.size,typeof b===q?b.apply(a):b)),c}function g(){return'\n      <span class="fa fa-list-ul"></span>\n    '}function h(){return'\n      <span class="glyphicon glyphicon-list"></span>\n    '}function i(){return'\n      <span class="fa fa-list-ol"></span>\n    '}function j(){return'\n      <span class="glyphicon glyphicon-th-list"></span>\n    '}function k(){return'\n      <span class="fa fa-outdent"></span>\n    '}function l(){return'\n      <span class="glyphicon glyphicon-indent-right"></span>\n    '}function m(){return'\n      <span class="fa fa-indent"></span>\n    '}function n(){return'\n      <span class="glyphicon glyphicon-indent-left"></span>\n    '}this.compilerInfo=[4,">= 1.0.0"],c=this.merge(c,a.helpers),e=e||{};var o,p="",q="function",r=this.escapeExpression,s=this;return p+='<li>\n  <div class="btn-group">\n    <a class="btn ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.size),{hash:{},inverse:s.noop,fn:s.program(1,f,e),data:e}),(o||0===o)&&(p+=o),p+=' btn-default" data-wysihtml5-command="insertUnorderedList" title="'+r((o=b&&b.locale,o=null==o||o===!1?o:o.lists,o=null==o||o===!1?o:o.unordered,typeof o===q?o.apply(b):o))+'" tabindex="-1">\n    ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.fa),{hash:{},inverse:s.program(5,h,e),fn:s.program(3,g,e),data:e}),(o||0===o)&&(p+=o),p+='\n    </a>\n    <a class="btn ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.size),{hash:{},inverse:s.noop,fn:s.program(1,f,e),data:e}),(o||0===o)&&(p+=o),p+=' btn-default" data-wysihtml5-command="insertOrderedList" title="'+r((o=b&&b.locale,o=null==o||o===!1?o:o.lists,o=null==o||o===!1?o:o.ordered,typeof o===q?o.apply(b):o))+'" tabindex="-1">\n    ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.fa),{hash:{},inverse:s.program(9,j,e),fn:s.program(7,i,e),data:e}),(o||0===o)&&(p+=o),p+='\n    </a>\n    <a class="btn ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.size),{hash:{},inverse:s.noop,fn:s.program(1,f,e),data:e}),(o||0===o)&&(p+=o),p+=' btn-default" data-wysihtml5-command="Outdent" title="'+r((o=b&&b.locale,o=null==o||o===!1?o:o.lists,o=null==o||o===!1?o:o.outdent,typeof o===q?o.apply(b):o))+'" tabindex="-1">\n    ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.fa),{hash:{},inverse:s.program(13,l,e),fn:s.program(11,k,e),data:e}),(o||0===o)&&(p+=o),p+='\n    </a>\n    <a class="btn ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.size),{hash:{},inverse:s.noop,fn:s.program(1,f,e),data:e}),(o||0===o)&&(p+=o),p+=' btn-default" data-wysihtml5-command="Indent" title="'+r((o=b&&b.locale,o=null==o||o===!1?o:o.lists,o=null==o||o===!1?o:o.indent,typeof o===q?o.apply(b):o))+'" tabindex="-1">\n    ',o=c["if"].call(b,(o=b&&b.options,o=null==o||o===!1?o:o.toolbar,null==o||o===!1?o:o.fa),{hash:{},inverse:s.program(17,n,e),fn:s.program(15,m,e),data:e}),(o||0===o)&&(p+=o),p+="\n    </a>\n  </div>\n</li>\n",p}),function(a){"use strict";"function"==typeof define&&define.amd?define("bootstrap.wysihtml5",["jquery","wysihtml5","bootstrap","bootstrap.wysihtml5.templates","bootstrap.wysihtml5.commands"],a):a(jQuery,wysihtml5)}(function(a,b){"use strict";var c=function(a,b){var c,d,e,f=function(a,c,d){return b.tpl[a]?b.tpl[a]({locale:c,options:d}):void 0},g=function(c,e){var f,g;this.el=c,f=a.extend(!0,{},d,e);for(g in f.customTemplates)f.customTemplates.hasOwnProperty(g)&&(b.tpl[g]=f.customTemplates[g]);this.toolbar=this.createToolbar(c,f),this.editor=this.createEditor(f)};g.prototype={constructor:g,createEditor:function(b){b=b||{},b=a.extend(!0,{},b),b.toolbar=this.toolbar[0],this.initializeEditor(this.el[0],b)},initializeEditor:function(a,c){var d,e=new b.Editor(this.el[0],c);if(e.on("beforeload",this.syncBootstrapDialogEvents),e.on("beforeload",this.loadParserRules),e.composer.editableArea.contentDocument?this.addMoreShortcuts(e,e.composer.editableArea.contentDocument.body||e.composer.editableArea.contentDocument,c.shortcuts):this.addMoreShortcuts(e,e.composer.editableArea,c.shortcuts),c&&c.events)for(d in c.events)c.events.hasOwnProperty(d)&&e.on(d,c.events[d]);return e},loadParserRules:function(){"string"===a.type(this.config.parserRules)&&a.ajax({dataType:"json",url:this.config.parserRules,context:this,error:function(a,b,c){void 0},success:function(a){this.config.parserRules=a,void 0}}),this.config.pasteParserRulesets&&"string"===a.type(this.config.pasteParserRulesets)&&a.ajax({dataType:"json",url:this.config.pasteParserRulesets,context:this,error:function(a,b,c){void 0},success:function(a){this.config.pasteParserRulesets=a}})},syncBootstrapDialogEvents:function(){var b=this;a.map(this.toolbar.commandMapping,function(a){return[a]}).filter(function(a){return a.dialog}).map(function(a){return a.dialog}).forEach(function(c){c.on("show",function(){a(this.container).modal("show")}),c.on("hide",function(){a(this.container).modal("hide"),setTimeout(b.composer.focus,0)}),a(c.container).on("shown.bs.modal",function(){a(this).find("input, select, textarea").first().focus()})}),this.on("change_view",function(){a(this.toolbar.container.children).find("a.btn").not('[data-wysihtml5-action="change_view"]').toggleClass("disabled")})},createToolbar:function(b,c){var g,h,i=this,j=a("<ul/>",{"class":"wysihtml5-toolbar",style:"display:none"}),k=c.locale||d.locale||"en";e.hasOwnProperty(k)||(void 0,k="en"),g=a.extend(!0,{},e.en,e[k]);for(h in c.toolbar)c.toolbar[h]&&j.append(f(h,g,c));return j.find('a[data-wysihtml5-command="formatBlock"]').click(function(b){var c=b.delegateTarget||b.target||b.srcElement,d=a(c),e=d.data("wysihtml5-display-format-name"),f=d.data("wysihtml5-format-name")||d.html();(void 0===e||"true"===e)&&i.toolbar.find(".current-font").text(f)}),j.find('a[data-wysihtml5-command="foreColor"]').click(function(b){var c=b.target||b.srcElement,d=a(c);i.toolbar.find(".current-color").text(d.html())}),this.el.before(j),j},addMoreShortcuts:function(a,c,d){b.dom.observe(c,"keydown",function(c){var e,f=c.keyCode,g=d[f];(c.ctrlKey||c.metaKey||c.altKey)&&g&&b.commands[g]&&(e=a.toolbar.commandMapping[g+":null"],e&&e.dialog&&!e.state?e.dialog.show():b.commands[g].exec(a.composer,g),c.preventDefault())})}},c={resetDefaults:function(){a.fn.wysihtml5.defaultOptions=a.extend(!0,{},a.fn.wysihtml5.defaultOptionsCache)},bypassDefaults:function(b){return this.each(function(){var c=a(this);c.data("wysihtml5",new g(c,b))})},shallowExtend:function(b){var d=a.extend({},a.fn.wysihtml5.defaultOptions,b||{},a(this).data()),e=this;return c.bypassDefaults.apply(e,[d])},deepExtend:function(b){var d=a.extend(!0,{},a.fn.wysihtml5.defaultOptions,b||{}),e=this;return c.bypassDefaults.apply(e,[d])},init:function(a){var b=this;return c.shallowExtend.apply(b,[a])}},a.fn.wysihtml5=function(b){return c[b]?c[b].apply(this,Array.prototype.slice.call(arguments,1)):"object"!=typeof b&&b?(a.error("Method "+b+" does not exist on jQuery.wysihtml5"),void 0):c.init.apply(this,arguments)},a.fn.wysihtml5.Constructor=g,d=a.fn.wysihtml5.defaultOptions={toolbar:{"font-styles":!0,color:!1,emphasis:{small:!0},blockquote:!0,lists:!0,html:!1,link:!0,image:!0,smallmodals:!1},useLineBreaks:!1,parserRules:{classes:{"wysiwyg-color-silver":1,"wysiwyg-color-gray":1,"wysiwyg-color-white":1,"wysiwyg-color-maroon":1,"wysiwyg-color-red":1,"wysiwyg-color-purple":1,"wysiwyg-color-fuchsia":1,"wysiwyg-color-green":1,"wysiwyg-color-lime":1,"wysiwyg-color-olive":1,"wysiwyg-color-yellow":1,"wysiwyg-color-navy":1,"wysiwyg-color-blue":1,"wysiwyg-color-teal":1,"wysiwyg-color-aqua":1,"wysiwyg-color-orange":1},tags:{b:{},i:{},strong:{},em:{},p:{},br:{},ol:{},ul:{},li:{},h1:{},h2:{},h3:{},h4:{},h5:{},h6:{},blockquote:{},u:1,img:{check_attributes:{width:"numbers",alt:"alt",src:"url",height:"numbers"}},a:{check_attributes:{href:"url"},set_attributes:{target:"_blank",rel:"nofollow"}},span:1,div:1,small:1,code:1,pre:1}},locale:"en",shortcuts:{83:"small",75:"createLink"}},void 0===a.fn.wysihtml5.defaultOptionsCache&&(a.fn.wysihtml5.defaultOptionsCache=a.extend(!0,{},a.fn.wysihtml5.defaultOptions)),e=a.fn.wysihtml5.locale={}};c(a,b)}),function(a){a.commands.small={exec:function(b,c){return a.commands.formatInline.exec(b,c,"small")},state:function(b,c){return a.commands.formatInline.state(b,c,"small")}}}(wysihtml5),function(a){"function"==typeof define&&define.amd?define("bootstrap.wysihtml5.en-US",["jquery","bootstrap.wysihtml5"],a):a(jQuery)}(function(a){a.fn.wysihtml5.locale.en=a.fn.wysihtml5.locale["en-US"]={font_styles:{normal:"Normal text",h1:"Heading 1",h2:"Heading 2",h3:"Heading 3",h4:"Heading 4",h5:"Heading 5",h6:"Heading 6"},emphasis:{bold:"Bold",italic:"Italic",underline:"Underline",small:"Small"},lists:{unordered:"Unordered list",ordered:"Ordered list",outdent:"Outdent",indent:"Indent"},link:{insert:"Insert link",cancel:"Cancel",target:"Open link in new window"},image:{insert:"Insert image",cancel:"Cancel"},html:{edit:"Edit HTML"},colours:{black:"Black",silver:"Silver",gray:"Grey",maroon:"Maroon",red:"Red",purple:"Purple",green:"Green",olive:"Olive",navy:"Navy",blue:"Blue",orange:"Orange"}}});
+/**
+ * Super simple wysiwyg editor on Bootstrap v0.6.16
+ * http://summernote.org/
+ *
+ * summernote.js
+ * Copyright 2013-2015 Alan Hong. and other contributors
+ * summernote may be freely distributed under the MIT license./
+ *
+ * Date: 2015-08-03T16:41Z
+ */
+(function (factory) {
+  /* global define */
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['jquery'], factory);
+  } else {
+    // Browser globals: jQuery
+    factory(window.jQuery);
+  }
+}(function ($) {
+  
+
+
+  if (!Array.prototype.reduce) {
+    /**
+     * Array.prototype.reduce polyfill
+     *
+     * @param {Function} callback
+     * @param {Value} [initialValue]
+     * @return {Value}
+     *
+     * @see http://goo.gl/WNriQD
+     */
+    Array.prototype.reduce = function (callback) {
+      var t = Object(this), len = t.length >>> 0, k = 0, value;
+      if (arguments.length === 2) {
+        value = arguments[1];
+      } else {
+        while (k < len && !(k in t)) {
+          k++;
+        }
+        if (k >= len) {
+          throw new TypeError('Reduce of empty array with no initial value');
+        }
+        value = t[k++];
+      }
+      for (; k < len; k++) {
+        if (k in t) {
+          value = callback(value, t[k], k, t);
+        }
+      }
+      return value;
+    };
+  }
+
+  if ('function' !== typeof Array.prototype.filter) {
+    /**
+     * Array.prototype.filter polyfill
+     *
+     * @param {Function} func
+     * @return {Array}
+     *
+     * @see http://goo.gl/T1KFnq
+     */
+    Array.prototype.filter = function (func) {
+      var t = Object(this), len = t.length >>> 0;
+
+      var res = [];
+      var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+      for (var i = 0; i < len; i++) {
+        if (i in t) {
+          var val = t[i];
+          if (func.call(thisArg, val, i, t)) {
+            res.push(val);
+          }
+        }
+      }
+  
+      return res;
+    };
+  }
+
+  if (!Array.prototype.map) {
+    /**
+     * Array.prototype.map polyfill
+     *
+     * @param {Function} callback
+     * @return {Array}
+     *
+     * @see https://goo.gl/SMWaMK
+     */
+    Array.prototype.map = function (callback, thisArg) {
+      var T, A, k;
+      if (this === null) {
+        throw new TypeError(' this is null or not defined');
+      }
+
+      var O = Object(this);
+      var len = O.length >>> 0;
+      if (typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function');
+      }
+  
+      if (arguments.length > 1) {
+        T = thisArg;
+      }
+  
+      A = new Array(len);
+      k = 0;
+  
+      while (k < len) {
+        var kValue, mappedValue;
+        if (k in O) {
+          kValue = O[k];
+          mappedValue = callback.call(T, kValue, k, O);
+          A[k] = mappedValue;
+        }
+        k++;
+      }
+      return A;
+    };
+  }
+
+  var isSupportAmd = typeof define === 'function' && define.amd;
+
+  /**
+   * returns whether font is installed or not.
+   *
+   * @param {String} fontName
+   * @return {Boolean}
+   */
+  var isFontInstalled = function (fontName) {
+    var testFontName = fontName === 'Comic Sans MS' ? 'Courier New' : 'Comic Sans MS';
+    var $tester = $('<div>').css({
+      position: 'absolute',
+      left: '-9999px',
+      top: '-9999px',
+      fontSize: '200px'
+    }).text('mmmmmmmmmwwwwwww').appendTo(document.body);
+
+    var originalWidth = $tester.css('fontFamily', testFontName).width();
+    var width = $tester.css('fontFamily', fontName + ',' + testFontName).width();
+
+    $tester.remove();
+
+    return originalWidth !== width;
+  };
+
+  var userAgent = navigator.userAgent;
+  var isMSIE = /MSIE|Trident/i.test(userAgent);
+  var browserVersion;
+  if (isMSIE) {
+    var matches = /MSIE (\d+[.]\d+)/.exec(userAgent);
+    if (matches) {
+      browserVersion = parseFloat(matches[1]);
+    }
+    matches = /Trident\/.*rv:([0-9]{1,}[\.0-9]{0,})/.exec(userAgent);
+    if (matches) {
+      browserVersion = parseFloat(matches[1]);
+    }
+  }
+
+  /**
+   * @class core.agent
+   *
+   * Object which check platform and agent
+   *
+   * @singleton
+   * @alternateClassName agent
+   */
+  var agent = {
+    /** @property {Boolean} [isMac=false] true if this agent is Mac  */
+    isMac: navigator.appVersion.indexOf('Mac') > -1,
+    /** @property {Boolean} [isMSIE=false] true if this agent is a Internet Explorer  */
+    isMSIE: isMSIE,
+    /** @property {Boolean} [isFF=false] true if this agent is a Firefox  */
+    isFF: /firefox/i.test(userAgent),
+    isWebkit: /webkit/i.test(userAgent),
+    /** @property {Boolean} [isSafari=false] true if this agent is a Safari  */
+    isSafari: /safari/i.test(userAgent),
+    /** @property {Float} browserVersion current browser version  */
+    browserVersion: browserVersion,
+    /** @property {String} jqueryVersion current jQuery version string  */
+    jqueryVersion: parseFloat($.fn.jquery),
+    isSupportAmd: isSupportAmd,
+    hasCodeMirror: isSupportAmd ? require.specified('CodeMirror') : !!window.CodeMirror,
+    isFontInstalled: isFontInstalled,
+    isW3CRangeSupport: !!document.createRange
+  };
+
+  /**
+   * @class core.func
+   *
+   * func utils (for high-order func's arg)
+   *
+   * @singleton
+   * @alternateClassName func
+   */
+  var func = (function () {
+    var eq = function (itemA) {
+      return function (itemB) {
+        return itemA === itemB;
+      };
+    };
+
+    var eq2 = function (itemA, itemB) {
+      return itemA === itemB;
+    };
+
+    var peq2 = function (propName) {
+      return function (itemA, itemB) {
+        return itemA[propName] === itemB[propName];
+      };
+    };
+
+    var ok = function () {
+      return true;
+    };
+
+    var fail = function () {
+      return false;
+    };
+
+    var not = function (f) {
+      return function () {
+        return !f.apply(f, arguments);
+      };
+    };
+
+    var and = function (fA, fB) {
+      return function (item) {
+        return fA(item) && fB(item);
+      };
+    };
+
+    var self = function (a) {
+      return a;
+    };
+
+    var idCounter = 0;
+
+    /**
+     * generate a globally-unique id
+     *
+     * @param {String} [prefix]
+     */
+    var uniqueId = function (prefix) {
+      var id = ++idCounter + '';
+      return prefix ? prefix + id : id;
+    };
+
+    /**
+     * returns bnd (bounds) from rect
+     *
+     * - IE Compatability Issue: http://goo.gl/sRLOAo
+     * - Scroll Issue: http://goo.gl/sNjUc
+     *
+     * @param {Rect} rect
+     * @return {Object} bounds
+     * @return {Number} bounds.top
+     * @return {Number} bounds.left
+     * @return {Number} bounds.width
+     * @return {Number} bounds.height
+     */
+    var rect2bnd = function (rect) {
+      var $document = $(document);
+      return {
+        top: rect.top + $document.scrollTop(),
+        left: rect.left + $document.scrollLeft(),
+        width: rect.right - rect.left,
+        height: rect.bottom - rect.top
+      };
+    };
+
+    /**
+     * returns a copy of the object where the keys have become the values and the values the keys.
+     * @param {Object} obj
+     * @return {Object}
+     */
+    var invertObject = function (obj) {
+      var inverted = {};
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          inverted[obj[key]] = key;
+        }
+      }
+      return inverted;
+    };
+
+    /**
+     * @param {String} namespace
+     * @param {String} [prefix]
+     * @return {String}
+     */
+    var namespaceToCamel = function (namespace, prefix) {
+      prefix = prefix || '';
+      return prefix + namespace.split('.').map(function (name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+      }).join('');
+    };
+
+    return {
+      eq: eq,
+      eq2: eq2,
+      peq2: peq2,
+      ok: ok,
+      fail: fail,
+      self: self,
+      not: not,
+      and: and,
+      uniqueId: uniqueId,
+      rect2bnd: rect2bnd,
+      invertObject: invertObject,
+      namespaceToCamel: namespaceToCamel
+    };
+  })();
+
+  /**
+   * @class core.list
+   *
+   * list utils
+   *
+   * @singleton
+   * @alternateClassName list
+   */
+  var list = (function () {
+    /**
+     * returns the first item of an array.
+     *
+     * @param {Array} array
+     */
+    var head = function (array) {
+      return array[0];
+    };
+
+    /**
+     * returns the last item of an array.
+     *
+     * @param {Array} array
+     */
+    var last = function (array) {
+      return array[array.length - 1];
+    };
+
+    /**
+     * returns everything but the last entry of the array.
+     *
+     * @param {Array} array
+     */
+    var initial = function (array) {
+      return array.slice(0, array.length - 1);
+    };
+
+    /**
+     * returns the rest of the items in an array.
+     *
+     * @param {Array} array
+     */
+    var tail = function (array) {
+      return array.slice(1);
+    };
+
+    /**
+     * returns item of array
+     */
+    var find = function (array, pred) {
+      for (var idx = 0, len = array.length; idx < len; idx ++) {
+        var item = array[idx];
+        if (pred(item)) {
+          return item;
+        }
+      }
+    };
+
+    /**
+     * returns true if all of the values in the array pass the predicate truth test.
+     */
+    var all = function (array, pred) {
+      for (var idx = 0, len = array.length; idx < len; idx ++) {
+        if (!pred(array[idx])) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    /**
+     * returns index of item
+     */
+    var indexOf = function (array, item) {
+      return $.inArray(item, array);
+    };
+
+    /**
+     * returns true if the value is present in the list.
+     */
+    var contains = function (array, item) {
+      return indexOf(array, item) !== -1;
+    };
+
+    /**
+     * get sum from a list
+     *
+     * @param {Array} array - array
+     * @param {Function} fn - iterator
+     */
+    var sum = function (array, fn) {
+      fn = fn || func.self;
+      return array.reduce(function (memo, v) {
+        return memo + fn(v);
+      }, 0);
+    };
+  
+    /**
+     * returns a copy of the collection with array type.
+     * @param {Collection} collection - collection eg) node.childNodes, ...
+     */
+    var from = function (collection) {
+      var result = [], idx = -1, length = collection.length;
+      while (++idx < length) {
+        result[idx] = collection[idx];
+      }
+      return result;
+    };
+  
+    /**
+     * cluster elements by predicate function.
+     *
+     * @param {Array} array - array
+     * @param {Function} fn - predicate function for cluster rule
+     * @param {Array[]}
+     */
+    var clusterBy = function (array, fn) {
+      if (!array.length) { return []; }
+      var aTail = tail(array);
+      return aTail.reduce(function (memo, v) {
+        var aLast = last(memo);
+        if (fn(last(aLast), v)) {
+          aLast[aLast.length] = v;
+        } else {
+          memo[memo.length] = [v];
+        }
+        return memo;
+      }, [[head(array)]]);
+    };
+  
+    /**
+     * returns a copy of the array with all falsy values removed
+     *
+     * @param {Array} array - array
+     * @param {Function} fn - predicate function for cluster rule
+     */
+    var compact = function (array) {
+      var aResult = [];
+      for (var idx = 0, len = array.length; idx < len; idx ++) {
+        if (array[idx]) { aResult.push(array[idx]); }
+      }
+      return aResult;
+    };
+
+    /**
+     * produces a duplicate-free version of the array
+     *
+     * @param {Array} array
+     */
+    var unique = function (array) {
+      var results = [];
+
+      for (var idx = 0, len = array.length; idx < len; idx ++) {
+        if (!contains(results, array[idx])) {
+          results.push(array[idx]);
+        }
+      }
+
+      return results;
+    };
+
+    /**
+     * returns next item.
+     * @param {Array} array
+     */
+    var next = function (array, item) {
+      var idx = indexOf(array, item);
+      if (idx === -1) { return null; }
+
+      return array[idx + 1];
+    };
+
+    /**
+     * returns prev item.
+     * @param {Array} array
+     */
+    var prev = function (array, item) {
+      var idx = indexOf(array, item);
+      if (idx === -1) { return null; }
+
+      return array[idx - 1];
+    };
+  
+    return { head: head, last: last, initial: initial, tail: tail,
+             prev: prev, next: next, find: find, contains: contains,
+             all: all, sum: sum, from: from,
+             clusterBy: clusterBy, compact: compact, unique: unique };
+  })();
+
+
+  var NBSP_CHAR = String.fromCharCode(160);
+  var ZERO_WIDTH_NBSP_CHAR = '\ufeff';
+
+  /**
+   * @class core.dom
+   *
+   * Dom functions
+   *
+   * @singleton
+   * @alternateClassName dom
+   */
+  var dom = (function () {
+    /**
+     * @method isEditable
+     *
+     * returns whether node is `note-editable` or not.
+     *
+     * @param {Node} node
+     * @return {Boolean}
+     */
+    var isEditable = function (node) {
+      return node && $(node).hasClass('note-editable');
+    };
+
+    /**
+     * @method isControlSizing
+     *
+     * returns whether node is `note-control-sizing` or not.
+     *
+     * @param {Node} node
+     * @return {Boolean}
+     */
+    var isControlSizing = function (node) {
+      return node && $(node).hasClass('note-control-sizing');
+    };
+
+    /**
+     * @method  buildLayoutInfo
+     *
+     * build layoutInfo from $editor(.note-editor)
+     *
+     * @param {jQuery} $editor
+     * @return {Object}
+     * @return {Function} return.editor
+     * @return {Node} return.dropzone
+     * @return {Node} return.toolbar
+     * @return {Node} return.editable
+     * @return {Node} return.codable
+     * @return {Node} return.popover
+     * @return {Node} return.handle
+     * @return {Node} return.dialog
+     */
+    var buildLayoutInfo = function ($editor) {
+      var makeFinder;
+
+      // air mode
+      if ($editor.hasClass('note-air-editor')) {
+        var id = list.last($editor.attr('id').split('-'));
+        makeFinder = function (sIdPrefix) {
+          return function () { return $(sIdPrefix + id); };
+        };
+
+        return {
+          editor: function () { return $editor; },
+          holder : function () { return $editor.data('holder'); },
+          editable: function () { return $editor; },
+          popover: makeFinder('#note-popover-'),
+          handle: makeFinder('#note-handle-'),
+          dialog: makeFinder('#note-dialog-')
+        };
+
+        // frame mode
+      } else {
+        makeFinder = function (className, $base) {
+          $base = $base || $editor;
+          return function () { return $base.find(className); };
+        };
+
+        var options = $editor.data('options');
+        var $dialogHolder = (options && options.dialogsInBody) ? $(document.body) : null;
+
+        return {
+          editor: function () { return $editor; },
+          holder : function () { return $editor.data('holder'); },
+          dropzone: makeFinder('.note-dropzone'),
+          toolbar: makeFinder('.note-toolbar'),
+          editable: makeFinder('.note-editable'),
+          codable: makeFinder('.note-codable'),
+          statusbar: makeFinder('.note-statusbar'),
+          popover: makeFinder('.note-popover'),
+          handle: makeFinder('.note-handle'),
+          dialog: makeFinder('.note-dialog', $dialogHolder)
+        };
+      }
+    };
+
+    /**
+     * returns makeLayoutInfo from editor's descendant node.
+     *
+     * @private
+     * @param {Node} descendant
+     * @return {Object}
+     */
+    var makeLayoutInfo = function (descendant) {
+      var $target = $(descendant).closest('.note-editor, .note-air-editor, .note-air-layout');
+
+      if (!$target.length) {
+        return null;
+      }
+
+      var $editor;
+      if ($target.is('.note-editor, .note-air-editor')) {
+        $editor = $target;
+      } else {
+        $editor = $('#note-editor-' + list.last($target.attr('id').split('-')));
+      }
+
+      return buildLayoutInfo($editor);
+    };
+
+    /**
+     * @method makePredByNodeName
+     *
+     * returns predicate which judge whether nodeName is same
+     *
+     * @param {String} nodeName
+     * @return {Function}
+     */
+    var makePredByNodeName = function (nodeName) {
+      nodeName = nodeName.toUpperCase();
+      return function (node) {
+        return node && node.nodeName.toUpperCase() === nodeName;
+      };
+    };
+
+    /**
+     * @method isText
+     *
+     *
+     *
+     * @param {Node} node
+     * @return {Boolean} true if node's type is text(3)
+     */
+    var isText = function (node) {
+      return node && node.nodeType === 3;
+    };
+
+    /**
+     * ex) br, col, embed, hr, img, input, ...
+     * @see http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements
+     */
+    var isVoid = function (node) {
+      return node && /^BR|^IMG|^HR|^IFRAME|^BUTTON/.test(node.nodeName.toUpperCase());
+    };
+
+    var isPara = function (node) {
+      if (isEditable(node)) {
+        return false;
+      }
+
+      // Chrome(v31.0), FF(v25.0.1) use DIV for paragraph
+      return node && /^DIV|^P|^LI|^H[1-7]/.test(node.nodeName.toUpperCase());
+    };
+
+    var isLi = makePredByNodeName('LI');
+
+    var isPurePara = function (node) {
+      return isPara(node) && !isLi(node);
+    };
+
+    var isTable = makePredByNodeName('TABLE');
+
+    var isInline = function (node) {
+      return !isBodyContainer(node) &&
+             !isList(node) &&
+             !isHr(node) &&
+             !isPara(node) &&
+             !isTable(node) &&
+             !isBlockquote(node);
+    };
+
+    var isList = function (node) {
+      return node && /^UL|^OL/.test(node.nodeName.toUpperCase());
+    };
+
+    var isHr = makePredByNodeName('HR');
+
+    var isCell = function (node) {
+      return node && /^TD|^TH/.test(node.nodeName.toUpperCase());
+    };
+
+    var isBlockquote = makePredByNodeName('BLOCKQUOTE');
+
+    var isBodyContainer = function (node) {
+      return isCell(node) || isBlockquote(node) || isEditable(node);
+    };
+
+    var isAnchor = makePredByNodeName('A');
+
+    var isParaInline = function (node) {
+      return isInline(node) && !!ancestor(node, isPara);
+    };
+
+    var isBodyInline = function (node) {
+      return isInline(node) && !ancestor(node, isPara);
+    };
+
+    var isBody = makePredByNodeName('BODY');
+
+    /**
+     * returns whether nodeB is closest sibling of nodeA
+     *
+     * @param {Node} nodeA
+     * @param {Node} nodeB
+     * @return {Boolean}
+     */
+    var isClosestSibling = function (nodeA, nodeB) {
+      return nodeA.nextSibling === nodeB ||
+             nodeA.previousSibling === nodeB;
+    };
+
+    /**
+     * returns array of closest siblings with node
+     *
+     * @param {Node} node
+     * @param {function} [pred] - predicate function
+     * @return {Node[]}
+     */
+    var withClosestSiblings = function (node, pred) {
+      pred = pred || func.ok;
+
+      var siblings = [];
+      if (node.previousSibling && pred(node.previousSibling)) {
+        siblings.push(node.previousSibling);
+      }
+      siblings.push(node);
+      if (node.nextSibling && pred(node.nextSibling)) {
+        siblings.push(node.nextSibling);
+      }
+      return siblings;
+    };
+
+    /**
+     * blank HTML for cursor position
+     * - [workaround] old IE only works with &nbsp;
+     * - [workaround] IE11 and other browser works with bogus br
+     */
+    var blankHTML = agent.isMSIE && agent.browserVersion < 11 ? '&nbsp;' : '<br>';
+
+    /**
+     * @method nodeLength
+     *
+     * returns #text's text size or element's childNodes size
+     *
+     * @param {Node} node
+     */
+    var nodeLength = function (node) {
+      if (isText(node)) {
+        return node.nodeValue.length;
+      }
+
+      return node.childNodes.length;
+    };
+
+    /**
+     * returns whether node is empty or not.
+     *
+     * @param {Node} node
+     * @return {Boolean}
+     */
+    var isEmpty = function (node) {
+      var len = nodeLength(node);
+
+      if (len === 0) {
+        return true;
+      } else if (!isText(node) && len === 1 && node.innerHTML === blankHTML) {
+        // ex) <p><br></p>, <span><br></span>
+        return true;
+      } else if (list.all(node.childNodes, isText) && node.innerHTML === '') {
+        // ex) <p></p>, <span></span>
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
+     * padding blankHTML if node is empty (for cursor position)
+     */
+    var paddingBlankHTML = function (node) {
+      if (!isVoid(node) && !nodeLength(node)) {
+        node.innerHTML = blankHTML;
+      }
+    };
+
+    /**
+     * find nearest ancestor predicate hit
+     *
+     * @param {Node} node
+     * @param {Function} pred - predicate function
+     */
+    var ancestor = function (node, pred) {
+      while (node) {
+        if (pred(node)) { return node; }
+        if (isEditable(node)) { break; }
+
+        node = node.parentNode;
+      }
+      return null;
+    };
+
+    /**
+     * find nearest ancestor only single child blood line and predicate hit
+     *
+     * @param {Node} node
+     * @param {Function} pred - predicate function
+     */
+    var singleChildAncestor = function (node, pred) {
+      node = node.parentNode;
+
+      while (node) {
+        if (nodeLength(node) !== 1) { break; }
+        if (pred(node)) { return node; }
+        if (isEditable(node)) { break; }
+
+        node = node.parentNode;
+      }
+      return null;
+    };
+
+    /**
+     * returns new array of ancestor nodes (until predicate hit).
+     *
+     * @param {Node} node
+     * @param {Function} [optional] pred - predicate function
+     */
+    var listAncestor = function (node, pred) {
+      pred = pred || func.fail;
+
+      var ancestors = [];
+      ancestor(node, function (el) {
+        if (!isEditable(el)) {
+          ancestors.push(el);
+        }
+
+        return pred(el);
+      });
+      return ancestors;
+    };
+
+    /**
+     * find farthest ancestor predicate hit
+     */
+    var lastAncestor = function (node, pred) {
+      var ancestors = listAncestor(node);
+      return list.last(ancestors.filter(pred));
+    };
+
+    /**
+     * returns common ancestor node between two nodes.
+     *
+     * @param {Node} nodeA
+     * @param {Node} nodeB
+     */
+    var commonAncestor = function (nodeA, nodeB) {
+      var ancestors = listAncestor(nodeA);
+      for (var n = nodeB; n; n = n.parentNode) {
+        if ($.inArray(n, ancestors) > -1) { return n; }
+      }
+      return null; // difference document area
+    };
+
+    /**
+     * listing all previous siblings (until predicate hit).
+     *
+     * @param {Node} node
+     * @param {Function} [optional] pred - predicate function
+     */
+    var listPrev = function (node, pred) {
+      pred = pred || func.fail;
+
+      var nodes = [];
+      while (node) {
+        if (pred(node)) { break; }
+        nodes.push(node);
+        node = node.previousSibling;
+      }
+      return nodes;
+    };
+
+    /**
+     * listing next siblings (until predicate hit).
+     *
+     * @param {Node} node
+     * @param {Function} [pred] - predicate function
+     */
+    var listNext = function (node, pred) {
+      pred = pred || func.fail;
+
+      var nodes = [];
+      while (node) {
+        if (pred(node)) { break; }
+        nodes.push(node);
+        node = node.nextSibling;
+      }
+      return nodes;
+    };
+
+    /**
+     * listing descendant nodes
+     *
+     * @param {Node} node
+     * @param {Function} [pred] - predicate function
+     */
+    var listDescendant = function (node, pred) {
+      var descendents = [];
+      pred = pred || func.ok;
+
+      // start DFS(depth first search) with node
+      (function fnWalk(current) {
+        if (node !== current && pred(current)) {
+          descendents.push(current);
+        }
+        for (var idx = 0, len = current.childNodes.length; idx < len; idx++) {
+          fnWalk(current.childNodes[idx]);
+        }
+      })(node);
+
+      return descendents;
+    };
+
+    /**
+     * wrap node with new tag.
+     *
+     * @param {Node} node
+     * @param {Node} tagName of wrapper
+     * @return {Node} - wrapper
+     */
+    var wrap = function (node, wrapperName) {
+      var parent = node.parentNode;
+      var wrapper = $('<' + wrapperName + '>')[0];
+
+      parent.insertBefore(wrapper, node);
+      wrapper.appendChild(node);
+
+      return wrapper;
+    };
+
+    /**
+     * insert node after preceding
+     *
+     * @param {Node} node
+     * @param {Node} preceding - predicate function
+     */
+    var insertAfter = function (node, preceding) {
+      var next = preceding.nextSibling, parent = preceding.parentNode;
+      if (next) {
+        parent.insertBefore(node, next);
+      } else {
+        parent.appendChild(node);
+      }
+      return node;
+    };
+
+    /**
+     * append elements.
+     *
+     * @param {Node} node
+     * @param {Collection} aChild
+     */
+    var appendChildNodes = function (node, aChild) {
+      $.each(aChild, function (idx, child) {
+        node.appendChild(child);
+      });
+      return node;
+    };
+
+    /**
+     * returns whether boundaryPoint is left edge or not.
+     *
+     * @param {BoundaryPoint} point
+     * @return {Boolean}
+     */
+    var isLeftEdgePoint = function (point) {
+      return point.offset === 0;
+    };
+
+    /**
+     * returns whether boundaryPoint is right edge or not.
+     *
+     * @param {BoundaryPoint} point
+     * @return {Boolean}
+     */
+    var isRightEdgePoint = function (point) {
+      return point.offset === nodeLength(point.node);
+    };
+
+    /**
+     * returns whether boundaryPoint is edge or not.
+     *
+     * @param {BoundaryPoint} point
+     * @return {Boolean}
+     */
+    var isEdgePoint = function (point) {
+      return isLeftEdgePoint(point) || isRightEdgePoint(point);
+    };
+
+    /**
+     * returns wheter node is left edge of ancestor or not.
+     *
+     * @param {Node} node
+     * @param {Node} ancestor
+     * @return {Boolean}
+     */
+    var isLeftEdgeOf = function (node, ancestor) {
+      while (node && node !== ancestor) {
+        if (position(node) !== 0) {
+          return false;
+        }
+        node = node.parentNode;
+      }
+
+      return true;
+    };
+
+    /**
+     * returns whether node is right edge of ancestor or not.
+     *
+     * @param {Node} node
+     * @param {Node} ancestor
+     * @return {Boolean}
+     */
+    var isRightEdgeOf = function (node, ancestor) {
+      while (node && node !== ancestor) {
+        if (position(node) !== nodeLength(node.parentNode) - 1) {
+          return false;
+        }
+        node = node.parentNode;
+      }
+
+      return true;
+    };
+
+    /**
+     * returns whether point is left edge of ancestor or not.
+     * @param {BoundaryPoint} point
+     * @param {Node} ancestor
+     * @return {Boolean}
+     */
+    var isLeftEdgePointOf = function (point, ancestor) {
+      return isLeftEdgePoint(point) && isLeftEdgeOf(point.node, ancestor);
+    };
+
+    /**
+     * returns whether point is right edge of ancestor or not.
+     * @param {BoundaryPoint} point
+     * @param {Node} ancestor
+     * @return {Boolean}
+     */
+    var isRightEdgePointOf = function (point, ancestor) {
+      return isRightEdgePoint(point) && isRightEdgeOf(point.node, ancestor);
+    };
+
+    /**
+     * returns offset from parent.
+     *
+     * @param {Node} node
+     */
+    var position = function (node) {
+      var offset = 0;
+      while ((node = node.previousSibling)) {
+        offset += 1;
+      }
+      return offset;
+    };
+
+    var hasChildren = function (node) {
+      return !!(node && node.childNodes && node.childNodes.length);
+    };
+
+    /**
+     * returns previous boundaryPoint
+     *
+     * @param {BoundaryPoint} point
+     * @param {Boolean} isSkipInnerOffset
+     * @return {BoundaryPoint}
+     */
+    var prevPoint = function (point, isSkipInnerOffset) {
+      var node, offset;
+
+      if (point.offset === 0) {
+        if (isEditable(point.node)) {
+          return null;
+        }
+
+        node = point.node.parentNode;
+        offset = position(point.node);
+      } else if (hasChildren(point.node)) {
+        node = point.node.childNodes[point.offset - 1];
+        offset = nodeLength(node);
+      } else {
+        node = point.node;
+        offset = isSkipInnerOffset ? 0 : point.offset - 1;
+      }
+
+      return {
+        node: node,
+        offset: offset
+      };
+    };
+
+    /**
+     * returns next boundaryPoint
+     *
+     * @param {BoundaryPoint} point
+     * @param {Boolean} isSkipInnerOffset
+     * @return {BoundaryPoint}
+     */
+    var nextPoint = function (point, isSkipInnerOffset) {
+      var node, offset;
+
+      if (nodeLength(point.node) === point.offset) {
+        if (isEditable(point.node)) {
+          return null;
+        }
+
+        node = point.node.parentNode;
+        offset = position(point.node) + 1;
+      } else if (hasChildren(point.node)) {
+        node = point.node.childNodes[point.offset];
+        offset = 0;
+      } else {
+        node = point.node;
+        offset = isSkipInnerOffset ? nodeLength(point.node) : point.offset + 1;
+      }
+
+      return {
+        node: node,
+        offset: offset
+      };
+    };
+
+    /**
+     * returns whether pointA and pointB is same or not.
+     *
+     * @param {BoundaryPoint} pointA
+     * @param {BoundaryPoint} pointB
+     * @return {Boolean}
+     */
+    var isSamePoint = function (pointA, pointB) {
+      return pointA.node === pointB.node && pointA.offset === pointB.offset;
+    };
+
+    /**
+     * returns whether point is visible (can set cursor) or not.
+     * 
+     * @param {BoundaryPoint} point
+     * @return {Boolean}
+     */
+    var isVisiblePoint = function (point) {
+      if (isText(point.node) || !hasChildren(point.node) || isEmpty(point.node)) {
+        return true;
+      }
+
+      var leftNode = point.node.childNodes[point.offset - 1];
+      var rightNode = point.node.childNodes[point.offset];
+      if ((!leftNode || isVoid(leftNode)) && (!rightNode || isVoid(rightNode))) {
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
+     * @method prevPointUtil
+     *
+     * @param {BoundaryPoint} point
+     * @param {Function} pred
+     * @return {BoundaryPoint}
+     */
+    var prevPointUntil = function (point, pred) {
+      while (point) {
+        if (pred(point)) {
+          return point;
+        }
+
+        point = prevPoint(point);
+      }
+
+      return null;
+    };
+
+    /**
+     * @method nextPointUntil
+     *
+     * @param {BoundaryPoint} point
+     * @param {Function} pred
+     * @return {BoundaryPoint}
+     */
+    var nextPointUntil = function (point, pred) {
+      while (point) {
+        if (pred(point)) {
+          return point;
+        }
+
+        point = nextPoint(point);
+      }
+
+      return null;
+    };
+
+    /**
+     * returns whether point has character or not.
+     *
+     * @param {Point} point
+     * @return {Boolean}
+     */
+    var isCharPoint = function (point) {
+      if (!isText(point.node)) {
+        return false;
+      }
+
+      var ch = point.node.nodeValue.charAt(point.offset - 1);
+      return ch && (ch !== ' ' && ch !== NBSP_CHAR);
+    };
+
+    /**
+     * @method walkPoint
+     *
+     * @param {BoundaryPoint} startPoint
+     * @param {BoundaryPoint} endPoint
+     * @param {Function} handler
+     * @param {Boolean} isSkipInnerOffset
+     */
+    var walkPoint = function (startPoint, endPoint, handler, isSkipInnerOffset) {
+      var point = startPoint;
+
+      while (point) {
+        handler(point);
+
+        if (isSamePoint(point, endPoint)) {
+          break;
+        }
+
+        var isSkipOffset = isSkipInnerOffset &&
+                           startPoint.node !== point.node &&
+                           endPoint.node !== point.node;
+        point = nextPoint(point, isSkipOffset);
+      }
+    };
+
+    /**
+     * @method makeOffsetPath
+     *
+     * return offsetPath(array of offset) from ancestor
+     *
+     * @param {Node} ancestor - ancestor node
+     * @param {Node} node
+     */
+    var makeOffsetPath = function (ancestor, node) {
+      var ancestors = listAncestor(node, func.eq(ancestor));
+      return ancestors.map(position).reverse();
+    };
+
+    /**
+     * @method fromOffsetPath
+     *
+     * return element from offsetPath(array of offset)
+     *
+     * @param {Node} ancestor - ancestor node
+     * @param {array} offsets - offsetPath
+     */
+    var fromOffsetPath = function (ancestor, offsets) {
+      var current = ancestor;
+      for (var i = 0, len = offsets.length; i < len; i++) {
+        if (current.childNodes.length <= offsets[i]) {
+          current = current.childNodes[current.childNodes.length - 1];
+        } else {
+          current = current.childNodes[offsets[i]];
+        }
+      }
+      return current;
+    };
+
+    /**
+     * @method splitNode
+     *
+     * split element or #text
+     *
+     * @param {BoundaryPoint} point
+     * @param {Object} [options]
+     * @param {Boolean} [options.isSkipPaddingBlankHTML] - default: false
+     * @param {Boolean} [options.isNotSplitEdgePoint] - default: false
+     * @return {Node} right node of boundaryPoint
+     */
+    var splitNode = function (point, options) {
+      var isSkipPaddingBlankHTML = options && options.isSkipPaddingBlankHTML;
+      var isNotSplitEdgePoint = options && options.isNotSplitEdgePoint;
+
+      // edge case
+      if (isEdgePoint(point) && (isText(point.node) || isNotSplitEdgePoint)) {
+        if (isLeftEdgePoint(point)) {
+          return point.node;
+        } else if (isRightEdgePoint(point)) {
+          return point.node.nextSibling;
+        }
+      }
+
+      // split #text
+      if (isText(point.node)) {
+        return point.node.splitText(point.offset);
+      } else {
+        var childNode = point.node.childNodes[point.offset];
+        var clone = insertAfter(point.node.cloneNode(false), point.node);
+        appendChildNodes(clone, listNext(childNode));
+
+        if (!isSkipPaddingBlankHTML) {
+          paddingBlankHTML(point.node);
+          paddingBlankHTML(clone);
+        }
+
+        return clone;
+      }
+    };
+
+    /**
+     * @method splitTree
+     *
+     * split tree by point
+     *
+     * @param {Node} root - split root
+     * @param {BoundaryPoint} point
+     * @param {Object} [options]
+     * @param {Boolean} [options.isSkipPaddingBlankHTML] - default: false
+     * @param {Boolean} [options.isNotSplitEdgePoint] - default: false
+     * @return {Node} right node of boundaryPoint
+     */
+    var splitTree = function (root, point, options) {
+      // ex) [#text, <span>, <p>]
+      var ancestors = listAncestor(point.node, func.eq(root));
+
+      if (!ancestors.length) {
+        return null;
+      } else if (ancestors.length === 1) {
+        return splitNode(point, options);
+      }
+
+      return ancestors.reduce(function (node, parent) {
+        if (node === point.node) {
+          node = splitNode(point, options);
+        }
+
+        return splitNode({
+          node: parent,
+          offset: node ? dom.position(node) : nodeLength(parent)
+        }, options);
+      });
+    };
+
+    /**
+     * split point
+     *
+     * @param {Point} point
+     * @param {Boolean} isInline
+     * @return {Object}
+     */
+    var splitPoint = function (point, isInline) {
+      // find splitRoot, container
+      //  - inline: splitRoot is a child of paragraph
+      //  - block: splitRoot is a child of bodyContainer
+      var pred = isInline ? isPara : isBodyContainer;
+      var ancestors = listAncestor(point.node, pred);
+      var topAncestor = list.last(ancestors) || point.node;
+
+      var splitRoot, container;
+      if (pred(topAncestor)) {
+        splitRoot = ancestors[ancestors.length - 2];
+        container = topAncestor;
+      } else {
+        splitRoot = topAncestor;
+        container = splitRoot.parentNode;
+      }
+
+      // if splitRoot is exists, split with splitTree
+      var pivot = splitRoot && splitTree(splitRoot, point, {
+        isSkipPaddingBlankHTML: isInline,
+        isNotSplitEdgePoint: isInline
+      });
+
+      // if container is point.node, find pivot with point.offset
+      if (!pivot && container === point.node) {
+        pivot = point.node.childNodes[point.offset];
+      }
+
+      return {
+        rightNode: pivot,
+        container: container
+      };
+    };
+
+    var create = function (nodeName) {
+      return document.createElement(nodeName);
+    };
+
+    var createText = function (text) {
+      return document.createTextNode(text);
+    };
+
+    /**
+     * @method remove
+     *
+     * remove node, (isRemoveChild: remove child or not)
+     *
+     * @param {Node} node
+     * @param {Boolean} isRemoveChild
+     */
+    var remove = function (node, isRemoveChild) {
+      if (!node || !node.parentNode) { return; }
+      if (node.removeNode) { return node.removeNode(isRemoveChild); }
+
+      var parent = node.parentNode;
+      if (!isRemoveChild) {
+        var nodes = [];
+        var i, len;
+        for (i = 0, len = node.childNodes.length; i < len; i++) {
+          nodes.push(node.childNodes[i]);
+        }
+
+        for (i = 0, len = nodes.length; i < len; i++) {
+          parent.insertBefore(nodes[i], node);
+        }
+      }
+
+      parent.removeChild(node);
+    };
+
+    /**
+     * @method removeWhile
+     *
+     * @param {Node} node
+     * @param {Function} pred
+     */
+    var removeWhile = function (node, pred) {
+      while (node) {
+        if (isEditable(node) || !pred(node)) {
+          break;
+        }
+
+        var parent = node.parentNode;
+        remove(node);
+        node = parent;
+      }
+    };
+
+    /**
+     * @method replace
+     *
+     * replace node with provided nodeName
+     *
+     * @param {Node} node
+     * @param {String} nodeName
+     * @return {Node} - new node
+     */
+    var replace = function (node, nodeName) {
+      if (node.nodeName.toUpperCase() === nodeName.toUpperCase()) {
+        return node;
+      }
+
+      var newNode = create(nodeName);
+
+      if (node.style.cssText) {
+        newNode.style.cssText = node.style.cssText;
+      }
+
+      appendChildNodes(newNode, list.from(node.childNodes));
+      insertAfter(newNode, node);
+      remove(node);
+
+      return newNode;
+    };
+
+    var isTextarea = makePredByNodeName('TEXTAREA');
+
+    /**
+     * @param {jQuery} $node
+     * @param {Boolean} [stripLinebreaks] - default: false
+     */
+    var value = function ($node, stripLinebreaks) {
+      var val = isTextarea($node[0]) ? $node.val() : $node.html();
+      if (stripLinebreaks) {
+        return val.replace(/[\n\r]/g, '');
+      }
+      return val;
+    };
+
+    /**
+     * @method html
+     *
+     * get the HTML contents of node
+     *
+     * @param {jQuery} $node
+     * @param {Boolean} [isNewlineOnBlock]
+     */
+    var html = function ($node, isNewlineOnBlock) {
+      var markup = value($node);
+
+      if (isNewlineOnBlock) {
+        var regexTag = /<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g;
+        markup = markup.replace(regexTag, function (match, endSlash, name) {
+          name = name.toUpperCase();
+          var isEndOfInlineContainer = /^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(name) &&
+                                       !!endSlash;
+          var isBlockNode = /^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(name);
+
+          return match + ((isEndOfInlineContainer || isBlockNode) ? '\n' : '');
+        });
+        markup = $.trim(markup);
+      }
+
+      return markup;
+    };
+
+    return {
+      /** @property {String} NBSP_CHAR */
+      NBSP_CHAR: NBSP_CHAR,
+      /** @property {String} ZERO_WIDTH_NBSP_CHAR */
+      ZERO_WIDTH_NBSP_CHAR: ZERO_WIDTH_NBSP_CHAR,
+      /** @property {String} blank */
+      blank: blankHTML,
+      /** @property {String} emptyPara */
+      emptyPara: '<p>' + blankHTML + '</p>',
+      makePredByNodeName: makePredByNodeName,
+      isEditable: isEditable,
+      isControlSizing: isControlSizing,
+      buildLayoutInfo: buildLayoutInfo,
+      makeLayoutInfo: makeLayoutInfo,
+      isText: isText,
+      isVoid: isVoid,
+      isPara: isPara,
+      isPurePara: isPurePara,
+      isInline: isInline,
+      isBlock: func.not(isInline),
+      isBodyInline: isBodyInline,
+      isBody: isBody,
+      isParaInline: isParaInline,
+      isList: isList,
+      isTable: isTable,
+      isCell: isCell,
+      isBlockquote: isBlockquote,
+      isBodyContainer: isBodyContainer,
+      isAnchor: isAnchor,
+      isDiv: makePredByNodeName('DIV'),
+      isLi: isLi,
+      isBR: makePredByNodeName('BR'),
+      isSpan: makePredByNodeName('SPAN'),
+      isB: makePredByNodeName('B'),
+      isU: makePredByNodeName('U'),
+      isS: makePredByNodeName('S'),
+      isI: makePredByNodeName('I'),
+      isImg: makePredByNodeName('IMG'),
+      isTextarea: isTextarea,
+      isEmpty: isEmpty,
+      isEmptyAnchor: func.and(isAnchor, isEmpty),
+      isClosestSibling: isClosestSibling,
+      withClosestSiblings: withClosestSiblings,
+      nodeLength: nodeLength,
+      isLeftEdgePoint: isLeftEdgePoint,
+      isRightEdgePoint: isRightEdgePoint,
+      isEdgePoint: isEdgePoint,
+      isLeftEdgeOf: isLeftEdgeOf,
+      isRightEdgeOf: isRightEdgeOf,
+      isLeftEdgePointOf: isLeftEdgePointOf,
+      isRightEdgePointOf: isRightEdgePointOf,
+      prevPoint: prevPoint,
+      nextPoint: nextPoint,
+      isSamePoint: isSamePoint,
+      isVisiblePoint: isVisiblePoint,
+      prevPointUntil: prevPointUntil,
+      nextPointUntil: nextPointUntil,
+      isCharPoint: isCharPoint,
+      walkPoint: walkPoint,
+      ancestor: ancestor,
+      singleChildAncestor: singleChildAncestor,
+      listAncestor: listAncestor,
+      lastAncestor: lastAncestor,
+      listNext: listNext,
+      listPrev: listPrev,
+      listDescendant: listDescendant,
+      commonAncestor: commonAncestor,
+      wrap: wrap,
+      insertAfter: insertAfter,
+      appendChildNodes: appendChildNodes,
+      position: position,
+      hasChildren: hasChildren,
+      makeOffsetPath: makeOffsetPath,
+      fromOffsetPath: fromOffsetPath,
+      splitTree: splitTree,
+      splitPoint: splitPoint,
+      create: create,
+      createText: createText,
+      remove: remove,
+      removeWhile: removeWhile,
+      replace: replace,
+      html: html,
+      value: value
+    };
+  })();
+
+
+  var range = (function () {
+
+    /**
+     * return boundaryPoint from TextRange, inspired by Andy Na's HuskyRange.js
+     *
+     * @param {TextRange} textRange
+     * @param {Boolean} isStart
+     * @return {BoundaryPoint}
+     *
+     * @see http://msdn.microsoft.com/en-us/library/ie/ms535872(v=vs.85).aspx
+     */
+    var textRangeToPoint = function (textRange, isStart) {
+      var container = textRange.parentElement(), offset;
+  
+      var tester = document.body.createTextRange(), prevContainer;
+      var childNodes = list.from(container.childNodes);
+      for (offset = 0; offset < childNodes.length; offset++) {
+        if (dom.isText(childNodes[offset])) {
+          continue;
+        }
+        tester.moveToElementText(childNodes[offset]);
+        if (tester.compareEndPoints('StartToStart', textRange) >= 0) {
+          break;
+        }
+        prevContainer = childNodes[offset];
+      }
+  
+      if (offset !== 0 && dom.isText(childNodes[offset - 1])) {
+        var textRangeStart = document.body.createTextRange(), curTextNode = null;
+        textRangeStart.moveToElementText(prevContainer || container);
+        textRangeStart.collapse(!prevContainer);
+        curTextNode = prevContainer ? prevContainer.nextSibling : container.firstChild;
+  
+        var pointTester = textRange.duplicate();
+        pointTester.setEndPoint('StartToStart', textRangeStart);
+        var textCount = pointTester.text.replace(/[\r\n]/g, '').length;
+  
+        while (textCount > curTextNode.nodeValue.length && curTextNode.nextSibling) {
+          textCount -= curTextNode.nodeValue.length;
+          curTextNode = curTextNode.nextSibling;
+        }
+  
+        /* jshint ignore:start */
+        var dummy = curTextNode.nodeValue; // enforce IE to re-reference curTextNode, hack
+        /* jshint ignore:end */
+  
+        if (isStart && curTextNode.nextSibling && dom.isText(curTextNode.nextSibling) &&
+            textCount === curTextNode.nodeValue.length) {
+          textCount -= curTextNode.nodeValue.length;
+          curTextNode = curTextNode.nextSibling;
+        }
+  
+        container = curTextNode;
+        offset = textCount;
+      }
+  
+      return {
+        cont: container,
+        offset: offset
+      };
+    };
+    
+    /**
+     * return TextRange from boundary point (inspired by google closure-library)
+     * @param {BoundaryPoint} point
+     * @return {TextRange}
+     */
+    var pointToTextRange = function (point) {
+      var textRangeInfo = function (container, offset) {
+        var node, isCollapseToStart;
+  
+        if (dom.isText(container)) {
+          var prevTextNodes = dom.listPrev(container, func.not(dom.isText));
+          var prevContainer = list.last(prevTextNodes).previousSibling;
+          node =  prevContainer || container.parentNode;
+          offset += list.sum(list.tail(prevTextNodes), dom.nodeLength);
+          isCollapseToStart = !prevContainer;
+        } else {
+          node = container.childNodes[offset] || container;
+          if (dom.isText(node)) {
+            return textRangeInfo(node, 0);
+          }
+  
+          offset = 0;
+          isCollapseToStart = false;
+        }
+  
+        return {
+          node: node,
+          collapseToStart: isCollapseToStart,
+          offset: offset
+        };
+      };
+  
+      var textRange = document.body.createTextRange();
+      var info = textRangeInfo(point.node, point.offset);
+  
+      textRange.moveToElementText(info.node);
+      textRange.collapse(info.collapseToStart);
+      textRange.moveStart('character', info.offset);
+      return textRange;
+    };
+    
+    /**
+     * Wrapped Range
+     *
+     * @constructor
+     * @param {Node} sc - start container
+     * @param {Number} so - start offset
+     * @param {Node} ec - end container
+     * @param {Number} eo - end offset
+     */
+    var WrappedRange = function (sc, so, ec, eo) {
+      this.sc = sc;
+      this.so = so;
+      this.ec = ec;
+      this.eo = eo;
+  
+      // nativeRange: get nativeRange from sc, so, ec, eo
+      var nativeRange = function () {
+        if (agent.isW3CRangeSupport) {
+          var w3cRange = document.createRange();
+          w3cRange.setStart(sc, so);
+          w3cRange.setEnd(ec, eo);
+
+          return w3cRange;
+        } else {
+          var textRange = pointToTextRange({
+            node: sc,
+            offset: so
+          });
+
+          textRange.setEndPoint('EndToEnd', pointToTextRange({
+            node: ec,
+            offset: eo
+          }));
+
+          return textRange;
+        }
+      };
+
+      this.getPoints = function () {
+        return {
+          sc: sc,
+          so: so,
+          ec: ec,
+          eo: eo
+        };
+      };
+
+      this.getStartPoint = function () {
+        return {
+          node: sc,
+          offset: so
+        };
+      };
+
+      this.getEndPoint = function () {
+        return {
+          node: ec,
+          offset: eo
+        };
+      };
+
+      /**
+       * select update visible range
+       */
+      this.select = function () {
+        var nativeRng = nativeRange();
+        if (agent.isW3CRangeSupport) {
+          var selection = document.getSelection();
+          if (selection.rangeCount > 0) {
+            selection.removeAllRanges();
+          }
+          selection.addRange(nativeRng);
+        } else {
+          nativeRng.select();
+        }
+        
+        return this;
+      };
+
+      /**
+       * @return {WrappedRange}
+       */
+      this.normalize = function () {
+
+        /**
+         * @param {BoundaryPoint} point
+         * @param {Boolean} isLeftToRight
+         * @return {BoundaryPoint}
+         */
+        var getVisiblePoint = function (point, isLeftToRight) {
+          if ((dom.isVisiblePoint(point) && !dom.isEdgePoint(point)) ||
+              (dom.isVisiblePoint(point) && dom.isRightEdgePoint(point) && !isLeftToRight) ||
+              (dom.isVisiblePoint(point) && dom.isLeftEdgePoint(point) && isLeftToRight) ||
+              (dom.isVisiblePoint(point) && dom.isBlock(point.node) && dom.isEmpty(point.node))) {
+            return point;
+          }
+
+          // point on block's edge
+          var block = dom.ancestor(point.node, dom.isBlock);
+          if (((dom.isLeftEdgePointOf(point, block) || dom.isVoid(dom.prevPoint(point).node)) && !isLeftToRight) ||
+              ((dom.isRightEdgePointOf(point, block) || dom.isVoid(dom.nextPoint(point).node)) && isLeftToRight)) {
+
+            // returns point already on visible point
+            if (dom.isVisiblePoint(point)) {
+              return point;
+            }
+            // reverse direction 
+            isLeftToRight = !isLeftToRight;
+          }
+
+          var nextPoint = isLeftToRight ? dom.nextPointUntil(dom.nextPoint(point), dom.isVisiblePoint) :
+                                          dom.prevPointUntil(dom.prevPoint(point), dom.isVisiblePoint);
+          return nextPoint || point;
+        };
+
+        var endPoint = getVisiblePoint(this.getEndPoint(), false);
+        var startPoint = this.isCollapsed() ? endPoint : getVisiblePoint(this.getStartPoint(), true);
+
+        return new WrappedRange(
+          startPoint.node,
+          startPoint.offset,
+          endPoint.node,
+          endPoint.offset
+        );
+      };
+
+      /**
+       * returns matched nodes on range
+       *
+       * @param {Function} [pred] - predicate function
+       * @param {Object} [options]
+       * @param {Boolean} [options.includeAncestor]
+       * @param {Boolean} [options.fullyContains]
+       * @return {Node[]}
+       */
+      this.nodes = function (pred, options) {
+        pred = pred || func.ok;
+
+        var includeAncestor = options && options.includeAncestor;
+        var fullyContains = options && options.fullyContains;
+
+        // TODO compare points and sort
+        var startPoint = this.getStartPoint();
+        var endPoint = this.getEndPoint();
+
+        var nodes = [];
+        var leftEdgeNodes = [];
+
+        dom.walkPoint(startPoint, endPoint, function (point) {
+          if (dom.isEditable(point.node)) {
+            return;
+          }
+
+          var node;
+          if (fullyContains) {
+            if (dom.isLeftEdgePoint(point)) {
+              leftEdgeNodes.push(point.node);
+            }
+            if (dom.isRightEdgePoint(point) && list.contains(leftEdgeNodes, point.node)) {
+              node = point.node;
+            }
+          } else if (includeAncestor) {
+            node = dom.ancestor(point.node, pred);
+          } else {
+            node = point.node;
+          }
+
+          if (node && pred(node)) {
+            nodes.push(node);
+          }
+        }, true);
+
+        return list.unique(nodes);
+      };
+
+      /**
+       * returns commonAncestor of range
+       * @return {Element} - commonAncestor
+       */
+      this.commonAncestor = function () {
+        return dom.commonAncestor(sc, ec);
+      };
+
+      /**
+       * returns expanded range by pred
+       *
+       * @param {Function} pred - predicate function
+       * @return {WrappedRange}
+       */
+      this.expand = function (pred) {
+        var startAncestor = dom.ancestor(sc, pred);
+        var endAncestor = dom.ancestor(ec, pred);
+
+        if (!startAncestor && !endAncestor) {
+          return new WrappedRange(sc, so, ec, eo);
+        }
+
+        var boundaryPoints = this.getPoints();
+
+        if (startAncestor) {
+          boundaryPoints.sc = startAncestor;
+          boundaryPoints.so = 0;
+        }
+
+        if (endAncestor) {
+          boundaryPoints.ec = endAncestor;
+          boundaryPoints.eo = dom.nodeLength(endAncestor);
+        }
+
+        return new WrappedRange(
+          boundaryPoints.sc,
+          boundaryPoints.so,
+          boundaryPoints.ec,
+          boundaryPoints.eo
+        );
+      };
+
+      /**
+       * @param {Boolean} isCollapseToStart
+       * @return {WrappedRange}
+       */
+      this.collapse = function (isCollapseToStart) {
+        if (isCollapseToStart) {
+          return new WrappedRange(sc, so, sc, so);
+        } else {
+          return new WrappedRange(ec, eo, ec, eo);
+        }
+      };
+
+      /**
+       * splitText on range
+       */
+      this.splitText = function () {
+        var isSameContainer = sc === ec;
+        var boundaryPoints = this.getPoints();
+
+        if (dom.isText(ec) && !dom.isEdgePoint(this.getEndPoint())) {
+          ec.splitText(eo);
+        }
+
+        if (dom.isText(sc) && !dom.isEdgePoint(this.getStartPoint())) {
+          boundaryPoints.sc = sc.splitText(so);
+          boundaryPoints.so = 0;
+
+          if (isSameContainer) {
+            boundaryPoints.ec = boundaryPoints.sc;
+            boundaryPoints.eo = eo - so;
+          }
+        }
+
+        return new WrappedRange(
+          boundaryPoints.sc,
+          boundaryPoints.so,
+          boundaryPoints.ec,
+          boundaryPoints.eo
+        );
+      };
+
+      /**
+       * delete contents on range
+       * @return {WrappedRange}
+       */
+      this.deleteContents = function () {
+        if (this.isCollapsed()) {
+          return this;
+        }
+
+        var rng = this.splitText();
+        var nodes = rng.nodes(null, {
+          fullyContains: true
+        });
+
+        // find new cursor point
+        var point = dom.prevPointUntil(rng.getStartPoint(), function (point) {
+          return !list.contains(nodes, point.node);
+        });
+
+        var emptyParents = [];
+        $.each(nodes, function (idx, node) {
+          // find empty parents
+          var parent = node.parentNode;
+          if (point.node !== parent && dom.nodeLength(parent) === 1) {
+            emptyParents.push(parent);
+          }
+          dom.remove(node, false);
+        });
+
+        // remove empty parents
+        $.each(emptyParents, function (idx, node) {
+          dom.remove(node, false);
+        });
+
+        return new WrappedRange(
+          point.node,
+          point.offset,
+          point.node,
+          point.offset
+        ).normalize();
+      };
+      
+      /**
+       * makeIsOn: return isOn(pred) function
+       */
+      var makeIsOn = function (pred) {
+        return function () {
+          var ancestor = dom.ancestor(sc, pred);
+          return !!ancestor && (ancestor === dom.ancestor(ec, pred));
+        };
+      };
+  
+      // isOnEditable: judge whether range is on editable or not
+      this.isOnEditable = makeIsOn(dom.isEditable);
+      // isOnList: judge whether range is on list node or not
+      this.isOnList = makeIsOn(dom.isList);
+      // isOnAnchor: judge whether range is on anchor node or not
+      this.isOnAnchor = makeIsOn(dom.isAnchor);
+      // isOnAnchor: judge whether range is on cell node or not
+      this.isOnCell = makeIsOn(dom.isCell);
+
+      /**
+       * @param {Function} pred
+       * @return {Boolean}
+       */
+      this.isLeftEdgeOf = function (pred) {
+        if (!dom.isLeftEdgePoint(this.getStartPoint())) {
+          return false;
+        }
+
+        var node = dom.ancestor(this.sc, pred);
+        return node && dom.isLeftEdgeOf(this.sc, node);
+      };
+
+      /**
+       * returns whether range was collapsed or not
+       */
+      this.isCollapsed = function () {
+        return sc === ec && so === eo;
+      };
+
+      /**
+       * wrap inline nodes which children of body with paragraph
+       *
+       * @return {WrappedRange}
+       */
+      this.wrapBodyInlineWithPara = function () {
+        if (dom.isBodyContainer(sc) && dom.isEmpty(sc)) {
+          sc.innerHTML = dom.emptyPara;
+          return new WrappedRange(sc.firstChild, 0, sc.firstChild, 0);
+        }
+
+        /**
+         * [workaround] firefox often create range on not visible point. so normalize here.
+         *  - firefox: |<p>text</p>|
+         *  - chrome: <p>|text|</p>
+         */
+        var rng = this.normalize();
+        if (dom.isParaInline(sc) || dom.isPara(sc)) {
+          return rng;
+        }
+
+        // find inline top ancestor
+        var topAncestor;
+        if (dom.isInline(rng.sc)) {
+          var ancestors = dom.listAncestor(rng.sc, func.not(dom.isInline));
+          topAncestor = list.last(ancestors);
+          if (!dom.isInline(topAncestor)) {
+            topAncestor = ancestors[ancestors.length - 2] || rng.sc.childNodes[rng.so];
+          }
+        } else {
+          topAncestor = rng.sc.childNodes[rng.so > 0 ? rng.so - 1 : 0];
+        }
+
+        // siblings not in paragraph
+        var inlineSiblings = dom.listPrev(topAncestor, dom.isParaInline).reverse();
+        inlineSiblings = inlineSiblings.concat(dom.listNext(topAncestor.nextSibling, dom.isParaInline));
+
+        // wrap with paragraph
+        if (inlineSiblings.length) {
+          var para = dom.wrap(list.head(inlineSiblings), 'p');
+          dom.appendChildNodes(para, list.tail(inlineSiblings));
+        }
+
+        return this.normalize();
+      };
+
+      /**
+       * insert node at current cursor
+       *
+       * @param {Node} node
+       * @return {Node}
+       */
+      this.insertNode = function (node) {
+        var rng = this.wrapBodyInlineWithPara().deleteContents();
+        var info = dom.splitPoint(rng.getStartPoint(), dom.isInline(node));
+
+        if (info.rightNode) {
+          info.rightNode.parentNode.insertBefore(node, info.rightNode);
+        } else {
+          info.container.appendChild(node);
+        }
+
+        return node;
+      };
+
+      /**
+       * insert html at current cursor
+       */
+      this.pasteHTML = function (markup) {
+        var contentsContainer = $('<div></div>').html(markup)[0];
+        var childNodes = list.from(contentsContainer.childNodes);
+
+        var rng = this.wrapBodyInlineWithPara().deleteContents();
+
+        return childNodes.reverse().map(function (childNode) {
+          return rng.insertNode(childNode);
+        }).reverse();
+      };
+  
+      /**
+       * returns text in range
+       *
+       * @return {String}
+       */
+      this.toString = function () {
+        var nativeRng = nativeRange();
+        return agent.isW3CRangeSupport ? nativeRng.toString() : nativeRng.text;
+      };
+
+      /**
+       * returns range for word before cursor
+       *
+       * @param {Boolean} [findAfter] - find after cursor, default: false
+       * @return {WrappedRange}
+       */
+      this.getWordRange = function (findAfter) {
+        var endPoint = this.getEndPoint();
+
+        if (!dom.isCharPoint(endPoint)) {
+          return this;
+        }
+
+        var startPoint = dom.prevPointUntil(endPoint, function (point) {
+          return !dom.isCharPoint(point);
+        });
+
+        if (findAfter) {
+          endPoint = dom.nextPointUntil(endPoint, function (point) {
+            return !dom.isCharPoint(point);
+          });
+        }
+
+        return new WrappedRange(
+          startPoint.node,
+          startPoint.offset,
+          endPoint.node,
+          endPoint.offset
+        );
+      };
+  
+      /**
+       * create offsetPath bookmark
+       *
+       * @param {Node} editable
+       */
+      this.bookmark = function (editable) {
+        return {
+          s: {
+            path: dom.makeOffsetPath(editable, sc),
+            offset: so
+          },
+          e: {
+            path: dom.makeOffsetPath(editable, ec),
+            offset: eo
+          }
+        };
+      };
+
+      /**
+       * create offsetPath bookmark base on paragraph
+       *
+       * @param {Node[]} paras
+       */
+      this.paraBookmark = function (paras) {
+        return {
+          s: {
+            path: list.tail(dom.makeOffsetPath(list.head(paras), sc)),
+            offset: so
+          },
+          e: {
+            path: list.tail(dom.makeOffsetPath(list.last(paras), ec)),
+            offset: eo
+          }
+        };
+      };
+
+      /**
+       * getClientRects
+       * @return {Rect[]}
+       */
+      this.getClientRects = function () {
+        var nativeRng = nativeRange();
+        return nativeRng.getClientRects();
+      };
+    };
+
+  /**
+   * @class core.range
+   *
+   * Data structure
+   *  * BoundaryPoint: a point of dom tree
+   *  * BoundaryPoints: two boundaryPoints corresponding to the start and the end of the Range
+   *
+   * See to http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-Position
+   *
+   * @singleton
+   * @alternateClassName range
+   */
+    return {
+      /**
+       * @method
+       * 
+       * create Range Object From arguments or Browser Selection
+       *
+       * @param {Node} sc - start container
+       * @param {Number} so - start offset
+       * @param {Node} ec - end container
+       * @param {Number} eo - end offset
+       * @return {WrappedRange}
+       */
+      create : function (sc, so, ec, eo) {
+        if (!arguments.length) { // from Browser Selection
+          if (agent.isW3CRangeSupport) {
+            var selection = document.getSelection();
+            if (!selection || selection.rangeCount === 0) {
+              return null;
+            } else if (dom.isBody(selection.anchorNode)) {
+              // Firefox: returns entire body as range on initialization. We won't never need it.
+              return null;
+            }
+  
+            var nativeRng = selection.getRangeAt(0);
+            sc = nativeRng.startContainer;
+            so = nativeRng.startOffset;
+            ec = nativeRng.endContainer;
+            eo = nativeRng.endOffset;
+          } else { // IE8: TextRange
+            var textRange = document.selection.createRange();
+            var textRangeEnd = textRange.duplicate();
+            textRangeEnd.collapse(false);
+            var textRangeStart = textRange;
+            textRangeStart.collapse(true);
+  
+            var startPoint = textRangeToPoint(textRangeStart, true),
+            endPoint = textRangeToPoint(textRangeEnd, false);
+
+            // same visible point case: range was collapsed.
+            if (dom.isText(startPoint.node) && dom.isLeftEdgePoint(startPoint) &&
+                dom.isTextNode(endPoint.node) && dom.isRightEdgePoint(endPoint) &&
+                endPoint.node.nextSibling === startPoint.node) {
+              startPoint = endPoint;
+            }
+
+            sc = startPoint.cont;
+            so = startPoint.offset;
+            ec = endPoint.cont;
+            eo = endPoint.offset;
+          }
+        } else if (arguments.length === 2) { //collapsed
+          ec = sc;
+          eo = so;
+        }
+        return new WrappedRange(sc, so, ec, eo);
+      },
+
+      /**
+       * @method 
+       * 
+       * create WrappedRange from node
+       *
+       * @param {Node} node
+       * @return {WrappedRange}
+       */
+      createFromNode: function (node) {
+        var sc = node;
+        var so = 0;
+        var ec = node;
+        var eo = dom.nodeLength(ec);
+
+        // browsers can't target a picture or void node
+        if (dom.isVoid(sc)) {
+          so = dom.listPrev(sc).length - 1;
+          sc = sc.parentNode;
+        }
+        if (dom.isBR(ec)) {
+          eo = dom.listPrev(ec).length - 1;
+          ec = ec.parentNode;
+        } else if (dom.isVoid(ec)) {
+          eo = dom.listPrev(ec).length;
+          ec = ec.parentNode;
+        }
+
+        return this.create(sc, so, ec, eo);
+      },
+
+      /**
+       * create WrappedRange from node after position
+       *
+       * @param {Node} node
+       * @return {WrappedRange}
+       */
+      createFromNodeBefore: function (node) {
+        return this.createFromNode(node).collapse(true);
+      },
+
+      /**
+       * create WrappedRange from node after position
+       *
+       * @param {Node} node
+       * @return {WrappedRange}
+       */
+      createFromNodeAfter: function (node) {
+        return this.createFromNode(node).collapse();
+      },
+
+      /**
+       * @method 
+       * 
+       * create WrappedRange from bookmark
+       *
+       * @param {Node} editable
+       * @param {Object} bookmark
+       * @return {WrappedRange}
+       */
+      createFromBookmark : function (editable, bookmark) {
+        var sc = dom.fromOffsetPath(editable, bookmark.s.path);
+        var so = bookmark.s.offset;
+        var ec = dom.fromOffsetPath(editable, bookmark.e.path);
+        var eo = bookmark.e.offset;
+        return new WrappedRange(sc, so, ec, eo);
+      },
+
+      /**
+       * @method 
+       *
+       * create WrappedRange from paraBookmark
+       *
+       * @param {Object} bookmark
+       * @param {Node[]} paras
+       * @return {WrappedRange}
+       */
+      createFromParaBookmark: function (bookmark, paras) {
+        var so = bookmark.s.offset;
+        var eo = bookmark.e.offset;
+        var sc = dom.fromOffsetPath(list.head(paras), bookmark.s.path);
+        var ec = dom.fromOffsetPath(list.last(paras), bookmark.e.path);
+
+        return new WrappedRange(sc, so, ec, eo);
+      }
+    };
+  })();
+
+  /**
+   * @class defaults 
+   * 
+   * @singleton
+   */
+  var defaults = {
+    /** @property */
+    version: '0.6.16',
+
+    /**
+     * 
+     * for event options, reference to EventHandler.attach
+     * 
+     * @property {Object} options 
+     * @property {String/Number} [options.width=null] set editor width 
+     * @property {String/Number} [options.height=null] set editor height, ex) 300
+     * @property {String/Number} options.minHeight set minimum height of editor
+     * @property {String/Number} options.maxHeight
+     * @property {String/Number} options.focus 
+     * @property {Number} options.tabsize 
+     * @property {Boolean} options.styleWithSpan
+     * @property {Object} options.codemirror
+     * @property {Object} [options.codemirror.mode='text/html']
+     * @property {Object} [options.codemirror.htmlMode=true]
+     * @property {Object} [options.codemirror.lineNumbers=true]
+     * @property {String} [options.lang=en-US] language 'en-US', 'ko-KR', ...
+     * @property {String} [options.direction=null] text direction, ex) 'rtl'
+     * @property {Array} [options.toolbar]
+     * @property {Boolean} [options.airMode=false]
+     * @property {Array} [options.airPopover]
+     * @property {Fucntion} [options.onInit] initialize
+     * @property {Fucntion} [options.onsubmit]
+     */
+    options: {
+      width: null,                  // set editor width
+      height: null,                 // set editor height, ex) 300
+
+      minHeight: null,              // set minimum height of editor
+      maxHeight: null,              // set maximum height of editor
+
+      focus: false,                 // set focus to editable area after initializing summernote
+
+      tabsize: 4,                   // size of tab ex) 2 or 4
+      styleWithSpan: true,          // style with span (Chrome and FF only)
+
+      disableLinkTarget: false,     // hide link Target Checkbox
+      disableDragAndDrop: false,    // disable drag and drop event
+      disableResizeEditor: false,   // disable resizing editor
+      disableResizeImage: false,    // disable resizing image
+
+      shortcuts: true,              // enable keyboard shortcuts
+
+      textareaAutoSync: true,       // enable textarea auto sync
+
+      placeholder: false,           // enable placeholder text
+      prettifyHtml: true,           // enable prettifying html while toggling codeview
+
+      iconPrefix: 'fa fa-',         // prefix for css icon classes
+
+      icons: {
+        font: {
+          bold: 'bold',
+          italic: 'italic',
+          underline: 'underline',
+          clear: 'eraser',
+          height: 'text-height',
+          strikethrough: 'strikethrough',
+          superscript: 'superscript',
+          subscript: 'subscript'
+        },
+        image: {
+          image: 'picture-o',
+          floatLeft: 'align-left',
+          floatRight: 'align-right',
+          floatNone: 'align-justify',
+          shapeRounded: 'square',
+          shapeCircle: 'circle-o',
+          shapeThumbnail: 'picture-o',
+          shapeNone: 'times',
+          remove: 'trash-o'
+        },
+        link: {
+          link: 'link',
+          unlink: 'unlink',
+          edit: 'edit'
+        },
+        table: {
+          table: 'table'
+        },
+        hr: {
+          insert: 'minus'
+        },
+        style: {
+          style: 'magic'
+        },
+        lists: {
+          unordered: 'list-ul',
+          ordered: 'list-ol'
+        },
+        options: {
+          help: 'question',
+          fullscreen: 'arrows-alt',
+          codeview: 'code'
+        },
+        paragraph: {
+          paragraph: 'align-left',
+          outdent: 'outdent',
+          indent: 'indent',
+          left: 'align-left',
+          center: 'align-center',
+          right: 'align-right',
+          justify: 'align-justify'
+        },
+        color: {
+          recent: 'font'
+        },
+        history: {
+          undo: 'undo',
+          redo: 'repeat'
+        },
+        misc: {
+          check: 'check'
+        }
+      },
+
+      dialogsInBody: false,          // false will add dialogs into editor
+
+      codemirror: {                 // codemirror options
+        mode: 'text/html',
+        htmlMode: true,
+        lineNumbers: true
+      },
+
+      // language
+      lang: 'en-US',                // language 'en-US', 'ko-KR', ...
+      direction: null,              // text direction, ex) 'rtl'
+
+      // toolbar
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        // ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+        ['fontname', ['fontname']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'hr']],
+        ['view', ['fullscreen', 'codeview']],
+        ['help', ['help']]
+      ],
+
+      plugin : { },
+
+      // air mode: inline editor
+      airMode: false,
+      // airPopover: [
+      //   ['style', ['style']],
+      //   ['font', ['bold', 'italic', 'underline', 'clear']],
+      //   ['fontname', ['fontname']],
+      //   ['color', ['color']],
+      //   ['para', ['ul', 'ol', 'paragraph']],
+      //   ['height', ['height']],
+      //   ['table', ['table']],
+      //   ['insert', ['link', 'picture']],
+      //   ['help', ['help']]
+      // ],
+      airPopover: [
+        ['color', ['color']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['para', ['ul', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture']]
+      ],
+
+      // style tag
+      styleTags: ['p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+
+      // default fontName
+      defaultFontName: 'Helvetica Neue',
+
+      // fontName
+      fontNames: [
+        'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+        'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
+        'Tahoma', 'Times New Roman', 'Verdana'
+      ],
+      fontNamesIgnoreCheck: [],
+
+      fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36'],
+
+      // pallete colors(n x n)
+      colors: [
+        ['#000000', '#424242', '#636363', '#9C9C94', '#CEC6CE', '#EFEFEF', '#F7F7F7', '#FFFFFF'],
+        ['#FF0000', '#FF9C00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#9C00FF', '#FF00FF'],
+        ['#F7C6CE', '#FFE7CE', '#FFEFC6', '#D6EFD6', '#CEDEE7', '#CEE7F7', '#D6D6E7', '#E7D6DE'],
+        ['#E79C9C', '#FFC69C', '#FFE79C', '#B5D6A5', '#A5C6CE', '#9CC6EF', '#B5A5D6', '#D6A5BD'],
+        ['#E76363', '#F7AD6B', '#FFD663', '#94BD7B', '#73A5AD', '#6BADDE', '#8C7BC6', '#C67BA5'],
+        ['#CE0000', '#E79439', '#EFC631', '#6BA54A', '#4A7B8C', '#3984C6', '#634AA5', '#A54A7B'],
+        ['#9C0000', '#B56308', '#BD9400', '#397B21', '#104A5A', '#085294', '#311873', '#731842'],
+        ['#630000', '#7B3900', '#846300', '#295218', '#083139', '#003163', '#21104A', '#4A1031']
+      ],
+
+      // lineHeight
+      lineHeights: ['1.0', '1.2', '1.4', '1.5', '1.6', '1.8', '2.0', '3.0'],
+
+      // insertTable max size
+      insertTableMaxSize: {
+        col: 10,
+        row: 10
+      },
+
+      // image
+      maximumImageFileSize: null, // size in bytes, null = no limit
+
+      // callbacks
+      oninit: null,             // initialize
+      onfocus: null,            // editable has focus
+      onblur: null,             // editable out of focus
+      onenter: null,            // enter key pressed
+      onkeyup: null,            // keyup
+      onkeydown: null,          // keydown
+      onImageUpload: null,      // imageUpload
+      onImageUploadError: null, // imageUploadError
+      onMediaDelete: null,      // media delete
+      onToolbarClick: null,
+      onsubmit: null,
+
+      /**
+       * manipulate link address when user create link
+       * @param {String} sLinkUrl
+       * @return {String}
+       */
+      onCreateLink: function (sLinkUrl) {
+        if (sLinkUrl.indexOf('@') !== -1 && sLinkUrl.indexOf(':') === -1) {
+          sLinkUrl =  'mailto:' + sLinkUrl;
+        }
+
+        return sLinkUrl;
+      },
+
+      keyMap: {
+        pc: {
+          'ENTER': 'insertParagraph',
+          'CTRL+Z': 'undo',
+          'CTRL+Y': 'redo',
+          'TAB': 'tab',
+          'SHIFT+TAB': 'untab',
+          'CTRL+B': 'bold',
+          'CTRL+I': 'italic',
+          'CTRL+U': 'underline',
+          'CTRL+SHIFT+S': 'strikethrough',
+          'CTRL+BACKSLASH': 'removeFormat',
+          'CTRL+SHIFT+L': 'justifyLeft',
+          'CTRL+SHIFT+E': 'justifyCenter',
+          'CTRL+SHIFT+R': 'justifyRight',
+          'CTRL+SHIFT+J': 'justifyFull',
+          'CTRL+SHIFT+NUM7': 'insertUnorderedList',
+          'CTRL+SHIFT+NUM8': 'insertOrderedList',
+          'CTRL+LEFTBRACKET': 'outdent',
+          'CTRL+RIGHTBRACKET': 'indent',
+          'CTRL+NUM0': 'formatPara',
+          'CTRL+NUM1': 'formatH1',
+          'CTRL+NUM2': 'formatH2',
+          'CTRL+NUM3': 'formatH3',
+          'CTRL+NUM4': 'formatH4',
+          'CTRL+NUM5': 'formatH5',
+          'CTRL+NUM6': 'formatH6',
+          'CTRL+ENTER': 'insertHorizontalRule',
+          'CTRL+K': 'showLinkDialog'
+        },
+
+        mac: {
+          'ENTER': 'insertParagraph',
+          'CMD+Z': 'undo',
+          'CMD+SHIFT+Z': 'redo',
+          'TAB': 'tab',
+          'SHIFT+TAB': 'untab',
+          'CMD+B': 'bold',
+          'CMD+I': 'italic',
+          'CMD+U': 'underline',
+          'CMD+SHIFT+S': 'strikethrough',
+          'CMD+BACKSLASH': 'removeFormat',
+          'CMD+SHIFT+L': 'justifyLeft',
+          'CMD+SHIFT+E': 'justifyCenter',
+          'CMD+SHIFT+R': 'justifyRight',
+          'CMD+SHIFT+J': 'justifyFull',
+          'CMD+SHIFT+NUM7': 'insertUnorderedList',
+          'CMD+SHIFT+NUM8': 'insertOrderedList',
+          'CMD+LEFTBRACKET': 'outdent',
+          'CMD+RIGHTBRACKET': 'indent',
+          'CMD+NUM0': 'formatPara',
+          'CMD+NUM1': 'formatH1',
+          'CMD+NUM2': 'formatH2',
+          'CMD+NUM3': 'formatH3',
+          'CMD+NUM4': 'formatH4',
+          'CMD+NUM5': 'formatH5',
+          'CMD+NUM6': 'formatH6',
+          'CMD+ENTER': 'insertHorizontalRule',
+          'CMD+K': 'showLinkDialog'
+        }
+      }
+    },
+
+    // default language: en-US
+    lang: {
+      'en-US': {
+        font: {
+          bold: 'Bold',
+          italic: 'Italic',
+          underline: 'Underline',
+          clear: 'Remove Font Style',
+          height: 'Line Height',
+          name: 'Font Family',
+          strikethrough: 'Strikethrough',
+          subscript: 'Subscript',
+          superscript: 'Superscript',
+          size: 'Font Size'
+        },
+        image: {
+          image: 'Picture',
+          insert: 'Insert Image',
+          resizeFull: 'Resize Full',
+          resizeHalf: 'Resize Half',
+          resizeQuarter: 'Resize Quarter',
+          floatLeft: 'Float Left',
+          floatRight: 'Float Right',
+          floatNone: 'Float None',
+          shapeRounded: 'Shape: Rounded',
+          shapeCircle: 'Shape: Circle',
+          shapeThumbnail: 'Shape: Thumbnail',
+          shapeNone: 'Shape: None',
+          dragImageHere: 'Drag image or text here',
+          dropImage: 'Drop image or Text',
+          selectFromFiles: 'Select from files',
+          maximumFileSize: 'Maximum file size',
+          maximumFileSizeError: 'Maximum file size exceeded.',
+          url: 'Image URL',
+          remove: 'Remove Image'
+        },
+        link: {
+          link: 'Link',
+          insert: 'Insert Link',
+          unlink: 'Unlink',
+          edit: 'Edit',
+          textToDisplay: 'Text to display',
+          url: 'To what URL should this link go?',
+          openInNewWindow: 'Open in new window'
+        },
+        table: {
+          table: 'Table'
+        },
+        hr: {
+          insert: 'Insert Horizontal Rule'
+        },
+        style: {
+          style: 'Style',
+          normal: 'Normal',
+          blockquote: 'Quote',
+          pre: 'Code',
+          h1: 'Header 1',
+          h2: 'Header 2',
+          h3: 'Header 3',
+          h4: 'Header 4',
+          h5: 'Header 5',
+          h6: 'Header 6'
+        },
+        lists: {
+          unordered: 'Unordered list',
+          ordered: 'Ordered list'
+        },
+        options: {
+          help: 'Help',
+          fullscreen: 'Full Screen',
+          codeview: 'Code View'
+        },
+        paragraph: {
+          paragraph: 'Paragraph',
+          outdent: 'Outdent',
+          indent: 'Indent',
+          left: 'Align left',
+          center: 'Align center',
+          right: 'Align right',
+          justify: 'Justify full'
+        },
+        color: {
+          recent: 'Recent Color',
+          more: 'More Color',
+          background: 'Background Color',
+          foreground: 'Foreground Color',
+          transparent: 'Transparent',
+          setTransparent: 'Set transparent',
+          reset: 'Reset',
+          resetToDefault: 'Reset to default'
+        },
+        shortcut: {
+          shortcuts: 'Keyboard shortcuts',
+          close: 'Close',
+          textFormatting: 'Text formatting',
+          action: 'Action',
+          paragraphFormatting: 'Paragraph formatting',
+          documentStyle: 'Document Style',
+          extraKeys: 'Extra keys'
+        },
+        history: {
+          undo: 'Undo',
+          redo: 'Redo'
+        }
+      }
+    }
+  };
+
+  /**
+   * @class core.async
+   *
+   * Async functions which returns `Promise`
+   *
+   * @singleton
+   * @alternateClassName async
+   */
+  var async = (function () {
+    /**
+     * @method readFileAsDataURL
+     *
+     * read contents of file as representing URL
+     *
+     * @param {File} file
+     * @return {Promise} - then: sDataUrl
+     */
+    var readFileAsDataURL = function (file) {
+      return $.Deferred(function (deferred) {
+        $.extend(new FileReader(), {
+          onload: function (e) {
+            var sDataURL = e.target.result;
+            deferred.resolve(sDataURL);
+          },
+          onerror: function () {
+            deferred.reject(this);
+          }
+        }).readAsDataURL(file);
+      }).promise();
+    };
+  
+    /**
+     * @method createImage
+     *
+     * create `<image>` from url string
+     *
+     * @param {String} sUrl
+     * @param {String} filename
+     * @return {Promise} - then: $image
+     */
+    var createImage = function (sUrl, filename) {
+      return $.Deferred(function (deferred) {
+        var $img = $('<img>');
+
+        $img.one('load', function () {
+          $img.off('error abort');
+          deferred.resolve($img);
+        }).one('error abort', function () {
+          $img.off('load').detach();
+          deferred.reject($img);
+        }).css({
+          display: 'none'
+        }).appendTo(document.body).attr({
+          'src': sUrl,
+          'data-filename': filename
+        });
+      }).promise();
+    };
+
+    return {
+      readFileAsDataURL: readFileAsDataURL,
+      createImage: createImage
+    };
+  })();
+
+  /**
+   * @class core.key
+   *
+   * Object for keycodes.
+   *
+   * @singleton
+   * @alternateClassName key
+   */
+  var key = (function () {
+    var keyMap = {
+      'BACKSPACE': 8,
+      'TAB': 9,
+      'ENTER': 13,
+      'SPACE': 32,
+
+      // Number: 0-9
+      'NUM0': 48,
+      'NUM1': 49,
+      'NUM2': 50,
+      'NUM3': 51,
+      'NUM4': 52,
+      'NUM5': 53,
+      'NUM6': 54,
+      'NUM7': 55,
+      'NUM8': 56,
+
+      // Alphabet: a-z
+      'B': 66,
+      'E': 69,
+      'I': 73,
+      'J': 74,
+      'K': 75,
+      'L': 76,
+      'R': 82,
+      'S': 83,
+      'U': 85,
+      'V': 86,
+      'Y': 89,
+      'Z': 90,
+
+      'SLASH': 191,
+      'LEFTBRACKET': 219,
+      'BACKSLASH': 220,
+      'RIGHTBRACKET': 221
+    };
+
+    return {
+      /**
+       * @method isEdit
+       *
+       * @param {Number} keyCode
+       * @return {Boolean}
+       */
+      isEdit: function (keyCode) {
+        return list.contains([8, 9, 13, 32], keyCode);
+      },
+      /**
+       * @method isMove
+       *
+       * @param {Number} keyCode
+       * @return {Boolean}
+       */
+      isMove: function (keyCode) {
+        return list.contains([37, 38, 39, 40], keyCode);
+      },
+      /**
+       * @property {Object} nameFromCode
+       * @property {String} nameFromCode.8 "BACKSPACE"
+       */
+      nameFromCode: func.invertObject(keyMap),
+      code: keyMap
+    };
+  })();
+
+  /**
+   * @class editing.History
+   *
+   * Editor History
+   *
+   */
+  var History = function ($editable) {
+    var stack = [], stackOffset = -1;
+    var editable = $editable[0];
+
+    var makeSnapshot = function () {
+      var rng = range.create();
+      var emptyBookmark = {s: {path: [], offset: 0}, e: {path: [], offset: 0}};
+
+      return {
+        contents: $editable.html(),
+        bookmark: (rng ? rng.bookmark(editable) : emptyBookmark)
+      };
+    };
+
+    var applySnapshot = function (snapshot) {
+      if (snapshot.contents !== null) {
+        $editable.html(snapshot.contents);
+      }
+      if (snapshot.bookmark !== null) {
+        range.createFromBookmark(editable, snapshot.bookmark).select();
+      }
+    };
+
+    /**
+     * undo
+     */
+    this.undo = function () {
+      // Create snap shot if not yet recorded
+      if ($editable.html() !== stack[stackOffset].contents) {
+        this.recordUndo();
+      }
+
+      if (0 < stackOffset) {
+        stackOffset--;
+        applySnapshot(stack[stackOffset]);
+      }
+    };
+
+    /**
+     * redo
+     */
+    this.redo = function () {
+      if (stack.length - 1 > stackOffset) {
+        stackOffset++;
+        applySnapshot(stack[stackOffset]);
+      }
+    };
+
+    /**
+     * recorded undo
+     */
+    this.recordUndo = function () {
+      stackOffset++;
+
+      // Wash out stack after stackOffset
+      if (stack.length > stackOffset) {
+        stack = stack.slice(0, stackOffset);
+      }
+
+      // Create new snapshot and push it to the end
+      stack.push(makeSnapshot());
+    };
+
+    // Create first undo stack
+    this.recordUndo();
+  };
+
+  /**
+   * @class editing.Style
+   *
+   * Style
+   *
+   */
+  var Style = function () {
+    /**
+     * @method jQueryCSS
+     *
+     * [workaround] for old jQuery
+     * passing an array of style properties to .css()
+     * will result in an object of property-value pairs.
+     * (compability with version < 1.9)
+     *
+     * @private
+     * @param  {jQuery} $obj
+     * @param  {Array} propertyNames - An array of one or more CSS properties.
+     * @return {Object}
+     */
+    var jQueryCSS = function ($obj, propertyNames) {
+      if (agent.jqueryVersion < 1.9) {
+        var result = {};
+        $.each(propertyNames, function (idx, propertyName) {
+          result[propertyName] = $obj.css(propertyName);
+        });
+        return result;
+      }
+      return $obj.css.call($obj, propertyNames);
+    };
+
+    /**
+     * returns style object from node
+     *
+     * @param {jQuery} $node
+     * @return {Object}
+     */
+    this.fromNode = function ($node) {
+      var properties = ['font-family', 'font-size', 'text-align', 'list-style-type', 'line-height'];
+      var styleInfo = jQueryCSS($node, properties) || {};
+      styleInfo['font-size'] = parseInt(styleInfo['font-size'], 10);
+      return styleInfo;
+    };
+
+    /**
+     * paragraph level style
+     *
+     * @param {WrappedRange} rng
+     * @param {Object} styleInfo
+     */
+    this.stylePara = function (rng, styleInfo) {
+      $.each(rng.nodes(dom.isPara, {
+        includeAncestor: true
+      }), function (idx, para) {
+        $(para).css(styleInfo);
+      });
+    };
+
+    /**
+     * insert and returns styleNodes on range.
+     *
+     * @param {WrappedRange} rng
+     * @param {Object} [options] - options for styleNodes
+     * @param {String} [options.nodeName] - default: `SPAN`
+     * @param {Boolean} [options.expandClosestSibling] - default: `false`
+     * @param {Boolean} [options.onlyPartialContains] - default: `false`
+     * @return {Node[]}
+     */
+    this.styleNodes = function (rng, options) {
+      rng = rng.splitText();
+
+      var nodeName = options && options.nodeName || 'SPAN';
+      var expandClosestSibling = !!(options && options.expandClosestSibling);
+      var onlyPartialContains = !!(options && options.onlyPartialContains);
+
+      if (rng.isCollapsed()) {
+        return [rng.insertNode(dom.create(nodeName))];
+      }
+
+      var pred = dom.makePredByNodeName(nodeName);
+      var nodes = rng.nodes(dom.isText, {
+        fullyContains: true
+      }).map(function (text) {
+        return dom.singleChildAncestor(text, pred) || dom.wrap(text, nodeName);
+      });
+
+      if (expandClosestSibling) {
+        if (onlyPartialContains) {
+          var nodesInRange = rng.nodes();
+          // compose with partial contains predication
+          pred = func.and(pred, function (node) {
+            return list.contains(nodesInRange, node);
+          });
+        }
+
+        return nodes.map(function (node) {
+          var siblings = dom.withClosestSiblings(node, pred);
+          var head = list.head(siblings);
+          var tails = list.tail(siblings);
+          $.each(tails, function (idx, elem) {
+            dom.appendChildNodes(head, elem.childNodes);
+            dom.remove(elem);
+          });
+          return list.head(siblings);
+        });
+      } else {
+        return nodes;
+      }
+    };
+
+    /**
+     * get current style on cursor
+     *
+     * @param {WrappedRange} rng
+     * @return {Object} - object contains style properties.
+     */
+    this.current = function (rng) {
+      var $cont = $(dom.isText(rng.sc) ? rng.sc.parentNode : rng.sc);
+      var styleInfo = this.fromNode($cont);
+
+      // document.queryCommandState for toggle state
+      styleInfo['font-bold'] = document.queryCommandState('bold') ? 'bold' : 'normal';
+      styleInfo['font-italic'] = document.queryCommandState('italic') ? 'italic' : 'normal';
+      styleInfo['font-underline'] = document.queryCommandState('underline') ? 'underline' : 'normal';
+      styleInfo['font-strikethrough'] = document.queryCommandState('strikeThrough') ? 'strikethrough' : 'normal';
+      styleInfo['font-superscript'] = document.queryCommandState('superscript') ? 'superscript' : 'normal';
+      styleInfo['font-subscript'] = document.queryCommandState('subscript') ? 'subscript' : 'normal';
+
+      // list-style-type to list-style(unordered, ordered)
+      if (!rng.isOnList()) {
+        styleInfo['list-style'] = 'none';
+      } else {
+        var aOrderedType = ['circle', 'disc', 'disc-leading-zero', 'square'];
+        var isUnordered = $.inArray(styleInfo['list-style-type'], aOrderedType) > -1;
+        styleInfo['list-style'] = isUnordered ? 'unordered' : 'ordered';
+      }
+
+      var para = dom.ancestor(rng.sc, dom.isPara);
+      if (para && para.style['line-height']) {
+        styleInfo['line-height'] = para.style.lineHeight;
+      } else {
+        var lineHeight = parseInt(styleInfo['line-height'], 10) / parseInt(styleInfo['font-size'], 10);
+        styleInfo['line-height'] = lineHeight.toFixed(1);
+      }
+
+      styleInfo.anchor = rng.isOnAnchor() && dom.ancestor(rng.sc, dom.isAnchor);
+      styleInfo.ancestors = dom.listAncestor(rng.sc, dom.isEditable);
+      styleInfo.range = rng;
+
+      return styleInfo;
+    };
+  };
+
+
+  /**
+   * @class editing.Bullet
+   *
+   * @alternateClassName Bullet
+   */
+  var Bullet = function () {
+    /**
+     * @method insertOrderedList
+     *
+     * toggle ordered list
+     *
+     * @type command
+     */
+    this.insertOrderedList = function () {
+      this.toggleList('OL');
+    };
+
+    /**
+     * @method insertUnorderedList
+     *
+     * toggle unordered list
+     *
+     * @type command
+     */
+    this.insertUnorderedList = function () {
+      this.toggleList('UL');
+    };
+
+    /**
+     * @method indent
+     *
+     * indent
+     *
+     * @type command
+     */
+    this.indent = function () {
+      var self = this;
+      var rng = range.create().wrapBodyInlineWithPara();
+
+      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+
+      $.each(clustereds, function (idx, paras) {
+        var head = list.head(paras);
+        if (dom.isLi(head)) {
+          self.wrapList(paras, head.parentNode.nodeName);
+        } else {
+          $.each(paras, function (idx, para) {
+            $(para).css('marginLeft', function (idx, val) {
+              return (parseInt(val, 10) || 0) + 25;
+            });
+          });
+        }
+      });
+
+      rng.select();
+    };
+
+    /**
+     * @method outdent
+     *
+     * outdent
+     *
+     * @type command
+     */
+    this.outdent = function () {
+      var self = this;
+      var rng = range.create().wrapBodyInlineWithPara();
+
+      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+
+      $.each(clustereds, function (idx, paras) {
+        var head = list.head(paras);
+        if (dom.isLi(head)) {
+          self.releaseList([paras]);
+        } else {
+          $.each(paras, function (idx, para) {
+            $(para).css('marginLeft', function (idx, val) {
+              val = (parseInt(val, 10) || 0);
+              return val > 25 ? val - 25 : '';
+            });
+          });
+        }
+      });
+
+      rng.select();
+    };
+
+    /**
+     * @method toggleList
+     *
+     * toggle list
+     *
+     * @param {String} listName - OL or UL
+     */
+    this.toggleList = function (listName) {
+      var self = this;
+      var rng = range.create().wrapBodyInlineWithPara();
+
+      var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+      var bookmark = rng.paraBookmark(paras);
+      var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
+
+      // paragraph to list
+      if (list.find(paras, dom.isPurePara)) {
+        var wrappedParas = [];
+        $.each(clustereds, function (idx, paras) {
+          wrappedParas = wrappedParas.concat(self.wrapList(paras, listName));
+        });
+        paras = wrappedParas;
+      // list to paragraph or change list style
+      } else {
+        var diffLists = rng.nodes(dom.isList, {
+          includeAncestor: true
+        }).filter(function (listNode) {
+          return !$.nodeName(listNode, listName);
+        });
+
+        if (diffLists.length) {
+          $.each(diffLists, function (idx, listNode) {
+            dom.replace(listNode, listName);
+          });
+        } else {
+          paras = this.releaseList(clustereds, true);
+        }
+      }
+
+      range.createFromParaBookmark(bookmark, paras).select();
+    };
+
+    /**
+     * @method wrapList
+     *
+     * @param {Node[]} paras
+     * @param {String} listName
+     * @return {Node[]}
+     */
+    this.wrapList = function (paras, listName) {
+      var head = list.head(paras);
+      var last = list.last(paras);
+
+      var prevList = dom.isList(head.previousSibling) && head.previousSibling;
+      var nextList = dom.isList(last.nextSibling) && last.nextSibling;
+
+      var listNode = prevList || dom.insertAfter(dom.create(listName || 'UL'), last);
+
+      // P to LI
+      paras = paras.map(function (para) {
+        return dom.isPurePara(para) ? dom.replace(para, 'LI') : para;
+      });
+
+      // append to list(<ul>, <ol>)
+      dom.appendChildNodes(listNode, paras);
+
+      if (nextList) {
+        dom.appendChildNodes(listNode, list.from(nextList.childNodes));
+        dom.remove(nextList);
+      }
+
+      return paras;
+    };
+
+    /**
+     * @method releaseList
+     *
+     * @param {Array[]} clustereds
+     * @param {Boolean} isEscapseToBody
+     * @return {Node[]}
+     */
+    this.releaseList = function (clustereds, isEscapseToBody) {
+      var releasedParas = [];
+
+      $.each(clustereds, function (idx, paras) {
+        var head = list.head(paras);
+        var last = list.last(paras);
+
+        var headList = isEscapseToBody ? dom.lastAncestor(head, dom.isList) :
+                                         head.parentNode;
+        var lastList = headList.childNodes.length > 1 ? dom.splitTree(headList, {
+          node: last.parentNode,
+          offset: dom.position(last) + 1
+        }, {
+          isSkipPaddingBlankHTML: true
+        }) : null;
+
+        var middleList = dom.splitTree(headList, {
+          node: head.parentNode,
+          offset: dom.position(head)
+        }, {
+          isSkipPaddingBlankHTML: true
+        });
+
+        paras = isEscapseToBody ? dom.listDescendant(middleList, dom.isLi) :
+                                  list.from(middleList.childNodes).filter(dom.isLi);
+
+        // LI to P
+        if (isEscapseToBody || !dom.isList(headList.parentNode)) {
+          paras = paras.map(function (para) {
+            return dom.replace(para, 'P');
+          });
+        }
+
+        $.each(list.from(paras).reverse(), function (idx, para) {
+          dom.insertAfter(para, headList);
+        });
+
+        // remove empty lists
+        var rootLists = list.compact([headList, middleList, lastList]);
+        $.each(rootLists, function (idx, rootList) {
+          var listNodes = [rootList].concat(dom.listDescendant(rootList, dom.isList));
+          $.each(listNodes.reverse(), function (idx, listNode) {
+            if (!dom.nodeLength(listNode)) {
+              dom.remove(listNode, true);
+            }
+          });
+        });
+
+        releasedParas = releasedParas.concat(paras);
+      });
+
+      return releasedParas;
+    };
+  };
+
+
+  /**
+   * @class editing.Typing
+   *
+   * Typing
+   *
+   */
+  var Typing = function () {
+
+    // a Bullet instance to toggle lists off
+    var bullet = new Bullet();
+
+    /**
+     * insert tab
+     *
+     * @param {jQuery} $editable
+     * @param {WrappedRange} rng
+     * @param {Number} tabsize
+     */
+    this.insertTab = function ($editable, rng, tabsize) {
+      var tab = dom.createText(new Array(tabsize + 1).join(dom.NBSP_CHAR));
+      rng = rng.deleteContents();
+      rng.insertNode(tab, true);
+
+      rng = range.create(tab, tabsize);
+      rng.select();
+    };
+
+    /**
+     * insert paragraph
+     */
+    this.insertParagraph = function () {
+      var rng = range.create();
+
+      // deleteContents on range.
+      rng = rng.deleteContents();
+
+      // Wrap range if it needs to be wrapped by paragraph
+      rng = rng.wrapBodyInlineWithPara();
+
+      // finding paragraph
+      var splitRoot = dom.ancestor(rng.sc, dom.isPara);
+
+      var nextPara;
+      // on paragraph: split paragraph
+      if (splitRoot) {
+        // if it is an empty line with li
+        if (dom.isEmpty(splitRoot) && dom.isLi(splitRoot)) {
+          // disable UL/OL and escape!
+          bullet.toggleList(splitRoot.parentNode.nodeName);
+          return;
+        // if new line has content (not a line break)
+        } else {
+          nextPara = dom.splitTree(splitRoot, rng.getStartPoint());
+
+          var emptyAnchors = dom.listDescendant(splitRoot, dom.isEmptyAnchor);
+          emptyAnchors = emptyAnchors.concat(dom.listDescendant(nextPara, dom.isEmptyAnchor));
+
+          $.each(emptyAnchors, function (idx, anchor) {
+            dom.remove(anchor);
+          });
+        }
+      // no paragraph: insert empty paragraph
+      } else {
+        var next = rng.sc.childNodes[rng.so];
+        nextPara = $(dom.emptyPara)[0];
+        if (next) {
+          rng.sc.insertBefore(nextPara, next);
+        } else {
+          rng.sc.appendChild(nextPara);
+        }
+      }
+
+      range.create(nextPara, 0).normalize().select();
+
+    };
+
+  };
+
+  /**
+   * @class editing.Table
+   *
+   * Table
+   *
+   */
+  var Table = function () {
+    /**
+     * handle tab key
+     *
+     * @param {WrappedRange} rng
+     * @param {Boolean} isShift
+     */
+    this.tab = function (rng, isShift) {
+      var cell = dom.ancestor(rng.commonAncestor(), dom.isCell);
+      var table = dom.ancestor(cell, dom.isTable);
+      var cells = dom.listDescendant(table, dom.isCell);
+
+      var nextCell = list[isShift ? 'prev' : 'next'](cells, cell);
+      if (nextCell) {
+        range.create(nextCell, 0).select();
+      }
+    };
+
+    /**
+     * create empty table element
+     *
+     * @param {Number} rowCount
+     * @param {Number} colCount
+     * @return {Node}
+     */
+    this.createTable = function (colCount, rowCount) {
+      var tds = [], tdHTML;
+      for (var idxCol = 0; idxCol < colCount; idxCol++) {
+        tds.push('<td>' + dom.blank + '</td>');
+      }
+      tdHTML = tds.join('');
+
+      var trs = [], trHTML;
+      for (var idxRow = 0; idxRow < rowCount; idxRow++) {
+        trs.push('<tr>' + tdHTML + '</tr>');
+      }
+      trHTML = trs.join('');
+      return $('<table class="table table-bordered">' + trHTML + '</table>')[0];
+    };
+  };
+
+
+  var KEY_BOGUS = 'bogus';
+
+  /**
+   * @class editing.Editor
+   *
+   * Editor
+   *
+   */
+  var Editor = function (handler) {
+
+    var self = this;
+    var style = new Style();
+    var table = new Table();
+    var typing = new Typing();
+    var bullet = new Bullet();
+
+    /**
+     * @method createRange
+     *
+     * create range
+     *
+     * @param {jQuery} $editable
+     * @return {WrappedRange}
+     */
+    this.createRange = function ($editable) {
+      this.focus($editable);
+      return range.create();
+    };
+
+    /**
+     * @method saveRange
+     *
+     * save current range
+     *
+     * @param {jQuery} $editable
+     * @param {Boolean} [thenCollapse=false]
+     */
+    this.saveRange = function ($editable, thenCollapse) {
+      this.focus($editable);
+      $editable.data('range', range.create());
+      if (thenCollapse) {
+        range.create().collapse().select();
+      }
+    };
+
+    /**
+     * @method saveRange
+     *
+     * save current node list to $editable.data('childNodes')
+     *
+     * @param {jQuery} $editable
+     */
+    this.saveNode = function ($editable) {
+      // copy child node reference
+      var copy = [];
+      for (var key  = 0, len = $editable[0].childNodes.length; key < len; key++) {
+        copy.push($editable[0].childNodes[key]);
+      }
+      $editable.data('childNodes', copy);
+    };
+
+    /**
+     * @method restoreRange
+     *
+     * restore lately range
+     *
+     * @param {jQuery} $editable
+     */
+    this.restoreRange = function ($editable) {
+      var rng = $editable.data('range');
+      if (rng) {
+        rng.select();
+        this.focus($editable);
+      }
+    };
+
+    /**
+     * @method restoreNode
+     *
+     * restore lately node list
+     *
+     * @param {jQuery} $editable
+     */
+    this.restoreNode = function ($editable) {
+      $editable.html('');
+      var child = $editable.data('childNodes');
+      for (var index = 0, len = child.length; index < len; index++) {
+        $editable[0].appendChild(child[index]);
+      }
+    };
+
+    /**
+     * @method currentStyle
+     *
+     * current style
+     *
+     * @param {Node} target
+     * @return {Object|Boolean} unfocus
+     */
+    this.currentStyle = function (target) {
+      var rng = range.create();
+      var styleInfo =  rng && rng.isOnEditable() ? style.current(rng.normalize()) : {};
+      if (dom.isImg(target)) {
+        styleInfo.image = target;
+      }
+      return styleInfo;
+    };
+
+    /**
+     * style from node
+     *
+     * @param {jQuery} $node
+     * @return {Object}
+     */
+    this.styleFromNode = function ($node) {
+      return style.fromNode($node);
+    };
+
+    var triggerOnBeforeChange = function ($editable) {
+      var $holder = dom.makeLayoutInfo($editable).holder();
+      handler.bindCustomEvent(
+        $holder, $editable.data('callbacks'), 'before.command'
+      )($editable.html(), $editable);
+    };
+
+    var triggerOnChange = function ($editable) {
+      var $holder = dom.makeLayoutInfo($editable).holder();
+      handler.bindCustomEvent(
+        $holder, $editable.data('callbacks'), 'change'
+      )($editable.html(), $editable);
+    };
+
+    /**
+     * @method undo
+     * undo
+     * @param {jQuery} $editable
+     */
+    this.undo = function ($editable) {
+      triggerOnBeforeChange($editable);
+      $editable.data('NoteHistory').undo();
+      triggerOnChange($editable);
+    };
+
+    /**
+     * @method redo
+     * redo
+     * @param {jQuery} $editable
+     */
+    this.redo = function ($editable) {
+      triggerOnBeforeChange($editable);
+      $editable.data('NoteHistory').redo();
+      triggerOnChange($editable);
+    };
+
+    /**
+     * @method beforeCommand
+     * before command
+     * @param {jQuery} $editable
+     */
+    var beforeCommand = this.beforeCommand = function ($editable) {
+      triggerOnBeforeChange($editable);
+      // keep focus on editable before command execution
+      self.focus($editable);
+    };
+
+    /**
+     * @method afterCommand
+     * after command
+     * @param {jQuery} $editable
+     * @param {Boolean} isPreventTrigger
+     */
+    var afterCommand = this.afterCommand = function ($editable, isPreventTrigger) {
+      $editable.data('NoteHistory').recordUndo();
+      if (!isPreventTrigger) {
+        triggerOnChange($editable);
+      }
+    };
+
+    /**
+     * @method bold
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method italic
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method underline
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method strikethrough
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method formatBlock
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method superscript
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method subscript
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method justifyLeft
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method justifyCenter
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method justifyRight
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method justifyFull
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method formatBlock
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method removeFormat
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method backColor
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method foreColor
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method insertHorizontalRule
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /**
+     * @method fontName
+     *
+     * change font name
+     *
+     * @param {jQuery} $editable
+     * @param {Mixed} value
+     */
+
+    /* jshint ignore:start */
+    // native commands(with execCommand), generate function for execCommand
+    var commands = ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript',
+                    'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
+                    'formatBlock', 'removeFormat',
+                    'backColor', 'foreColor', 'fontName'];
+
+    for (var idx = 0, len = commands.length; idx < len; idx ++) {
+      this[commands[idx]] = (function (sCmd) {
+        return function ($editable, value) {
+          beforeCommand($editable);
+
+          document.execCommand(sCmd, false, value);
+
+          afterCommand($editable, true);
+        };
+      })(commands[idx]);
+    }
+    /* jshint ignore:end */
+
+    /**
+     * @method tab
+     *
+     * handle tab key
+     *
+     * @param {jQuery} $editable
+     * @param {Object} options
+     */
+    this.tab = function ($editable, options) {
+      var rng = this.createRange($editable);
+      if (rng.isCollapsed() && rng.isOnCell()) {
+        table.tab(rng);
+      } else {
+        beforeCommand($editable);
+        typing.insertTab($editable, rng, options.tabsize);
+        afterCommand($editable);
+      }
+    };
+
+    /**
+     * @method untab
+     *
+     * handle shift+tab key
+     *
+     */
+    this.untab = function ($editable) {
+      var rng = this.createRange($editable);
+      if (rng.isCollapsed() && rng.isOnCell()) {
+        table.tab(rng, true);
+      }
+    };
+
+    /**
+     * @method insertParagraph
+     *
+     * insert paragraph
+     *
+     * @param {Node} $editable
+     */
+    this.insertParagraph = function ($editable) {
+      beforeCommand($editable);
+      typing.insertParagraph($editable);
+      afterCommand($editable);
+    };
+
+    /**
+     * @method insertOrderedList
+     *
+     * @param {jQuery} $editable
+     */
+    this.insertOrderedList = function ($editable) {
+      beforeCommand($editable);
+      bullet.insertOrderedList($editable);
+      afterCommand($editable);
+    };
+
+    /**
+     * @param {jQuery} $editable
+     */
+    this.insertUnorderedList = function ($editable) {
+      beforeCommand($editable);
+      bullet.insertUnorderedList($editable);
+      afterCommand($editable);
+    };
+
+    /**
+     * @param {jQuery} $editable
+     */
+    this.indent = function ($editable) {
+      beforeCommand($editable);
+      bullet.indent($editable);
+      afterCommand($editable);
+    };
+
+    /**
+     * @param {jQuery} $editable
+     */
+    this.outdent = function ($editable) {
+      beforeCommand($editable);
+      bullet.outdent($editable);
+      afterCommand($editable);
+    };
+
+    /**
+     * insert image
+     *
+     * @param {jQuery} $editable
+     * @param {String} sUrl
+     */
+    this.insertImage = function ($editable, sUrl, filename) {
+      async.createImage(sUrl, filename).then(function ($image) {
+        beforeCommand($editable);
+        $image.css({
+          display: '',
+          width: Math.min($editable.width(), $image.width())
+        });
+        range.create().insertNode($image[0]);
+        range.createFromNodeAfter($image[0]).select();
+        afterCommand($editable);
+      }).fail(function () {
+        var $holder = dom.makeLayoutInfo($editable).holder();
+        handler.bindCustomEvent(
+          $holder, $editable.data('callbacks'), 'image.upload.error'
+        )();
+      });
+    };
+
+    /**
+     * @method insertNode
+     * insert node
+     * @param {Node} $editable
+     * @param {Node} node
+     */
+    this.insertNode = function ($editable, node) {
+      beforeCommand($editable);
+      range.create().insertNode(node);
+      range.createFromNodeAfter(node).select();
+      afterCommand($editable);
+    };
+
+    /**
+     * insert text
+     * @param {Node} $editable
+     * @param {String} text
+     */
+    this.insertText = function ($editable, text) {
+      beforeCommand($editable);
+      var textNode = range.create().insertNode(dom.createText(text));
+      range.create(textNode, dom.nodeLength(textNode)).select();
+      afterCommand($editable);
+    };
+
+    /**
+     * paste HTML
+     * @param {Node} $editable
+     * @param {String} markup
+     */
+    this.pasteHTML = function ($editable, markup) {
+      beforeCommand($editable);
+      var contents = range.create().pasteHTML(markup);
+      range.createFromNodeAfter(list.last(contents)).select();
+      afterCommand($editable);
+    };
+
+    /**
+     * formatBlock
+     *
+     * @param {jQuery} $editable
+     * @param {String} tagName
+     */
+    this.formatBlock = function ($editable, tagName) {
+      beforeCommand($editable);
+      // [workaround] for MSIE, IE need `<`
+      tagName = agent.isMSIE ? '<' + tagName + '>' : tagName;
+      document.execCommand('FormatBlock', false, tagName);
+      afterCommand($editable);
+    };
+
+    this.formatPara = function ($editable) {
+      beforeCommand($editable);
+      this.formatBlock($editable, 'P');
+      afterCommand($editable);
+    };
+
+    /* jshint ignore:start */
+    for (var idx = 1; idx <= 6; idx ++) {
+      this['formatH' + idx] = function (idx) {
+        return function ($editable) {
+          this.formatBlock($editable, 'H' + idx);
+        };
+      }(idx);
+    };
+    /* jshint ignore:end */
+
+    /**
+     * fontSize
+     *
+     * @param {jQuery} $editable
+     * @param {String} value - px
+     */
+    this.fontSize = function ($editable, value) {
+      var rng = range.create();
+
+      if (rng.isCollapsed()) {
+        var spans = style.styleNodes(rng);
+        var firstSpan = list.head(spans);
+
+        $(spans).css({
+          'font-size': value + 'px'
+        });
+
+        // [workaround] added styled bogus span for style
+        //  - also bogus character needed for cursor position
+        if (firstSpan && !dom.nodeLength(firstSpan)) {
+          firstSpan.innerHTML = dom.ZERO_WIDTH_NBSP_CHAR;
+          range.createFromNodeAfter(firstSpan.firstChild).select();
+          $editable.data(KEY_BOGUS, firstSpan);
+        }
+      } else {
+        beforeCommand($editable);
+        $(style.styleNodes(rng)).css({
+          'font-size': value + 'px'
+        });
+        afterCommand($editable);
+      }
+    };
+
+    /**
+     * insert horizontal rule
+     * @param {jQuery} $editable
+     */
+    this.insertHorizontalRule = function ($editable) {
+      beforeCommand($editable);
+
+      var rng = range.create();
+      var hrNode = rng.insertNode($('<HR/>')[0]);
+      if (hrNode.nextSibling) {
+        range.create(hrNode.nextSibling, 0).normalize().select();
+      }
+
+      afterCommand($editable);
+    };
+
+    /**
+     * remove bogus node and character
+     */
+    this.removeBogus = function ($editable) {
+      var bogusNode = $editable.data(KEY_BOGUS);
+      if (!bogusNode) {
+        return;
+      }
+
+      var textNode = list.find(list.from(bogusNode.childNodes), dom.isText);
+
+      var bogusCharIdx = textNode.nodeValue.indexOf(dom.ZERO_WIDTH_NBSP_CHAR);
+      if (bogusCharIdx !== -1) {
+        textNode.deleteData(bogusCharIdx, 1);
+      }
+
+      if (dom.isEmpty(bogusNode)) {
+        dom.remove(bogusNode);
+      }
+
+      $editable.removeData(KEY_BOGUS);
+    };
+
+    /**
+     * lineHeight
+     * @param {jQuery} $editable
+     * @param {String} value
+     */
+    this.lineHeight = function ($editable, value) {
+      beforeCommand($editable);
+      style.stylePara(range.create(), {
+        lineHeight: value
+      });
+      afterCommand($editable);
+    };
+
+    /**
+     * unlink
+     *
+     * @type command
+     *
+     * @param {jQuery} $editable
+     */
+    this.unlink = function ($editable) {
+      var rng = this.createRange($editable);
+      if (rng.isOnAnchor()) {
+        var anchor = dom.ancestor(rng.sc, dom.isAnchor);
+        rng = range.createFromNode(anchor);
+        rng.select();
+
+        beforeCommand($editable);
+        document.execCommand('unlink');
+        afterCommand($editable);
+      }
+    };
+
+    /**
+     * create link (command)
+     *
+     * @param {jQuery} $editable
+     * @param {Object} linkInfo
+     * @param {Object} options
+     */
+    this.createLink = function ($editable, linkInfo, options) {
+      var linkUrl = linkInfo.url;
+      var linkText = linkInfo.text;
+      var isNewWindow = linkInfo.isNewWindow;
+      var rng = linkInfo.range || this.createRange($editable);
+      var isTextChanged = rng.toString() !== linkText;
+
+      options = options || dom.makeLayoutInfo($editable).editor().data('options');
+
+      beforeCommand($editable);
+
+      if (options.onCreateLink) {
+        linkUrl = options.onCreateLink(linkUrl);
+      }
+
+      var anchors = [];
+      if (isTextChanged) {
+        // Create a new link when text changed.
+        var anchor = rng.insertNode($('<A>' + linkText + '</A>')[0]);
+        anchors.push(anchor);
+      } else {
+        anchors = style.styleNodes(rng, {
+          nodeName: 'A',
+          expandClosestSibling: true,
+          onlyPartialContains: true
+        });
+      }
+
+      $.each(anchors, function (idx, anchor) {
+        $(anchor).attr('href', linkUrl);
+        if (isNewWindow) {
+          $(anchor).attr('target', '_blank');
+        } else {
+          $(anchor).removeAttr('target');
+        }
+      });
+
+      var startRange = range.createFromNodeBefore(list.head(anchors));
+      var startPoint = startRange.getStartPoint();
+      var endRange = range.createFromNodeAfter(list.last(anchors));
+      var endPoint = endRange.getEndPoint();
+
+      range.create(
+        startPoint.node,
+        startPoint.offset,
+        endPoint.node,
+        endPoint.offset
+      ).select();
+
+      afterCommand($editable);
+    };
+
+    /**
+     * returns link info
+     *
+     * @return {Object}
+     * @return {WrappedRange} return.range
+     * @return {String} return.text
+     * @return {Boolean} [return.isNewWindow=true]
+     * @return {String} [return.url=""]
+     */
+    this.getLinkInfo = function ($editable) {
+      this.focus($editable);
+
+      var rng = range.create().expand(dom.isAnchor);
+
+      // Get the first anchor on range(for edit).
+      var $anchor = $(list.head(rng.nodes(dom.isAnchor)));
+
+      return {
+        range: rng,
+        text: rng.toString(),
+        isNewWindow: $anchor.length ? $anchor.attr('target') === '_blank' : false,
+        url: $anchor.length ? $anchor.attr('href') : ''
+      };
+    };
+
+    /**
+     * setting color
+     *
+     * @param {Node} $editable
+     * @param {Object} sObjColor  color code
+     * @param {String} sObjColor.foreColor foreground color
+     * @param {String} sObjColor.backColor background color
+     */
+    this.color = function ($editable, sObjColor) {
+      var oColor = JSON.parse(sObjColor);
+      var foreColor = oColor.foreColor, backColor = oColor.backColor;
+
+      beforeCommand($editable);
+
+      if (foreColor) { document.execCommand('foreColor', false, foreColor); }
+      if (backColor) { document.execCommand('backColor', false, backColor); }
+
+      afterCommand($editable);
+    };
+
+    /**
+     * insert Table
+     *
+     * @param {Node} $editable
+     * @param {String} sDim dimension of table (ex : "5x5")
+     */
+    this.insertTable = function ($editable, sDim) {
+      var dimension = sDim.split('x');
+      beforeCommand($editable);
+
+      var rng = range.create().deleteContents();
+      rng.insertNode(table.createTable(dimension[0], dimension[1]));
+      afterCommand($editable);
+    };
+
+    /**
+     * float me
+     *
+     * @param {jQuery} $editable
+     * @param {String} value
+     * @param {jQuery} $target
+     */
+    this.floatMe = function ($editable, value, $target) {
+      beforeCommand($editable);
+      // bootstrap
+      $target.removeClass('pull-left pull-right');
+      if (value && value !== 'none') {
+        $target.addClass('pull-' + value);
+      }
+
+      // fallback for non-bootstrap
+      $target.css('float', value);
+      afterCommand($editable);
+    };
+
+    /**
+     * change image shape
+     *
+     * @param {jQuery} $editable
+     * @param {String} value css class
+     * @param {Node} $target
+     */
+    this.imageShape = function ($editable, value, $target) {
+      beforeCommand($editable);
+
+      $target.removeClass('img-rounded img-circle img-thumbnail');
+
+      if (value) {
+        $target.addClass(value);
+      }
+
+      afterCommand($editable);
+    };
+
+    /**
+     * resize overlay element
+     * @param {jQuery} $editable
+     * @param {String} value
+     * @param {jQuery} $target - target element
+     */
+    this.resize = function ($editable, value, $target) {
+      beforeCommand($editable);
+
+      $target.css({
+        width: value * 100 + '%',
+        height: ''
+      });
+
+      afterCommand($editable);
+    };
+
+    /**
+     * @param {Position} pos
+     * @param {jQuery} $target - target element
+     * @param {Boolean} [bKeepRatio] - keep ratio
+     */
+    this.resizeTo = function (pos, $target, bKeepRatio) {
+      var imageSize;
+      if (bKeepRatio) {
+        var newRatio = pos.y / pos.x;
+        var ratio = $target.data('ratio');
+        imageSize = {
+          width: ratio > newRatio ? pos.x : pos.y / ratio,
+          height: ratio > newRatio ? pos.x * ratio : pos.y
+        };
+      } else {
+        imageSize = {
+          width: pos.x,
+          height: pos.y
+        };
+      }
+
+      $target.css(imageSize);
+    };
+
+    /**
+     * remove media object
+     *
+     * @param {jQuery} $editable
+     * @param {String} value - dummy argument (for keep interface)
+     * @param {jQuery} $target - target element
+     */
+    this.removeMedia = function ($editable, value, $target) {
+      beforeCommand($editable);
+      $target.detach();
+
+      handler.bindCustomEvent(
+        $(), $editable.data('callbacks'), 'media.delete'
+      )($target, $editable);
+
+      afterCommand($editable);
+    };
+
+    /**
+     * set focus
+     *
+     * @param $editable
+     */
+    this.focus = function ($editable) {
+      $editable.focus();
+
+      // [workaround] for firefox bug http://goo.gl/lVfAaI
+      if (agent.isFF && !range.create().isOnEditable()) {
+        range.createFromNode($editable[0])
+             .normalize()
+             .collapse()
+             .select();
+      }
+    };
+
+    /**
+     * returns whether contents is empty or not.
+     *
+     * @param {jQuery} $editable
+     * @return {Boolean}
+     */
+    this.isEmpty = function ($editable) {
+      return dom.isEmpty($editable[0]) || dom.emptyPara === $editable.html();
+    };
+  };
+
+  /**
+   * @class module.Button
+   *
+   * Button
+   */
+  var Button = function () {
+    /**
+     * update button status
+     *
+     * @param {jQuery} $container
+     * @param {Object} styleInfo
+     */
+    this.update = function ($container, styleInfo) {
+      /**
+       * handle dropdown's check mark (for fontname, fontsize, lineHeight).
+       * @param {jQuery} $btn
+       * @param {Number} value
+       */
+      var checkDropdownMenu = function ($btn, value) {
+        $btn.find('.dropdown-menu li a').each(function () {
+          // always compare string to avoid creating another func.
+          var isChecked = ($(this).data('value') + '') === (value + '');
+          this.className = isChecked ? 'checked' : '';
+        });
+      };
+
+      /**
+       * update button state(active or not).
+       *
+       * @private
+       * @param {String} selector
+       * @param {Function} pred
+       */
+      var btnState = function (selector, pred) {
+        var $btn = $container.find(selector);
+        $btn.toggleClass('active', pred());
+      };
+
+      if (styleInfo.image) {
+        var $img = $(styleInfo.image);
+
+        btnState('button[data-event="imageShape"][data-value="img-rounded"]', function () {
+          return $img.hasClass('img-rounded');
+        });
+        btnState('button[data-event="imageShape"][data-value="img-circle"]', function () {
+          return $img.hasClass('img-circle');
+        });
+        btnState('button[data-event="imageShape"][data-value="img-thumbnail"]', function () {
+          return $img.hasClass('img-thumbnail');
+        });
+        btnState('button[data-event="imageShape"]:not([data-value])', function () {
+          return !$img.is('.img-rounded, .img-circle, .img-thumbnail');
+        });
+
+        var imgFloat = $img.css('float');
+        btnState('button[data-event="floatMe"][data-value="left"]', function () {
+          return imgFloat === 'left';
+        });
+        btnState('button[data-event="floatMe"][data-value="right"]', function () {
+          return imgFloat === 'right';
+        });
+        btnState('button[data-event="floatMe"][data-value="none"]', function () {
+          return imgFloat !== 'left' && imgFloat !== 'right';
+        });
+
+        var style = $img.attr('style');
+        btnState('button[data-event="resize"][data-value="1"]', function () {
+          return !!/(^|\s)(max-)?width\s*:\s*100%/.test(style);
+        });
+        btnState('button[data-event="resize"][data-value="0.5"]', function () {
+          return !!/(^|\s)(max-)?width\s*:\s*50%/.test(style);
+        });
+        btnState('button[data-event="resize"][data-value="0.25"]', function () {
+          return !!/(^|\s)(max-)?width\s*:\s*25%/.test(style);
+        });
+        return;
+      }
+
+      // fontname
+      var $fontname = $container.find('.note-fontname');
+      if ($fontname.length) {
+        var selectedFont = styleInfo['font-family'];
+        if (!!selectedFont) {
+
+          var list = selectedFont.split(',');
+          for (var i = 0, len = list.length; i < len; i++) {
+            selectedFont = list[i].replace(/[\'\"]/g, '').replace(/\s+$/, '').replace(/^\s+/, '');
+            if (agent.isFontInstalled(selectedFont)) {
+              break;
+            }
+          }
+          
+          $fontname.find('.note-current-fontname').text(selectedFont);
+          checkDropdownMenu($fontname, selectedFont);
+
+        }
+      }
+
+      // fontsize
+      var $fontsize = $container.find('.note-fontsize');
+      $fontsize.find('.note-current-fontsize').text(styleInfo['font-size']);
+      checkDropdownMenu($fontsize, parseFloat(styleInfo['font-size']));
+
+      // lineheight
+      var $lineHeight = $container.find('.note-height');
+      checkDropdownMenu($lineHeight, parseFloat(styleInfo['line-height']));
+
+      btnState('button[data-event="bold"]', function () {
+        return styleInfo['font-bold'] === 'bold';
+      });
+      btnState('button[data-event="italic"]', function () {
+        return styleInfo['font-italic'] === 'italic';
+      });
+      btnState('button[data-event="underline"]', function () {
+        return styleInfo['font-underline'] === 'underline';
+      });
+      btnState('button[data-event="strikethrough"]', function () {
+        return styleInfo['font-strikethrough'] === 'strikethrough';
+      });
+      btnState('button[data-event="superscript"]', function () {
+        return styleInfo['font-superscript'] === 'superscript';
+      });
+      btnState('button[data-event="subscript"]', function () {
+        return styleInfo['font-subscript'] === 'subscript';
+      });
+      btnState('button[data-event="justifyLeft"]', function () {
+        return styleInfo['text-align'] === 'left' || styleInfo['text-align'] === 'start';
+      });
+      btnState('button[data-event="justifyCenter"]', function () {
+        return styleInfo['text-align'] === 'center';
+      });
+      btnState('button[data-event="justifyRight"]', function () {
+        return styleInfo['text-align'] === 'right';
+      });
+      btnState('button[data-event="justifyFull"]', function () {
+        return styleInfo['text-align'] === 'justify';
+      });
+      btnState('button[data-event="insertUnorderedList"]', function () {
+        return styleInfo['list-style'] === 'unordered';
+      });
+      btnState('button[data-event="insertOrderedList"]', function () {
+        return styleInfo['list-style'] === 'ordered';
+      });
+    };
+
+    /**
+     * update recent color
+     *
+     * @param {Node} button
+     * @param {String} eventName
+     * @param {Mixed} value
+     */
+    this.updateRecentColor = function (button, eventName, value) {
+      var $color = $(button).closest('.note-color');
+      var $recentColor = $color.find('.note-recent-color');
+      var colorInfo = JSON.parse($recentColor.attr('data-value'));
+      colorInfo[eventName] = value;
+      $recentColor.attr('data-value', JSON.stringify(colorInfo));
+      var sKey = eventName === 'backColor' ? 'background-color' : 'color';
+      $recentColor.find('i').css(sKey, value);
+    };
+  };
+
+  /**
+   * @class module.Toolbar
+   *
+   * Toolbar
+   */
+  var Toolbar = function () {
+    var button = new Button();
+
+    this.update = function ($toolbar, styleInfo) {
+      button.update($toolbar, styleInfo);
+    };
+
+    /**
+     * @param {Node} button
+     * @param {String} eventName
+     * @param {String} value
+     */
+    this.updateRecentColor = function (buttonNode, eventName, value) {
+      button.updateRecentColor(buttonNode, eventName, value);
+    };
+
+    /**
+     * activate buttons exclude codeview
+     * @param {jQuery} $toolbar
+     */
+    this.activate = function ($toolbar) {
+      $toolbar.find('button')
+              .not('button[data-event="codeview"]')
+              .removeClass('disabled');
+    };
+
+    /**
+     * deactivate buttons exclude codeview
+     * @param {jQuery} $toolbar
+     */
+    this.deactivate = function ($toolbar) {
+      $toolbar.find('button')
+              .not('button[data-event="codeview"]')
+              .addClass('disabled');
+    };
+
+    /**
+     * @param {jQuery} $container
+     * @param {Boolean} [bFullscreen=false]
+     */
+    this.updateFullscreen = function ($container, bFullscreen) {
+      var $btn = $container.find('button[data-event="fullscreen"]');
+      $btn.toggleClass('active', bFullscreen);
+    };
+
+    /**
+     * @param {jQuery} $container
+     * @param {Boolean} [isCodeview=false]
+     */
+    this.updateCodeview = function ($container, isCodeview) {
+      var $btn = $container.find('button[data-event="codeview"]');
+      $btn.toggleClass('active', isCodeview);
+
+      if (isCodeview) {
+        this.deactivate($container);
+      } else {
+        this.activate($container);
+      }
+    };
+
+    /**
+     * get button in toolbar 
+     *
+     * @param {jQuery} $editable
+     * @param {String} name
+     * @return {jQuery}
+     */
+    this.get = function ($editable, name) {
+      var $toolbar = dom.makeLayoutInfo($editable).toolbar();
+
+      return $toolbar.find('[data-name=' + name + ']');
+    };
+
+    /**
+     * set button state
+     * @param {jQuery} $editable
+     * @param {String} name
+     * @param {Boolean} [isActive=true]
+     */
+    this.setButtonState = function ($editable, name, isActive) {
+      isActive = (isActive === false) ? false : true;
+
+      var $button = this.get($editable, name);
+      $button.toggleClass('active', isActive);
+    };
+  };
+
+  var EDITABLE_PADDING = 24;
+
+  var Statusbar = function () {
+    var $document = $(document);
+
+    this.attach = function (layoutInfo, options) {
+      if (!options.disableResizeEditor) {
+        layoutInfo.statusbar().on('mousedown', hStatusbarMousedown);
+      }
+    };
+
+    /**
+     * `mousedown` event handler on statusbar
+     *
+     * @param {MouseEvent} event
+     */
+    var hStatusbarMousedown = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var $editable = dom.makeLayoutInfo(event.target).editable();
+      var editableTop = $editable.offset().top - $document.scrollTop();
+
+      var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
+      var options = layoutInfo.editor().data('options');
+
+      $document.on('mousemove', function (event) {
+        var nHeight = event.clientY - (editableTop + EDITABLE_PADDING);
+
+        nHeight = (options.minHeight > 0) ? Math.max(nHeight, options.minHeight) : nHeight;
+        nHeight = (options.maxHeight > 0) ? Math.min(nHeight, options.maxHeight) : nHeight;
+
+        $editable.height(nHeight);
+      }).one('mouseup', function () {
+        $document.off('mousemove');
+      });
+    };
+  };
+
+  /**
+   * @class module.Popover
+   *
+   * Popover (http://getbootstrap.com/javascript/#popovers)
+   *
+   */
+  var Popover = function () {
+    var button = new Button();
+
+    /**
+     * returns position from placeholder
+     *
+     * @private
+     * @param {Node} placeholder
+     * @param {Object} options
+     * @param {Boolean} options.isAirMode
+     * @return {Position}
+     */
+    var posFromPlaceholder = function (placeholder, options) {
+      var isAirMode = options && options.isAirMode;
+      var isLeftTop = options && options.isLeftTop;
+
+      var $placeholder = $(placeholder);
+      var pos = isAirMode ? $placeholder.offset() : $placeholder.position();
+      var height = isLeftTop ? 0 : $placeholder.outerHeight(true); // include margin
+
+      // popover below placeholder.
+      return {
+        left: pos.left,
+        top: pos.top + height
+      };
+    };
+
+    /**
+     * show popover
+     *
+     * @private
+     * @param {jQuery} popover
+     * @param {Position} pos
+     */
+    var showPopover = function ($popover, pos) {
+      $popover.css({
+        display: 'block',
+        left: pos.left,
+        top: pos.top
+      });
+    };
+
+    var PX_POPOVER_ARROW_OFFSET_X = 20;
+
+    /**
+     * update current state
+     * @param {jQuery} $popover - popover container
+     * @param {Object} styleInfo - style object
+     * @param {Boolean} isAirMode
+     */
+    this.update = function ($popover, styleInfo, isAirMode) {
+      button.update($popover, styleInfo);
+
+      var $linkPopover = $popover.find('.note-link-popover');
+      if (styleInfo.anchor) {
+        var $anchor = $linkPopover.find('a');
+        var href = $(styleInfo.anchor).attr('href');
+        var target = $(styleInfo.anchor).attr('target');
+        $anchor.attr('href', href).html(href);
+        if (!target) {
+          $anchor.removeAttr('target');
+        } else {
+          $anchor.attr('target', '_blank');
+        }
+        showPopover($linkPopover, posFromPlaceholder(styleInfo.anchor, {
+          isAirMode: isAirMode
+        }));
+      } else {
+        $linkPopover.hide();
+      }
+
+      var $imagePopover = $popover.find('.note-image-popover');
+      if (styleInfo.image) {
+        showPopover($imagePopover, posFromPlaceholder(styleInfo.image, {
+          isAirMode: isAirMode,
+          isLeftTop: true
+        }));
+      } else {
+        $imagePopover.hide();
+      }
+
+      var $airPopover = $popover.find('.note-air-popover');
+      if (isAirMode && styleInfo.range && !styleInfo.range.isCollapsed()) {
+        var rect = list.last(styleInfo.range.getClientRects());
+        if (rect) {
+          var bnd = func.rect2bnd(rect);
+          showPopover($airPopover, {
+            left: Math.max(bnd.left + bnd.width / 2 - PX_POPOVER_ARROW_OFFSET_X, 0),
+            top: bnd.top + bnd.height
+          });
+        }
+      } else {
+        $airPopover.hide();
+      }
+    };
+
+    /**
+     * @param {Node} button
+     * @param {String} eventName
+     * @param {String} value
+     */
+    this.updateRecentColor = function (button, eventName, value) {
+      button.updateRecentColor(button, eventName, value);
+    };
+
+    /**
+     * hide all popovers
+     * @param {jQuery} $popover - popover container
+     */
+    this.hide = function ($popover) {
+      $popover.children().hide();
+    };
+  };
+
+  /**
+   * @class module.Handle
+   *
+   * Handle
+   */
+  var Handle = function (handler) {
+    var $document = $(document);
+
+    /**
+     * `mousedown` event handler on $handle
+     *  - controlSizing: resize image
+     *
+     * @param {MouseEvent} event
+     */
+    var hHandleMousedown = function (event) {
+      if (dom.isControlSizing(event.target)) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var layoutInfo = dom.makeLayoutInfo(event.target),
+            $handle = layoutInfo.handle(),
+            $popover = layoutInfo.popover(),
+            $editable = layoutInfo.editable(),
+            $editor = layoutInfo.editor();
+
+        var target = $handle.find('.note-control-selection').data('target'),
+            $target = $(target), posStart = $target.offset(),
+            scrollTop = $document.scrollTop();
+
+        var isAirMode = $editor.data('options').airMode;
+
+        $document.on('mousemove', function (event) {
+          handler.invoke('editor.resizeTo', {
+            x: event.clientX - posStart.left,
+            y: event.clientY - (posStart.top - scrollTop)
+          }, $target, !event.shiftKey);
+
+          handler.invoke('handle.update', $handle, {image: target}, isAirMode);
+          handler.invoke('popover.update', $popover, {image: target}, isAirMode);
+        }).one('mouseup', function () {
+          $document.off('mousemove');
+          handler.invoke('editor.afterCommand', $editable);
+        });
+
+        if (!$target.data('ratio')) { // original ratio.
+          $target.data('ratio', $target.height() / $target.width());
+        }
+      }
+    };
+
+    this.attach = function (layoutInfo) {
+      layoutInfo.handle().on('mousedown', hHandleMousedown);
+    };
+
+    /**
+     * update handle
+     * @param {jQuery} $handle
+     * @param {Object} styleInfo
+     * @param {Boolean} isAirMode
+     */
+    this.update = function ($handle, styleInfo, isAirMode) {
+      var $selection = $handle.find('.note-control-selection');
+      if (styleInfo.image) {
+        var $image = $(styleInfo.image);
+        var pos = isAirMode ? $image.offset() : $image.position();
+
+        // include margin
+        var imageSize = {
+          w: $image.outerWidth(true),
+          h: $image.outerHeight(true)
+        };
+
+        $selection.css({
+          display: 'block',
+          left: pos.left,
+          top: pos.top,
+          width: imageSize.w,
+          height: imageSize.h
+        }).data('target', styleInfo.image); // save current image element.
+        var sizingText = imageSize.w + 'x' + imageSize.h;
+        $selection.find('.note-control-selection-info').text(sizingText);
+      } else {
+        $selection.hide();
+      }
+    };
+
+    /**
+     * hide
+     *
+     * @param {jQuery} $handle
+     */
+    this.hide = function ($handle) {
+      $handle.children().hide();
+    };
+  };
+
+  var Fullscreen = function (handler) {
+    var $window = $(window);
+    var $scrollbar = $('html, body');
+
+    /**
+     * toggle fullscreen
+     *
+     * @param {Object} layoutInfo
+     */
+    this.toggle = function (layoutInfo) {
+
+      var $editor = layoutInfo.editor(),
+          $toolbar = layoutInfo.toolbar(),
+          $editable = layoutInfo.editable(),
+          $codable = layoutInfo.codable();
+
+      var resize = function (size) {
+        $editable.css('height', size.h);
+        $codable.css('height', size.h);
+        if ($codable.data('cmeditor')) {
+          $codable.data('cmeditor').setsize(null, size.h);
+        }
+      };
+
+      $editor.toggleClass('fullscreen');
+      var isFullscreen = $editor.hasClass('fullscreen');
+      if (isFullscreen) {
+        $editable.data('orgheight', $editable.css('height'));
+
+        $window.on('resize', function () {
+          resize({
+            h: $window.height() - $toolbar.outerHeight()
+          });
+        }).trigger('resize');
+
+        $scrollbar.css('overflow', 'hidden');
+      } else {
+        $window.off('resize');
+        resize({
+          h: $editable.data('orgheight')
+        });
+        $scrollbar.css('overflow', 'visible');
+      }
+
+      handler.invoke('toolbar.updateFullscreen', $toolbar, isFullscreen);
+    };
+  };
+
+
+  var CodeMirror;
+  if (agent.hasCodeMirror) {
+    if (agent.isSupportAmd) {
+      require(['CodeMirror'], function (cm) {
+        CodeMirror = cm;
+      });
+    } else {
+      CodeMirror = window.CodeMirror;
+    }
+  }
+
+  /**
+   * @class Codeview
+   */
+  var Codeview = function (handler) {
+
+    this.sync = function (layoutInfo) {
+      var isCodeview = handler.invoke('codeview.isActivated', layoutInfo);
+      if (isCodeview && agent.hasCodeMirror) {
+        layoutInfo.codable().data('cmEditor').save();
+      }
+    };
+
+    /**
+     * @param {Object} layoutInfo
+     * @return {Boolean}
+     */
+    this.isActivated = function (layoutInfo) {
+      var $editor = layoutInfo.editor();
+      return $editor.hasClass('codeview');
+    };
+
+    /**
+     * toggle codeview
+     *
+     * @param {Object} layoutInfo
+     */
+    this.toggle = function (layoutInfo) {
+      if (this.isActivated(layoutInfo)) {
+        this.deactivate(layoutInfo);
+      } else {
+        this.activate(layoutInfo);
+      }
+    };
+
+    /**
+     * activate code view
+     *
+     * @param {Object} layoutInfo
+     */
+    this.activate = function (layoutInfo) {
+      var $editor = layoutInfo.editor(),
+          $toolbar = layoutInfo.toolbar(),
+          $editable = layoutInfo.editable(),
+          $codable = layoutInfo.codable(),
+          $popover = layoutInfo.popover(),
+          $handle = layoutInfo.handle();
+
+      var options = $editor.data('options');
+
+      $codable.val(dom.html($editable, options.prettifyHtml));
+      $codable.height($editable.height());
+
+      handler.invoke('toolbar.updateCodeview', $toolbar, true);
+      handler.invoke('popover.hide', $popover);
+      handler.invoke('handle.hide', $handle);
+
+      $editor.addClass('codeview');
+
+      $codable.focus();
+
+      // activate CodeMirror as codable
+      if (agent.hasCodeMirror) {
+        var cmEditor = CodeMirror.fromTextArea($codable[0], options.codemirror);
+
+        // CodeMirror TernServer
+        if (options.codemirror.tern) {
+          var server = new CodeMirror.TernServer(options.codemirror.tern);
+          cmEditor.ternServer = server;
+          cmEditor.on('cursorActivity', function (cm) {
+            server.updateArgHints(cm);
+          });
+        }
+
+        // CodeMirror hasn't Padding.
+        cmEditor.setSize(null, $editable.outerHeight());
+        $codable.data('cmEditor', cmEditor);
+      }
+    };
+
+    /**
+     * deactivate code view
+     *
+     * @param {Object} layoutInfo
+     */
+    this.deactivate = function (layoutInfo) {
+      var $holder = layoutInfo.holder(),
+          $editor = layoutInfo.editor(),
+          $toolbar = layoutInfo.toolbar(),
+          $editable = layoutInfo.editable(),
+          $codable = layoutInfo.codable();
+
+      var options = $editor.data('options');
+
+      // deactivate CodeMirror as codable
+      if (agent.hasCodeMirror) {
+        var cmEditor = $codable.data('cmEditor');
+        $codable.val(cmEditor.getValue());
+        cmEditor.toTextArea();
+      }
+
+      var value = dom.value($codable, options.prettifyHtml) || dom.emptyPara;
+      var isChange = $editable.html() !== value;
+
+      $editable.html(value);
+      $editable.height(options.height ? $codable.height() : 'auto');
+      $editor.removeClass('codeview');
+
+      if (isChange) {
+        handler.bindCustomEvent(
+          $holder, $editable.data('callbacks'), 'change'
+        )($editable.html(), $editable);
+      }
+
+      $editable.focus();
+
+      handler.invoke('toolbar.updateCodeview', $toolbar, false);
+    };
+  };
+
+  var DragAndDrop = function (handler) {
+    var $document = $(document);
+
+    /**
+     * attach Drag and Drop Events
+     *
+     * @param {Object} layoutInfo - layout Informations
+     * @param {Object} options
+     */
+    this.attach = function (layoutInfo, options) {
+      if (options.airMode || options.disableDragAndDrop) {
+        // prevent default drop event
+        $document.on('drop', function (e) {
+          e.preventDefault();
+        });
+      } else {
+        this.attachDragAndDropEvent(layoutInfo, options);
+      }
+    };
+
+    /**
+     * attach Drag and Drop Events
+     *
+     * @param {Object} layoutInfo - layout Informations
+     * @param {Object} options
+     */
+    this.attachDragAndDropEvent = function (layoutInfo, options) {
+      var collection = $(),
+          $editor = layoutInfo.editor(),
+          $dropzone = layoutInfo.dropzone(),
+          $dropzoneMessage = $dropzone.find('.note-dropzone-message');
+
+      // show dropzone on dragenter when dragging a object to document
+      // -but only if the editor is visible, i.e. has a positive width and height
+      $document.on('dragenter', function (e) {
+        var isCodeview = handler.invoke('codeview.isActivated', layoutInfo);
+        var hasEditorSize = $editor.width() > 0 && $editor.height() > 0;
+        if (!isCodeview && !collection.length && hasEditorSize) {
+          $editor.addClass('dragover');
+          $dropzone.width($editor.width());
+          $dropzone.height($editor.height());
+          $dropzoneMessage.text(options.langInfo.image.dragImageHere);
+        }
+        collection = collection.add(e.target);
+      }).on('dragleave', function (e) {
+        collection = collection.not(e.target);
+        if (!collection.length) {
+          $editor.removeClass('dragover');
+        }
+      }).on('drop', function () {
+        collection = $();
+        $editor.removeClass('dragover');
+      });
+
+      // change dropzone's message on hover.
+      $dropzone.on('dragenter', function () {
+        $dropzone.addClass('hover');
+        $dropzoneMessage.text(options.langInfo.image.dropImage);
+      }).on('dragleave', function () {
+        $dropzone.removeClass('hover');
+        $dropzoneMessage.text(options.langInfo.image.dragImageHere);
+      });
+
+      // attach dropImage
+      $dropzone.on('drop', function (event) {
+
+        var dataTransfer = event.originalEvent.dataTransfer;
+        var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
+
+        if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+          event.preventDefault();
+          layoutInfo.editable().focus();
+          handler.insertImages(layoutInfo, dataTransfer.files);
+        } else {
+          var insertNodefunc = function () {
+            layoutInfo.holder().summernote('insertNode', this);
+          };
+
+          for (var i = 0, len = dataTransfer.types.length; i < len; i++) {
+            var type = dataTransfer.types[i];
+            var content = dataTransfer.getData(type);
+
+            if (type.toLowerCase().indexOf('text') > -1) {
+              layoutInfo.holder().summernote('pasteHTML', content);
+            } else {
+              $(content).each(insertNodefunc);
+            }
+          }
+        }
+      }).on('dragover', false); // prevent default dragover event
+    };
+  };
+
+  var Clipboard = function (handler) {
+    var $paste;
+
+    this.attach = function (layoutInfo) {
+      // [workaround] getting image from clipboard
+      //  - IE11 and Firefox: CTRL+v hook
+      //  - Webkit: event.clipboardData
+      if ((agent.isMSIE && agent.browserVersion > 10) || agent.isFF) {
+        $paste = $('<div />').attr('contenteditable', true).css({
+          position : 'absolute',
+          left : -100000,
+          opacity : 0
+        });
+
+        layoutInfo.editable().on('keydown', function (e) {
+          if (e.ctrlKey && e.keyCode === key.code.V) {
+            handler.invoke('saveRange', layoutInfo.editable());
+            $paste.focus();
+
+            setTimeout(function () {
+              pasteByHook(layoutInfo);
+            }, 0);
+          }
+        });
+
+        layoutInfo.editable().before($paste);
+      } else {
+        layoutInfo.editable().on('paste', pasteByEvent);
+      }
+    };
+
+    var pasteByHook = function (layoutInfo) {
+      var $editable = layoutInfo.editable();
+      var node = $paste[0].firstChild;
+
+      if (dom.isImg(node)) {
+        var dataURI = node.src;
+        var decodedData = atob(dataURI.split(',')[1]);
+        var array = new Uint8Array(decodedData.length);
+        for (var i = 0; i < decodedData.length; i++) {
+          array[i] = decodedData.charCodeAt(i);
+        }
+
+        var blob = new Blob([array], { type : 'image/png' });
+        blob.name = 'clipboard.png';
+
+        handler.invoke('restoreRange', $editable);
+        handler.invoke('focus', $editable);
+        handler.insertImages(layoutInfo, [blob]);
+      } else {
+        var pasteContent = $('<div />').html($paste.html()).html();
+        handler.invoke('restoreRange', $editable);
+        handler.invoke('focus', $editable);
+
+        if (pasteContent) {
+          handler.invoke('pasteHTML', $editable, pasteContent);
+        }
+      }
+
+      $paste.empty();
+    };
+
+    /**
+     * paste by clipboard event
+     *
+     * @param {Event} event
+     */
+    var pasteByEvent = function (event) {
+      var clipboardData = event.originalEvent.clipboardData;
+      var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
+      var $editable = layoutInfo.editable();
+
+      if (clipboardData && clipboardData.items && clipboardData.items.length) {
+        var item = list.head(clipboardData.items);
+        if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+          handler.insertImages(layoutInfo, [item.getAsFile()]);
+        }
+        handler.invoke('editor.afterCommand', $editable);
+      }
+    };
+  };
+
+  var LinkDialog = function (handler) {
+
+    /**
+     * toggle button status
+     *
+     * @private
+     * @param {jQuery} $btn
+     * @param {Boolean} isEnable
+     */
+    var toggleBtn = function ($btn, isEnable) {
+      $btn.toggleClass('disabled', !isEnable);
+      $btn.attr('disabled', !isEnable);
+    };
+
+    /**
+     * bind enter key
+     *
+     * @private
+     * @param {jQuery} $input
+     * @param {jQuery} $btn
+     */
+    var bindEnterKey = function ($input, $btn) {
+      $input.on('keypress', function (event) {
+        if (event.keyCode === key.code.ENTER) {
+          $btn.trigger('click');
+        }
+      });
+    };
+
+    /**
+     * Show link dialog and set event handlers on dialog controls.
+     *
+     * @param {jQuery} $editable
+     * @param {jQuery} $dialog
+     * @param {Object} linkInfo
+     * @return {Promise}
+     */
+    this.showLinkDialog = function ($editable, $dialog, linkInfo) {
+      return $.Deferred(function (deferred) {
+        var $linkDialog = $dialog.find('.note-link-dialog');
+
+        var $linkText = $linkDialog.find('.note-link-text'),
+        $linkUrl = $linkDialog.find('.note-link-url'),
+        $linkBtn = $linkDialog.find('.note-link-btn'),
+        $openInNewWindow = $linkDialog.find('input[type=checkbox]');
+
+        $linkDialog.one('shown.bs.modal', function () {
+          $linkText.val(linkInfo.text);
+
+          $linkText.on('input', function () {
+            toggleBtn($linkBtn, $linkText.val() && $linkUrl.val());
+            // if linktext was modified by keyup,
+            // stop cloning text from linkUrl
+            linkInfo.text = $linkText.val();
+          });
+
+          // if no url was given, copy text to url
+          if (!linkInfo.url) {
+            linkInfo.url = linkInfo.text || 'http://';
+            toggleBtn($linkBtn, linkInfo.text);
+          }
+
+          $linkUrl.on('input', function () {
+            toggleBtn($linkBtn, $linkText.val() && $linkUrl.val());
+            // display same link on `Text to display` input
+            // when create a new link
+            if (!linkInfo.text) {
+              $linkText.val($linkUrl.val());
+            }
+          }).val(linkInfo.url).trigger('focus').trigger('select');
+
+          bindEnterKey($linkUrl, $linkBtn);
+          bindEnterKey($linkText, $linkBtn);
+
+          $openInNewWindow.prop('checked', linkInfo.isNewWindow);
+
+          $linkBtn.one('click', function (event) {
+            event.preventDefault();
+
+            deferred.resolve({
+              range: linkInfo.range,
+              url: $linkUrl.val(),
+              text: $linkText.val(),
+              isNewWindow: $openInNewWindow.is(':checked')
+            });
+            $linkDialog.modal('hide');
+          });
+        }).one('hidden.bs.modal', function () {
+          // detach events
+          $linkText.off('input keypress');
+          $linkUrl.off('input keypress');
+          $linkBtn.off('click');
+
+          if (deferred.state() === 'pending') {
+            deferred.reject();
+          }
+        }).modal('show');
+      }).promise();
+    };
+
+    /**
+     * @param {Object} layoutInfo
+     */
+    this.show = function (layoutInfo) {
+      var $editor = layoutInfo.editor(),
+          $dialog = layoutInfo.dialog(),
+          $editable = layoutInfo.editable(),
+          $popover = layoutInfo.popover(),
+          linkInfo = handler.invoke('editor.getLinkInfo', $editable);
+
+      var options = $editor.data('options');
+
+      handler.invoke('editor.saveRange', $editable);
+      this.showLinkDialog($editable, $dialog, linkInfo).then(function (linkInfo) {
+        handler.invoke('editor.restoreRange', $editable);
+        handler.invoke('editor.createLink', $editable, linkInfo, options);
+        // hide popover after creating link
+        handler.invoke('popover.hide', $popover);
+      }).fail(function () {
+        handler.invoke('editor.restoreRange', $editable);
+      });
+    };
+  };
+
+  var ImageDialog = function (handler) {
+    /**
+     * toggle button status
+     *
+     * @private
+     * @param {jQuery} $btn
+     * @param {Boolean} isEnable
+     */
+    var toggleBtn = function ($btn, isEnable) {
+      $btn.toggleClass('disabled', !isEnable);
+      $btn.attr('disabled', !isEnable);
+    };
+
+    /**
+     * bind enter key
+     *
+     * @private
+     * @param {jQuery} $input
+     * @param {jQuery} $btn
+     */
+    var bindEnterKey = function ($input, $btn) {
+      $input.on('keypress', function (event) {
+        if (event.keyCode === key.code.ENTER) {
+          $btn.trigger('click');
+        }
+      });
+    };
+
+    this.show = function (layoutInfo) {
+      var $dialog = layoutInfo.dialog(),
+          $editable = layoutInfo.editable();
+
+      handler.invoke('editor.saveRange', $editable);
+      this.showImageDialog($editable, $dialog).then(function (data) {
+        handler.invoke('editor.restoreRange', $editable);
+
+        if (typeof data === 'string') {
+          // image url
+          handler.invoke('editor.insertImage', $editable, data);
+        } else {
+          // array of files
+          handler.insertImages(layoutInfo, data);
+        }
+      }).fail(function () {
+        handler.invoke('editor.restoreRange', $editable);
+      });
+    };
+
+    /**
+     * show image dialog
+     *
+     * @param {jQuery} $editable
+     * @param {jQuery} $dialog
+     * @return {Promise}
+     */
+    this.showImageDialog = function ($editable, $dialog) {
+      return $.Deferred(function (deferred) {
+        var $imageDialog = $dialog.find('.note-image-dialog');
+
+        var $imageInput = $dialog.find('.note-image-input'),
+            $imageUrl = $dialog.find('.note-image-url'),
+            $imageBtn = $dialog.find('.note-image-btn');
+
+        $imageDialog.one('shown.bs.modal', function () {
+          // Cloning imageInput to clear element.
+          $imageInput.replaceWith($imageInput.clone()
+            .on('change', function () {
+              deferred.resolve(this.files || this.value);
+              $imageDialog.modal('hide');
+            })
+            .val('')
+          );
+
+          $imageBtn.click(function (event) {
+            event.preventDefault();
+
+            deferred.resolve($imageUrl.val());
+            $imageDialog.modal('hide');
+          });
+
+          $imageUrl.on('keyup paste', function (event) {
+            var url;
+            
+            if (event.type === 'paste') {
+              url = event.originalEvent.clipboardData.getData('text');
+            } else {
+              url = $imageUrl.val();
+            }
+            
+            toggleBtn($imageBtn, url);
+          }).val('').trigger('focus');
+          bindEnterKey($imageUrl, $imageBtn);
+        }).one('hidden.bs.modal', function () {
+          $imageInput.off('change');
+          $imageUrl.off('keyup paste keypress');
+          $imageBtn.off('click');
+
+          if (deferred.state() === 'pending') {
+            deferred.reject();
+          }
+        }).modal('show');
+      });
+    };
+  };
+
+  var HelpDialog = function (handler) {
+    /**
+     * show help dialog
+     *
+     * @param {jQuery} $editable
+     * @param {jQuery} $dialog
+     * @return {Promise}
+     */
+    this.showHelpDialog = function ($editable, $dialog) {
+      return $.Deferred(function (deferred) {
+        var $helpDialog = $dialog.find('.note-help-dialog');
+
+        $helpDialog.one('hidden.bs.modal', function () {
+          deferred.resolve();
+        }).modal('show');
+      }).promise();
+    };
+
+    /**
+     * @param {Object} layoutInfo
+     */
+    this.show = function (layoutInfo) {
+      var $dialog = layoutInfo.dialog(),
+          $editable = layoutInfo.editable();
+
+      handler.invoke('editor.saveRange', $editable, true);
+      this.showHelpDialog($editable, $dialog).then(function () {
+        handler.invoke('editor.restoreRange', $editable);
+      });
+    };
+  };
+
+
+  /**
+   * @class EventHandler
+   *
+   * EventHandler
+   *  - TODO: new instance per a editor
+   */
+  var EventHandler = function () {
+    var self = this;
+
+    /**
+     * Modules
+     */
+    var modules = this.modules = {
+      editor: new Editor(this),
+      toolbar: new Toolbar(this),
+      statusbar: new Statusbar(this),
+      popover: new Popover(this),
+      handle: new Handle(this),
+      fullscreen: new Fullscreen(this),
+      codeview: new Codeview(this),
+      dragAndDrop: new DragAndDrop(this),
+      clipboard: new Clipboard(this),
+      linkDialog: new LinkDialog(this),
+      imageDialog: new ImageDialog(this),
+      helpDialog: new HelpDialog(this)
+    };
+
+    /**
+     * invoke module's method
+     *
+     * @param {String} moduleAndMethod - ex) 'editor.redo'
+     * @param {...*} arguments - arguments of method
+     * @return {*}
+     */
+    this.invoke = function () {
+      var moduleAndMethod = list.head(list.from(arguments));
+      var args = list.tail(list.from(arguments));
+
+      var splits = moduleAndMethod.split('.');
+      var hasSeparator = splits.length > 1;
+      var moduleName = hasSeparator && list.head(splits);
+      var methodName = hasSeparator ? list.last(splits) : list.head(splits);
+
+      var module = this.getModule(moduleName);
+      var method = module[methodName];
+
+      return method && method.apply(module, args);
+    };
+
+    /**
+     * returns module
+     *
+     * @param {String} moduleName - name of module
+     * @return {Module} - defaults is editor
+     */
+    this.getModule = function (moduleName) {
+      return this.modules[moduleName] || this.modules.editor;
+    };
+
+    /**
+     * @param {jQuery} $holder
+     * @param {Object} callbacks
+     * @param {String} eventNamespace
+     * @returns {Function}
+     */
+    var bindCustomEvent = this.bindCustomEvent = function ($holder, callbacks, eventNamespace) {
+      return function () {
+        var callback = callbacks[func.namespaceToCamel(eventNamespace, 'on')];
+        if (callback) {
+          callback.apply($holder[0], arguments);
+        }
+        return $holder.trigger('summernote.' + eventNamespace, arguments);
+      };
+    };
+
+    /**
+     * insert Images from file array.
+     *
+     * @private
+     * @param {Object} layoutInfo
+     * @param {File[]} files
+     */
+    this.insertImages = function (layoutInfo, files) {
+      var $editor = layoutInfo.editor(),
+          $editable = layoutInfo.editable(),
+          $holder = layoutInfo.holder();
+
+      var callbacks = $editable.data('callbacks');
+      var options = $editor.data('options');
+
+      // If onImageUpload options setted
+      if (callbacks.onImageUpload) {
+        bindCustomEvent($holder, callbacks, 'image.upload')(files);
+      // else insert Image as dataURL
+      } else {
+        $.each(files, function (idx, file) {
+          var filename = file.name;
+          if (options.maximumImageFileSize && options.maximumImageFileSize < file.size) {
+            bindCustomEvent($holder, callbacks, 'image.upload.error')(options.langInfo.image.maximumFileSizeError);
+          } else {
+            async.readFileAsDataURL(file).then(function (sDataURL) {
+              modules.editor.insertImage($editable, sDataURL, filename);
+            }).fail(function () {
+              bindCustomEvent($holder, callbacks, 'image.upload.error')(options.langInfo.image.maximumFileSizeError);
+            });
+          }
+        });
+      }
+    };
+
+    var commands = {
+      /**
+       * @param {Object} layoutInfo
+       */
+      showLinkDialog: function (layoutInfo) {
+        modules.linkDialog.show(layoutInfo);
+      },
+
+      /**
+       * @param {Object} layoutInfo
+       */
+      showImageDialog: function (layoutInfo) {
+        modules.imageDialog.show(layoutInfo);
+      },
+
+      /**
+       * @param {Object} layoutInfo
+       */
+      showHelpDialog: function (layoutInfo) {
+        modules.helpDialog.show(layoutInfo);
+      },
+
+      /**
+       * @param {Object} layoutInfo
+       */
+      fullscreen: function (layoutInfo) {
+        modules.fullscreen.toggle(layoutInfo);
+      },
+
+      /**
+       * @param {Object} layoutInfo
+       */
+      codeview: function (layoutInfo) {
+        modules.codeview.toggle(layoutInfo);
+      }
+    };
+
+    var hMousedown = function (event) {
+      //preventDefault Selection for FF, IE8+
+      if (dom.isImg(event.target)) {
+        event.preventDefault();
+      }
+    };
+
+    var hKeyupAndMouseup = function (event) {
+      var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
+      modules.editor.removeBogus(layoutInfo.editable());
+      hToolbarAndPopoverUpdate(event);
+    };
+
+    /**
+     * update sytle info
+     * @param {Object} styleInfo
+     * @param {Object} layoutInfo
+     */
+    this.updateStyleInfo = function (styleInfo, layoutInfo) {
+      if (!styleInfo) {
+        return;
+      }
+      var isAirMode = layoutInfo.editor().data('options').airMode;
+      if (!isAirMode) {
+        modules.toolbar.update(layoutInfo.toolbar(), styleInfo);
+      }
+
+      modules.popover.update(layoutInfo.popover(), styleInfo, isAirMode);
+      modules.handle.update(layoutInfo.handle(), styleInfo, isAirMode);
+    };
+
+    var hToolbarAndPopoverUpdate = function (event) {
+      var target = event.target;
+      // delay for range after mouseup
+      setTimeout(function () {
+        var layoutInfo = dom.makeLayoutInfo(target);
+        var styleInfo = modules.editor.currentStyle(target);
+        self.updateStyleInfo(styleInfo, layoutInfo);
+      }, 0);
+    };
+
+    var hScroll = function (event) {
+      var layoutInfo = dom.makeLayoutInfo(event.currentTarget || event.target);
+      //hide popover and handle when scrolled
+      modules.popover.hide(layoutInfo.popover());
+      modules.handle.hide(layoutInfo.handle());
+    };
+
+    var hToolbarAndPopoverMousedown = function (event) {
+      // prevent default event when insertTable (FF, Webkit)
+      var $btn = $(event.target).closest('[data-event]');
+      if ($btn.length) {
+        event.preventDefault();
+      }
+    };
+
+    var hToolbarAndPopoverClick = function (event) {
+      var $btn = $(event.target).closest('[data-event]');
+
+      if (!$btn.length) {
+        return;
+      }
+
+      var eventName = $btn.attr('data-event'),
+          value = $btn.attr('data-value'),
+          hide = $btn.attr('data-hide');
+
+      var layoutInfo = dom.makeLayoutInfo(event.target);
+
+      // before command: detect control selection element($target)
+      var $target;
+      if ($.inArray(eventName, ['resize', 'floatMe', 'removeMedia', 'imageShape']) !== -1) {
+        var $selection = layoutInfo.handle().find('.note-control-selection');
+        $target = $($selection.data('target'));
+      }
+
+      // If requested, hide the popover when the button is clicked.
+      // Useful for things like showHelpDialog.
+      if (hide) {
+        $btn.parents('.popover').hide();
+      }
+
+      if ($.isFunction($.summernote.pluginEvents[eventName])) {
+        $.summernote.pluginEvents[eventName](event, modules.editor, layoutInfo, value);
+      } else if (modules.editor[eventName]) { // on command
+        var $editable = layoutInfo.editable();
+        $editable.focus();
+        modules.editor[eventName]($editable, value, $target);
+        event.preventDefault();
+      } else if (commands[eventName]) {
+        commands[eventName].call(this, layoutInfo);
+        event.preventDefault();
+      }
+
+      // after command
+      if ($.inArray(eventName, ['backColor', 'foreColor']) !== -1) {
+        var options = layoutInfo.editor().data('options', options);
+        var module = options.airMode ? modules.popover : modules.toolbar;
+        module.updateRecentColor(list.head($btn), eventName, value);
+      }
+
+      hToolbarAndPopoverUpdate(event);
+    };
+
+    var PX_PER_EM = 18;
+    var hDimensionPickerMove = function (event, options) {
+      var $picker = $(event.target.parentNode); // target is mousecatcher
+      var $dimensionDisplay = $picker.next();
+      var $catcher = $picker.find('.note-dimension-picker-mousecatcher');
+      var $highlighted = $picker.find('.note-dimension-picker-highlighted');
+      var $unhighlighted = $picker.find('.note-dimension-picker-unhighlighted');
+
+      var posOffset;
+      // HTML5 with jQuery - e.offsetX is undefined in Firefox
+      if (event.offsetX === undefined) {
+        var posCatcher = $(event.target).offset();
+        posOffset = {
+          x: event.pageX - posCatcher.left,
+          y: event.pageY - posCatcher.top
+        };
+      } else {
+        posOffset = {
+          x: event.offsetX,
+          y: event.offsetY
+        };
+      }
+
+      var dim = {
+        c: Math.ceil(posOffset.x / PX_PER_EM) || 1,
+        r: Math.ceil(posOffset.y / PX_PER_EM) || 1
+      };
+
+      $highlighted.css({ width: dim.c + 'em', height: dim.r + 'em' });
+      $catcher.attr('data-value', dim.c + 'x' + dim.r);
+
+      if (3 < dim.c && dim.c < options.insertTableMaxSize.col) {
+        $unhighlighted.css({ width: dim.c + 1 + 'em'});
+      }
+
+      if (3 < dim.r && dim.r < options.insertTableMaxSize.row) {
+        $unhighlighted.css({ height: dim.r + 1 + 'em'});
+      }
+
+      $dimensionDisplay.html(dim.c + ' x ' + dim.r);
+    };
+    
+    /**
+     * bind KeyMap on keydown
+     *
+     * @param {Object} layoutInfo
+     * @param {Object} keyMap
+     */
+    this.bindKeyMap = function (layoutInfo, keyMap) {
+      var $editor = layoutInfo.editor();
+      var $editable = layoutInfo.editable();
+
+      $editable.on('keydown', function (event) {
+        var keys = [];
+
+        // modifier
+        if (event.metaKey) { keys.push('CMD'); }
+        if (event.ctrlKey && !event.altKey) { keys.push('CTRL'); }
+        if (event.shiftKey) { keys.push('SHIFT'); }
+
+        // keycode
+        var keyName = key.nameFromCode[event.keyCode];
+        if (keyName) {
+          keys.push(keyName);
+        }
+
+        var pluginEvent;
+        var keyString = keys.join('+');
+        var eventName = keyMap[keyString];
+        if (eventName) {
+          // FIXME Summernote doesn't support event pipeline yet.
+          //  - Plugin -> Base Code
+          pluginEvent = $.summernote.pluginEvents[keyString];
+          if ($.isFunction(pluginEvent)) {
+            if (pluginEvent(event, modules.editor, layoutInfo)) {
+              return false;
+            }
+          }
+
+          pluginEvent = $.summernote.pluginEvents[eventName];
+
+          if ($.isFunction(pluginEvent)) {
+            pluginEvent(event, modules.editor, layoutInfo);
+          } else if (modules.editor[eventName]) {
+            modules.editor[eventName]($editable, $editor.data('options'));
+            event.preventDefault();
+          } else if (commands[eventName]) {
+            commands[eventName].call(this, layoutInfo);
+            event.preventDefault();
+          }
+        } else if (key.isEdit(event.keyCode)) {
+          modules.editor.afterCommand($editable);
+        }
+      });
+    };
+
+    /**
+     * attach eventhandler
+     *
+     * @param {Object} layoutInfo - layout Informations
+     * @param {Object} options - user options include custom event handlers
+     */
+    this.attach = function (layoutInfo, options) {
+      // handlers for editable
+      if (options.shortcuts) {
+        this.bindKeyMap(layoutInfo, options.keyMap[agent.isMac ? 'mac' : 'pc']);
+      }
+      layoutInfo.editable().on('mousedown', hMousedown);
+      layoutInfo.editable().on('keyup mouseup', hKeyupAndMouseup);
+      layoutInfo.editable().on('scroll', hScroll);
+
+      // handler for clipboard
+      modules.clipboard.attach(layoutInfo, options);
+
+      // handler for handle and popover
+      modules.handle.attach(layoutInfo, options);
+      layoutInfo.popover().on('click', hToolbarAndPopoverClick);
+      layoutInfo.popover().on('mousedown', hToolbarAndPopoverMousedown);
+
+      // handler for drag and drop
+      modules.dragAndDrop.attach(layoutInfo, options);
+
+      // handlers for frame mode (toolbar, statusbar)
+      if (!options.airMode) {
+        // handler for toolbar
+        layoutInfo.toolbar().on('click', hToolbarAndPopoverClick);
+        layoutInfo.toolbar().on('mousedown', hToolbarAndPopoverMousedown);
+
+        // handler for statusbar
+        modules.statusbar.attach(layoutInfo, options);
+      }
+
+      // handler for table dimension
+      var $catcherContainer = options.airMode ? layoutInfo.popover() :
+                                                layoutInfo.toolbar();
+      var $catcher = $catcherContainer.find('.note-dimension-picker-mousecatcher');
+      $catcher.css({
+        width: options.insertTableMaxSize.col + 'em',
+        height: options.insertTableMaxSize.row + 'em'
+      }).on('mousemove', function (event) {
+        hDimensionPickerMove(event, options);
+      });
+
+      // save options on editor
+      layoutInfo.editor().data('options', options);
+
+      // ret styleWithCSS for backColor / foreColor clearing with 'inherit'.
+      if (!agent.isMSIE) {
+        // [workaround] for Firefox
+        //  - protect FF Error: NS_ERROR_FAILURE: Failure
+        setTimeout(function () {
+          document.execCommand('styleWithCSS', 0, options.styleWithSpan);
+        }, 0);
+      }
+
+      // History
+      var history = new History(layoutInfo.editable());
+      layoutInfo.editable().data('NoteHistory', history);
+
+      // All editor status will be saved on editable with jquery's data
+      // for support multiple editor with singleton object.
+      layoutInfo.editable().data('callbacks', {
+        onInit: options.onInit,
+        onFocus: options.onFocus,
+        onBlur: options.onBlur,
+        onKeydown: options.onKeydown,
+        onKeyup: options.onKeyup,
+        onMousedown: options.onMousedown,
+        onEnter: options.onEnter,
+        onPaste: options.onPaste,
+        onBeforeCommand: options.onBeforeCommand,
+        onChange: options.onChange,
+        onImageUpload: options.onImageUpload,
+        onImageUploadError: options.onImageUploadError,
+        onMediaDelete: options.onMediaDelete,
+        onToolbarClick: options.onToolbarClick
+      });
+
+      var styleInfo = modules.editor.styleFromNode(layoutInfo.editable());
+      this.updateStyleInfo(styleInfo, layoutInfo);
+    };
+
+    /**
+     * attach jquery custom event
+     *
+     * @param {Object} layoutInfo - layout Informations
+     */
+    this.attachCustomEvent = function (layoutInfo, options) {
+      var $holder = layoutInfo.holder();
+      var $editable = layoutInfo.editable();
+      var callbacks = $editable.data('callbacks');
+
+      $editable.focus(bindCustomEvent($holder, callbacks, 'focus'));
+      $editable.blur(bindCustomEvent($holder, callbacks, 'blur'));
+
+      $editable.keydown(function (event) {
+        if (event.keyCode === key.code.ENTER) {
+          bindCustomEvent($holder, callbacks, 'enter').call(this, event);
+        }
+        bindCustomEvent($holder, callbacks, 'keydown').call(this, event);
+      });
+      $editable.keyup(bindCustomEvent($holder, callbacks, 'keyup'));
+
+      $editable.on('mousedown', bindCustomEvent($holder, callbacks, 'mousedown'));
+      $editable.on('mouseup', bindCustomEvent($holder, callbacks, 'mouseup'));
+      $editable.on('scroll', bindCustomEvent($holder, callbacks, 'scroll'));
+
+      $editable.on('paste', bindCustomEvent($holder, callbacks, 'paste'));
+      
+      // [workaround] IE doesn't have input events for contentEditable
+      //  - see: https://goo.gl/4bfIvA
+      var changeEventName = agent.isMSIE ? 'DOMCharacterDataModified DOMSubtreeModified DOMNodeInserted' : 'input';
+      $editable.on(changeEventName, function () {
+        bindCustomEvent($holder, callbacks, 'change')($editable.html(), $editable);
+      });
+
+      if (!options.airMode) {
+        layoutInfo.toolbar().click(bindCustomEvent($holder, callbacks, 'toolbar.click'));
+        layoutInfo.popover().click(bindCustomEvent($holder, callbacks, 'popover.click'));
+      }
+
+      // Textarea: auto filling the code before form submit.
+      if (dom.isTextarea(list.head($holder))) {
+        $holder.closest('form').submit(function (e) {
+          layoutInfo.holder().val(layoutInfo.holder().code());
+          bindCustomEvent($holder, callbacks, 'submit').call(this, e, $holder.code());
+        });
+      }
+
+      // textarea auto sync
+      if (dom.isTextarea(list.head($holder)) && options.textareaAutoSync) {
+        $holder.on('summernote.change', function () {
+          layoutInfo.holder().val(layoutInfo.holder().code());
+        });
+      }
+
+      // fire init event
+      bindCustomEvent($holder, callbacks, 'init')(layoutInfo);
+
+      // fire plugin init event
+      for (var i = 0, len = $.summernote.plugins.length; i < len; i++) {
+        if ($.isFunction($.summernote.plugins[i].init)) {
+          $.summernote.plugins[i].init(layoutInfo);
+        }
+      }
+    };
+      
+    this.detach = function (layoutInfo, options) {
+      layoutInfo.holder().off();
+      layoutInfo.editable().off();
+
+      layoutInfo.popover().off();
+      layoutInfo.handle().off();
+      layoutInfo.dialog().off();
+
+      if (!options.airMode) {
+        layoutInfo.dropzone().off();
+        layoutInfo.toolbar().off();
+        layoutInfo.statusbar().off();
+      }
+    };
+  };
+
+  /**
+   * @class Renderer
+   *
+   * renderer
+   *
+   * rendering toolbar and editable
+   */
+  var Renderer = function () {
+
+    /**
+     * bootstrap button template
+     * @private
+     * @param {String} label button name
+     * @param {Object} [options] button options
+     * @param {String} [options.event] data-event
+     * @param {String} [options.className] button's class name
+     * @param {String} [options.value] data-value
+     * @param {String} [options.title] button's title for popup
+     * @param {String} [options.dropdown] dropdown html
+     * @param {String} [options.hide] data-hide
+     */
+    var tplButton = function (label, options) {
+      var event = options.event;
+      var value = options.value;
+      var title = options.title;
+      var className = options.className;
+      var dropdown = options.dropdown;
+      var hide = options.hide;
+
+      return (dropdown ? '<div class="btn-group' +
+               (className ? ' ' + className : '') + '">' : '') +
+               '<button type="button"' +
+                 ' class="btn btn-default btn-sm' +
+                   ((!dropdown && className) ? ' ' + className : '') +
+                   (dropdown ? ' dropdown-toggle' : '') +
+                 '"' +
+                 (dropdown ? ' data-toggle="dropdown"' : '') +
+                 (title ? ' title="' + title + '"' : '') +
+                 (event ? ' data-event="' + event + '"' : '') +
+                 (value ? ' data-value=\'' + value + '\'' : '') +
+                 (hide ? ' data-hide=\'' + hide + '\'' : '') +
+                 ' tabindex="-1">' +
+                 label +
+                 (dropdown ? ' <span class="caret"></span>' : '') +
+               '</button>' +
+               (dropdown || '') +
+             (dropdown ? '</div>' : '');
+    };
+
+    /**
+     * bootstrap icon button template
+     * @private
+     * @param {String} iconClassName
+     * @param {Object} [options]
+     * @param {String} [options.event]
+     * @param {String} [options.value]
+     * @param {String} [options.title]
+     * @param {String} [options.dropdown]
+     */
+    var tplIconButton = function (iconClassName, options) {
+      var label = '<i class="' + iconClassName + '"></i>';
+      return tplButton(label, options);
+    };
+
+    /**
+     * bootstrap popover template
+     * @private
+     * @param {String} className
+     * @param {String} content
+     */
+    var tplPopover = function (className, content) {
+      var $popover = $('<div class="' + className + ' popover bottom in" style="display: none;">' +
+               '<div class="arrow"></div>' +
+               '<div class="popover-content">' +
+               '</div>' +
+             '</div>');
+
+      $popover.find('.popover-content').append(content);
+      return $popover;
+    };
+
+    /**
+     * bootstrap dialog template
+     *
+     * @param {String} className
+     * @param {String} [title='']
+     * @param {String} body
+     * @param {String} [footer='']
+     */
+    var tplDialog = function (className, title, body, footer) {
+      return '<div class="' + className + ' modal" aria-hidden="false">' +
+               '<div class="modal-dialog">' +
+                 '<div class="modal-content">' +
+                   (title ?
+                   '<div class="modal-header">' +
+                     '<button type="button" class="close" aria-hidden="true" tabindex="-1">&times;</button>' +
+                     '<h4 class="modal-title">' + title + '</h4>' +
+                   '</div>' : ''
+                   ) +
+                   '<div class="modal-body">' + body + '</div>' +
+                   (footer ?
+                   '<div class="modal-footer">' + footer + '</div>' : ''
+                   ) +
+                 '</div>' +
+               '</div>' +
+             '</div>';
+    };
+
+    /**
+     * bootstrap dropdown template
+     *
+     * @param {String|String[]} contents
+     * @param {String} [className='']
+     * @param {String} [nodeName='']
+     */
+    var tplDropdown = function (contents, className, nodeName) {
+      var classes = 'dropdown-menu' + (className ? ' ' + className : '');
+      nodeName = nodeName || 'ul';
+      if (contents instanceof Array) {
+        contents = contents.join('');
+      }
+
+      return '<' + nodeName + ' class="' + classes + '">' + contents + '</' + nodeName + '>';
+    };
+
+    var tplButtonInfo = {
+      picture: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.image.image, {
+          event: 'showImageDialog',
+          title: lang.image.image,
+          hide: true
+        });
+      },
+      link: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.link.link, {
+          event: 'showLinkDialog',
+          title: lang.link.link,
+          hide: true
+        });
+      },
+      table: function (lang, options) {
+        var dropdown = [
+          '<div class="note-dimension-picker">',
+          '<div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"></div>',
+          '<div class="note-dimension-picker-highlighted"></div>',
+          '<div class="note-dimension-picker-unhighlighted"></div>',
+          '</div>',
+          '<div class="note-dimension-display"> 1 x 1 </div>'
+        ];
+
+        return tplIconButton(options.iconPrefix + options.icons.table.table, {
+          title: lang.table.table,
+          dropdown: tplDropdown(dropdown, 'note-table')
+        });
+      },
+      style: function (lang, options) {
+        var items = options.styleTags.reduce(function (memo, v) {
+          var label = lang.style[v === 'p' ? 'normal' : v];
+          return memo + '<li><a data-event="formatBlock" href="#" data-value="' + v + '">' +
+                   (
+                     (v === 'p' || v === 'pre') ? label :
+                     '<' + v + '>' + label + '</' + v + '>'
+                   ) +
+                 '</a></li>';
+        }, '');
+
+        return tplIconButton(options.iconPrefix + options.icons.style.style, {
+          title: lang.style.style,
+          dropdown: tplDropdown(items)
+        });
+      },
+      fontname: function (lang, options) {
+        var realFontList = [];
+        var items = options.fontNames.reduce(function (memo, v) {
+          if (!agent.isFontInstalled(v) && !list.contains(options.fontNamesIgnoreCheck, v)) {
+            return memo;
+          }
+          realFontList.push(v);
+          return memo + '<li><a data-event="fontName" href="#" data-value="' + v + '" style="font-family:\'' + v + '\'">' +
+                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+                        '</a></li>';
+        }, '');
+
+        var hasDefaultFont = agent.isFontInstalled(options.defaultFontName);
+        var defaultFontName = (hasDefaultFont) ? options.defaultFontName : realFontList[0];
+
+        var label = '<span class="note-current-fontname">' +
+                        defaultFontName +
+                     '</span>';
+        return tplButton(label, {
+          title: lang.font.name,
+          className: 'note-fontname',
+          dropdown: tplDropdown(items, 'note-check')
+        });
+      },
+      fontsize: function (lang, options) {
+        var items = options.fontSizes.reduce(function (memo, v) {
+          return memo + '<li><a data-event="fontSize" href="#" data-value="' + v + '">' +
+                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+                        '</a></li>';
+        }, '');
+
+        var label = '<span class="note-current-fontsize">11</span>';
+        return tplButton(label, {
+          title: lang.font.size,
+          className: 'note-fontsize',
+          dropdown: tplDropdown(items, 'note-check')
+        });
+      },
+      color: function (lang, options) {
+        var colorButtonLabel = '<i class="' +
+                                  options.iconPrefix + options.icons.color.recent +
+                                '" style="color:black;background-color:yellow;"></i>';
+
+        var colorButton = tplButton(colorButtonLabel, {
+          className: 'note-recent-color',
+          title: lang.color.recent,
+          event: 'color',
+          value: '{"backColor":"yellow"}'
+        });
+
+        var items = [
+          '<li><div class="btn-group">',
+          '<div class="note-palette-title">' + lang.color.background + '</div>',
+          '<div class="note-color-reset" data-event="backColor"',
+          ' data-value="inherit" title="' + lang.color.transparent + '">' + lang.color.setTransparent + '</div>',
+          '<div class="note-color-palette" data-target-event="backColor"></div>',
+          '</div><div class="btn-group">',
+          '<div class="note-palette-title">' + lang.color.foreground + '</div>',
+          '<div class="note-color-reset" data-event="foreColor" data-value="inherit" title="' + lang.color.reset + '">',
+          lang.color.resetToDefault,
+          '</div>',
+          '<div class="note-color-palette" data-target-event="foreColor"></div>',
+          '</div></li>'
+        ];
+
+        var moreButton = tplButton('', {
+          title: lang.color.more,
+          dropdown: tplDropdown(items)
+        });
+
+        return colorButton + moreButton;
+      },
+      bold: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.bold, {
+          event: 'bold',
+          title: lang.font.bold
+        });
+      },
+      italic: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.italic, {
+          event: 'italic',
+          title: lang.font.italic
+        });
+      },
+      underline: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.underline, {
+          event: 'underline',
+          title: lang.font.underline
+        });
+      },
+      strikethrough: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.strikethrough, {
+          event: 'strikethrough',
+          title: lang.font.strikethrough
+        });
+      },
+      superscript: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.superscript, {
+          event: 'superscript',
+          title: lang.font.superscript
+        });
+      },
+      subscript: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.subscript, {
+          event: 'subscript',
+          title: lang.font.subscript
+        });
+      },
+      clear: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.font.clear, {
+          event: 'removeFormat',
+          title: lang.font.clear
+        });
+      },
+      ul: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.lists.unordered, {
+          event: 'insertUnorderedList',
+          title: lang.lists.unordered
+        });
+      },
+      ol: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.lists.ordered, {
+          event: 'insertOrderedList',
+          title: lang.lists.ordered
+        });
+      },
+      paragraph: function (lang, options) {
+        var leftButton = tplIconButton(options.iconPrefix + options.icons.paragraph.left, {
+          title: lang.paragraph.left,
+          event: 'justifyLeft'
+        });
+        var centerButton = tplIconButton(options.iconPrefix + options.icons.paragraph.center, {
+          title: lang.paragraph.center,
+          event: 'justifyCenter'
+        });
+        var rightButton = tplIconButton(options.iconPrefix + options.icons.paragraph.right, {
+          title: lang.paragraph.right,
+          event: 'justifyRight'
+        });
+        var justifyButton = tplIconButton(options.iconPrefix + options.icons.paragraph.justify, {
+          title: lang.paragraph.justify,
+          event: 'justifyFull'
+        });
+
+        var outdentButton = tplIconButton(options.iconPrefix + options.icons.paragraph.outdent, {
+          title: lang.paragraph.outdent,
+          event: 'outdent'
+        });
+        var indentButton = tplIconButton(options.iconPrefix + options.icons.paragraph.indent, {
+          title: lang.paragraph.indent,
+          event: 'indent'
+        });
+
+        var dropdown = [
+          '<div class="note-align btn-group">',
+          leftButton + centerButton + rightButton + justifyButton,
+          '</div><div class="note-list btn-group">',
+          indentButton + outdentButton,
+          '</div>'
+        ];
+
+        return tplIconButton(options.iconPrefix + options.icons.paragraph.paragraph, {
+          title: lang.paragraph.paragraph,
+          dropdown: tplDropdown(dropdown, '', 'div')
+        });
+      },
+      height: function (lang, options) {
+        var items = options.lineHeights.reduce(function (memo, v) {
+          return memo + '<li><a data-event="lineHeight" href="#" data-value="' + parseFloat(v) + '">' +
+                          '<i class="' + options.iconPrefix + options.icons.misc.check + '"></i> ' + v +
+                        '</a></li>';
+        }, '');
+
+        return tplIconButton(options.iconPrefix + options.icons.font.height, {
+          title: lang.font.height,
+          dropdown: tplDropdown(items, 'note-check')
+        });
+
+      },
+      help: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.options.help, {
+          event: 'showHelpDialog',
+          title: lang.options.help,
+          hide: true
+        });
+      },
+      fullscreen: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.options.fullscreen, {
+          event: 'fullscreen',
+          title: lang.options.fullscreen
+        });
+      },
+      codeview: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.options.codeview, {
+          event: 'codeview',
+          title: lang.options.codeview
+        });
+      },
+      undo: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.history.undo, {
+          event: 'undo',
+          title: lang.history.undo
+        });
+      },
+      redo: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.history.redo, {
+          event: 'redo',
+          title: lang.history.redo
+        });
+      },
+      hr: function (lang, options) {
+        return tplIconButton(options.iconPrefix + options.icons.hr.insert, {
+          event: 'insertHorizontalRule',
+          title: lang.hr.insert
+        });
+      }
+    };
+
+    var tplPopovers = function (lang, options) {
+      var tplLinkPopover = function () {
+        var linkButton = tplIconButton(options.iconPrefix + options.icons.link.edit, {
+          title: lang.link.edit,
+          event: 'showLinkDialog',
+          hide: true
+        });
+        var unlinkButton = tplIconButton(options.iconPrefix + options.icons.link.unlink, {
+          title: lang.link.unlink,
+          event: 'unlink'
+        });
+        var content = '<a href="http://www.google.com" target="_blank">www.google.com</a>&nbsp;&nbsp;' +
+                      '<div class="note-insert btn-group">' +
+                        linkButton + unlinkButton +
+                      '</div>';
+        return tplPopover('note-link-popover', content);
+      };
+
+      var tplImagePopover = function () {
+        var fullButton = tplButton('<span class="note-fontsize-10">100%</span>', {
+          title: lang.image.resizeFull,
+          event: 'resize',
+          value: '1'
+        });
+        var halfButton = tplButton('<span class="note-fontsize-10">50%</span>', {
+          title: lang.image.resizeHalf,
+          event: 'resize',
+          value: '0.5'
+        });
+        var quarterButton = tplButton('<span class="note-fontsize-10">25%</span>', {
+          title: lang.image.resizeQuarter,
+          event: 'resize',
+          value: '0.25'
+        });
+
+        var leftButton = tplIconButton(options.iconPrefix + options.icons.image.floatLeft, {
+          title: lang.image.floatLeft,
+          event: 'floatMe',
+          value: 'left'
+        });
+        var rightButton = tplIconButton(options.iconPrefix + options.icons.image.floatRight, {
+          title: lang.image.floatRight,
+          event: 'floatMe',
+          value: 'right'
+        });
+        var justifyButton = tplIconButton(options.iconPrefix + options.icons.image.floatNone, {
+          title: lang.image.floatNone,
+          event: 'floatMe',
+          value: 'none'
+        });
+
+        var roundedButton = tplIconButton(options.iconPrefix + options.icons.image.shapeRounded, {
+          title: lang.image.shapeRounded,
+          event: 'imageShape',
+          value: 'img-rounded'
+        });
+        var circleButton = tplIconButton(options.iconPrefix + options.icons.image.shapeCircle, {
+          title: lang.image.shapeCircle,
+          event: 'imageShape',
+          value: 'img-circle'
+        });
+        var thumbnailButton = tplIconButton(options.iconPrefix + options.icons.image.shapeThumbnail, {
+          title: lang.image.shapeThumbnail,
+          event: 'imageShape',
+          value: 'img-thumbnail'
+        });
+        var noneButton = tplIconButton(options.iconPrefix + options.icons.image.shapeNone, {
+          title: lang.image.shapeNone,
+          event: 'imageShape',
+          value: ''
+        });
+
+        var removeButton = tplIconButton(options.iconPrefix + options.icons.image.remove, {
+          title: lang.image.remove,
+          event: 'removeMedia',
+          value: 'none'
+        });
+
+        var content = (options.disableResizeImage ? '' : '<div class="btn-group">' + fullButton + halfButton + quarterButton + '</div>') +
+                      '<div class="btn-group">' + leftButton + rightButton + justifyButton + '</div><br>' +
+                      '<div class="btn-group">' + roundedButton + circleButton + thumbnailButton + noneButton + '</div>' +
+                      '<div class="btn-group">' + removeButton + '</div>';
+        return tplPopover('note-image-popover', content);
+      };
+
+      var tplAirPopover = function () {
+        var $content = $('<div />');
+        for (var idx = 0, len = options.airPopover.length; idx < len; idx ++) {
+          var group = options.airPopover[idx];
+
+          var $group = $('<div class="note-' + group[0] + ' btn-group">');
+          for (var i = 0, lenGroup = group[1].length; i < lenGroup; i++) {
+            var $button = $(tplButtonInfo[group[1][i]](lang, options));
+
+            $button.attr('data-name', group[1][i]);
+
+            $group.append($button);
+          }
+          $content.append($group);
+        }
+
+        return tplPopover('note-air-popover', $content.children());
+      };
+
+      var $notePopover = $('<div class="note-popover" />');
+
+      $notePopover.append(tplLinkPopover());
+      $notePopover.append(tplImagePopover());
+
+      if (options.airMode) {
+        $notePopover.append(tplAirPopover());
+      }
+
+      return $notePopover;
+    };
+
+    var tplHandles = function (options) {
+      return '<div class="note-handle">' +
+               '<div class="note-control-selection">' +
+                 '<div class="note-control-selection-bg"></div>' +
+                 '<div class="note-control-holder note-control-nw"></div>' +
+                 '<div class="note-control-holder note-control-ne"></div>' +
+                 '<div class="note-control-holder note-control-sw"></div>' +
+                 '<div class="' +
+                 (options.disableResizeImage ? 'note-control-holder' : 'note-control-sizing') +
+                 ' note-control-se"></div>' +
+                 (options.disableResizeImage ? '' : '<div class="note-control-selection-info"></div>') +
+               '</div>' +
+             '</div>';
+    };
+
+    /**
+     * shortcut table template
+     * @param {String} title
+     * @param {String} body
+     */
+    var tplShortcut = function (title, keys) {
+      var keyClass = 'note-shortcut-col col-xs-6 note-shortcut-';
+      var body = [];
+
+      for (var i in keys) {
+        if (keys.hasOwnProperty(i)) {
+          body.push(
+            '<div class="' + keyClass + 'key">' + keys[i].kbd + '</div>' +
+            '<div class="' + keyClass + 'name">' + keys[i].text + '</div>'
+            );
+        }
+      }
+
+      return '<div class="note-shortcut-row row"><div class="' + keyClass + 'title col-xs-offset-6">' + title + '</div></div>' +
+             '<div class="note-shortcut-row row">' + body.join('</div><div class="note-shortcut-row row">') + '</div>';
+    };
+
+    var tplShortcutText = function (lang) {
+      var keys = [
+        { kbd: '⌘ + B', text: lang.font.bold },
+        { kbd: '⌘ + I', text: lang.font.italic },
+        { kbd: '⌘ + U', text: lang.font.underline },
+        { kbd: '⌘ + \\', text: lang.font.clear }
+      ];
+
+      return tplShortcut(lang.shortcut.textFormatting, keys);
+    };
+
+    var tplShortcutAction = function (lang) {
+      var keys = [
+        { kbd: '⌘ + Z', text: lang.history.undo },
+        { kbd: '⌘ + ⇧ + Z', text: lang.history.redo },
+        { kbd: '⌘ + ]', text: lang.paragraph.indent },
+        { kbd: '⌘ + [', text: lang.paragraph.outdent },
+        { kbd: '⌘ + ENTER', text: lang.hr.insert }
+      ];
+
+      return tplShortcut(lang.shortcut.action, keys);
+    };
+
+    var tplShortcutPara = function (lang) {
+      var keys = [
+        { kbd: '⌘ + ⇧ + L', text: lang.paragraph.left },
+        { kbd: '⌘ + ⇧ + E', text: lang.paragraph.center },
+        { kbd: '⌘ + ⇧ + R', text: lang.paragraph.right },
+        { kbd: '⌘ + ⇧ + J', text: lang.paragraph.justify },
+        { kbd: '⌘ + ⇧ + NUM7', text: lang.lists.ordered },
+        { kbd: '⌘ + ⇧ + NUM8', text: lang.lists.unordered }
+      ];
+
+      return tplShortcut(lang.shortcut.paragraphFormatting, keys);
+    };
+
+    var tplShortcutStyle = function (lang) {
+      var keys = [
+        { kbd: '⌘ + NUM0', text: lang.style.normal },
+        { kbd: '⌘ + NUM1', text: lang.style.h1 },
+        { kbd: '⌘ + NUM2', text: lang.style.h2 },
+        { kbd: '⌘ + NUM3', text: lang.style.h3 },
+        { kbd: '⌘ + NUM4', text: lang.style.h4 },
+        { kbd: '⌘ + NUM5', text: lang.style.h5 },
+        { kbd: '⌘ + NUM6', text: lang.style.h6 }
+      ];
+
+      return tplShortcut(lang.shortcut.documentStyle, keys);
+    };
+
+    var tplExtraShortcuts = function (lang, options) {
+      var extraKeys = options.extraKeys;
+      var keys = [];
+
+      for (var key in extraKeys) {
+        if (extraKeys.hasOwnProperty(key)) {
+          keys.push({ kbd: key, text: extraKeys[key] });
+        }
+      }
+
+      return tplShortcut(lang.shortcut.extraKeys, keys);
+    };
+
+    var tplShortcutTable = function (lang, options) {
+      var colClass = 'class="note-shortcut note-shortcut-col col-sm-6 col-xs-12"';
+      var template = [
+        '<div ' + colClass + '>' + tplShortcutAction(lang, options) + '</div>' +
+        '<div ' + colClass + '>' + tplShortcutText(lang, options) + '</div>',
+        '<div ' + colClass + '>' + tplShortcutStyle(lang, options) + '</div>' +
+        '<div ' + colClass + '>' + tplShortcutPara(lang, options) + '</div>'
+      ];
+
+      if (options.extraKeys) {
+        template.push('<div ' + colClass + '>' + tplExtraShortcuts(lang, options) + '</div>');
+      }
+
+      return '<div class="note-shortcut-row row">' +
+               template.join('</div><div class="note-shortcut-row row">') +
+             '</div>';
+    };
+
+    var replaceMacKeys = function (sHtml) {
+      return sHtml.replace(/⌘/g, 'Ctrl').replace(/⇧/g, 'Shift');
+    };
+
+    var tplDialogInfo = {
+      image: function (lang, options) {
+        var imageLimitation = '';
+        if (options.maximumImageFileSize) {
+          var unit = Math.floor(Math.log(options.maximumImageFileSize) / Math.log(1024));
+          var readableSize = (options.maximumImageFileSize / Math.pow(1024, unit)).toFixed(2) * 1 +
+                             ' ' + ' KMGTP'[unit] + 'B';
+          imageLimitation = '<small>' + lang.image.maximumFileSize + ' : ' + readableSize + '</small>';
+        }
+
+        var body = '<div class="form-group row note-group-select-from-files">' +
+                     '<label>' + lang.image.selectFromFiles + '</label>' +
+                     '<input class="note-image-input form-control" type="file" name="files" accept="image/*" multiple="multiple" />' +
+                     imageLimitation +
+                   '</div>' +
+                   '<div class="form-group row">' +
+                     '<label>' + lang.image.url + '</label>' +
+                     '<input class="note-image-url form-control col-md-12" type="text" />' +
+                   '</div>';
+        var footer = '<button href="#" class="btn btn-primary note-image-btn disabled" disabled>' + lang.image.insert + '</button>';
+        return tplDialog('note-image-dialog', lang.image.insert, body, footer);
+      },
+
+      link: function (lang, options) {
+        var body = '<div class="form-group row">' +
+                     '<label>' + lang.link.textToDisplay + '</label>' +
+                     '<input class="note-link-text form-control col-md-12" type="text" />' +
+                   '</div>' +
+                   '<div class="form-group row">' +
+                     '<label>' + lang.link.url + '</label>' +
+                     '<input class="note-link-url form-control col-md-12" type="text" value="http://" />' +
+                   '</div>' +
+                   (!options.disableLinkTarget ?
+                     '<div class="checkbox">' +
+                       '<label>' + '<input type="checkbox" checked> ' +
+                         lang.link.openInNewWindow +
+                       '</label>' +
+                     '</div>' : ''
+                   );
+        var footer = '<button href="#" class="btn btn-primary note-link-btn disabled" disabled>' + lang.link.insert + '</button>';
+        return tplDialog('note-link-dialog', lang.link.insert, body, footer);
+      },
+
+      help: function (lang, options) {
+        var body = '<a class="modal-close pull-right" aria-hidden="true" tabindex="-1">' + lang.shortcut.close + '</a>' +
+                   '<div class="title">' + lang.shortcut.shortcuts + '</div>' +
+                   (agent.isMac ? tplShortcutTable(lang, options) : replaceMacKeys(tplShortcutTable(lang, options))) +
+                   '<p class="text-center">' +
+                     '<a href="//summernote.org/" target="_blank">Summernote 0.6.16</a> · ' +
+                     '<a href="//github.com/summernote/summernote" target="_blank">Project</a> · ' +
+                     '<a href="//github.com/summernote/summernote/issues" target="_blank">Issues</a>' +
+                   '</p>';
+        return tplDialog('note-help-dialog', '', body, '');
+      }
+    };
+
+    var tplDialogs = function (lang, options) {
+      var dialogs = '';
+
+      $.each(tplDialogInfo, function (idx, tplDialog) {
+        dialogs += tplDialog(lang, options);
+      });
+
+      return '<div class="note-dialog">' + dialogs + '</div>';
+    };
+
+    var tplStatusbar = function () {
+      return '<div class="note-resizebar">' +
+               '<div class="note-icon-bar"></div>' +
+               '<div class="note-icon-bar"></div>' +
+               '<div class="note-icon-bar"></div>' +
+             '</div>';
+    };
+
+    var representShortcut = function (str) {
+      if (agent.isMac) {
+        str = str.replace('CMD', '⌘').replace('SHIFT', '⇧');
+      }
+
+      return str.replace('BACKSLASH', '\\')
+                .replace('SLASH', '/')
+                .replace('LEFTBRACKET', '[')
+                .replace('RIGHTBRACKET', ']');
+    };
+
+    /**
+     * createTooltip
+     *
+     * @param {jQuery} $container
+     * @param {Object} keyMap
+     * @param {String} [sPlacement]
+     */
+    var createTooltip = function ($container, keyMap, sPlacement) {
+      var invertedKeyMap = func.invertObject(keyMap);
+      var $buttons = $container.find('button');
+
+      $buttons.each(function (i, elBtn) {
+        var $btn = $(elBtn);
+        var sShortcut = invertedKeyMap[$btn.data('event')];
+        if (sShortcut) {
+          $btn.attr('title', function (i, v) {
+            return v + ' (' + representShortcut(sShortcut) + ')';
+          });
+        }
+      // bootstrap tooltip on btn-group bug
+      // https://github.com/twbs/bootstrap/issues/5687
+      }).tooltip({
+        container: 'body',
+        trigger: 'hover',
+        placement: sPlacement || 'top'
+      }).on('click', function () {
+        $(this).tooltip('hide');
+      });
+    };
+
+    // createPalette
+    var createPalette = function ($container, options) {
+      var colorInfo = options.colors;
+      $container.find('.note-color-palette').each(function () {
+        var $palette = $(this), eventName = $palette.attr('data-target-event');
+        var paletteContents = [];
+        for (var row = 0, lenRow = colorInfo.length; row < lenRow; row++) {
+          var colors = colorInfo[row];
+          var buttons = [];
+          for (var col = 0, lenCol = colors.length; col < lenCol; col++) {
+            var color = colors[col];
+            buttons.push(['<button type="button" class="note-color-btn" style="background-color:', color,
+                           ';" data-event="', eventName,
+                           '" data-value="', color,
+                           '" title="', color,
+                           '" data-toggle="button" tabindex="-1"></button>'].join(''));
+          }
+          paletteContents.push('<div class="note-color-row">' + buttons.join('') + '</div>');
+        }
+        $palette.html(paletteContents.join(''));
+      });
+    };
+
+    /**
+     * create summernote layout (air mode)
+     *
+     * @param {jQuery} $holder
+     * @param {Object} options
+     */
+    this.createLayoutByAirMode = function ($holder, options) {
+      var langInfo = options.langInfo;
+      var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
+      var id = func.uniqueId();
+
+      $holder.addClass('note-air-editor note-editable panel-body');
+      $holder.attr({
+        'id': 'note-editor-' + id,
+        'contentEditable': true
+      });
+
+      var body = document.body;
+
+      // create Popover
+      var $popover = $(tplPopovers(langInfo, options));
+      $popover.addClass('note-air-layout');
+      $popover.attr('id', 'note-popover-' + id);
+      $popover.appendTo(body);
+      createTooltip($popover, keyMap);
+      createPalette($popover, options);
+
+      // create Handle
+      var $handle = $(tplHandles(options));
+      $handle.addClass('note-air-layout');
+      $handle.attr('id', 'note-handle-' + id);
+      $handle.appendTo(body);
+
+      // create Dialog
+      var $dialog = $(tplDialogs(langInfo, options));
+      $dialog.addClass('note-air-layout');
+      $dialog.attr('id', 'note-dialog-' + id);
+      $dialog.find('button.close, a.modal-close').click(function () {
+        $(this).closest('.modal').modal('hide');
+      });
+      $dialog.appendTo(body);
+    };
+
+    /**
+     * create summernote layout (normal mode)
+     *
+     * @param {jQuery} $holder
+     * @param {Object} options
+     */
+    this.createLayoutByFrame = function ($holder, options) {
+      var langInfo = options.langInfo;
+
+      //01. create Editor
+      var $editor = $('<div class="note-editor panel panel-default" />');
+      if (options.width) {
+        $editor.width(options.width);
+      }
+
+      //02. statusbar (resizebar)
+      if (options.height > 0) {
+        $('<div class="note-statusbar">' + (options.disableResizeEditor ? '' : tplStatusbar()) + '</div>').prependTo($editor);
+      }
+
+      //03 editing area
+      var $editingArea = $('<div class="note-editing-area" />');
+      //03. create editable
+      var isContentEditable = !$holder.is(':disabled');
+      var $editable = $('<div class="note-editable panel-body" contentEditable="' + isContentEditable + '"></div>').prependTo($editingArea);
+      
+      if (options.height) {
+        $editable.height(options.height);
+      }
+      if (options.direction) {
+        $editable.attr('dir', options.direction);
+      }
+      var placeholder = $holder.attr('placeholder') || options.placeholder;
+      if (placeholder) {
+        $editable.attr('data-placeholder', placeholder);
+      }
+
+      $editable.html(dom.html($holder) || dom.emptyPara);
+
+      //031. create codable
+      $('<textarea class="note-codable"></textarea>').prependTo($editingArea);
+
+      //04. create Popover
+      var $popover = $(tplPopovers(langInfo, options)).prependTo($editingArea);
+      createPalette($popover, options);
+      createTooltip($popover, keyMap);
+
+      //05. handle(control selection, ...)
+      $(tplHandles(options)).prependTo($editingArea);
+
+      $editingArea.prependTo($editor);
+
+      //06. create Toolbar
+      var $toolbar = $('<div class="note-toolbar panel-heading" />');
+      for (var idx = 0, len = options.toolbar.length; idx < len; idx ++) {
+        var groupName = options.toolbar[idx][0];
+        var groupButtons = options.toolbar[idx][1];
+
+        var $group = $('<div class="note-' + groupName + ' btn-group" />');
+        for (var i = 0, btnLength = groupButtons.length; i < btnLength; i++) {
+          var buttonInfo = tplButtonInfo[groupButtons[i]];
+          // continue creating toolbar even if a button doesn't exist
+          if (!$.isFunction(buttonInfo)) { continue; }
+
+          var $button = $(buttonInfo(langInfo, options));
+          $button.attr('data-name', groupButtons[i]);  // set button's alias, becuase to get button element from $toolbar
+          $group.append($button);
+        }
+        $toolbar.append($group);
+      }
+
+      var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
+      createPalette($toolbar, options);
+      createTooltip($toolbar, keyMap, 'bottom');
+      $toolbar.prependTo($editor);
+
+      //07. create Dropzone
+      $('<div class="note-dropzone"><div class="note-dropzone-message"></div></div>').prependTo($editor);
+
+      //08. create Dialog
+      var $dialogContainer = options.dialogsInBody ? $(document.body) : $editor;
+      var $dialog = $(tplDialogs(langInfo, options)).prependTo($dialogContainer);
+      $dialog.find('button.close, a.modal-close').click(function () {
+        $(this).closest('.modal').modal('hide');
+      });
+
+      //09. Editor/Holder switch
+      $editor.insertAfter($holder);
+      $holder.hide();
+    };
+
+    this.hasNoteEditor = function ($holder) {
+      return this.noteEditorFromHolder($holder).length > 0;
+    };
+
+    this.noteEditorFromHolder = function ($holder) {
+      if ($holder.hasClass('note-air-editor')) {
+        return $holder;
+      } else if ($holder.next().hasClass('note-editor')) {
+        return $holder.next();
+      } else {
+        return $();
+      }
+    };
+
+    /**
+     * create summernote layout
+     *
+     * @param {jQuery} $holder
+     * @param {Object} options
+     */
+    this.createLayout = function ($holder, options) {
+      if (options.airMode) {
+        this.createLayoutByAirMode($holder, options);
+      } else {
+        this.createLayoutByFrame($holder, options);
+      }
+    };
+
+    /**
+     * returns layoutInfo from holder
+     *
+     * @param {jQuery} $holder - placeholder
+     * @return {Object}
+     */
+    this.layoutInfoFromHolder = function ($holder) {
+      var $editor = this.noteEditorFromHolder($holder);
+      if (!$editor.length) {
+        return;
+      }
+
+      // connect $holder to $editor
+      $editor.data('holder', $holder);
+
+      return dom.buildLayoutInfo($editor);
+    };
+
+    /**
+     * removeLayout
+     *
+     * @param {jQuery} $holder - placeholder
+     * @param {Object} layoutInfo
+     * @param {Object} options
+     *
+     */
+    this.removeLayout = function ($holder, layoutInfo, options) {
+      if (options.airMode) {
+        $holder.removeClass('note-air-editor note-editable')
+               .removeAttr('id contentEditable');
+
+        layoutInfo.popover().remove();
+        layoutInfo.handle().remove();
+        layoutInfo.dialog().remove();
+      } else {
+        $holder.html(layoutInfo.editable().html());
+
+        if (options.dialogsInBody) {
+          layoutInfo.dialog().remove();
+        }
+        layoutInfo.editor().remove();
+        $holder.show();
+      }
+    };
+
+    /**
+     *
+     * @return {Object}
+     * @return {function(label, options=):string} return.button {@link #tplButton function to make text button}
+     * @return {function(iconClass, options=):string} return.iconButton {@link #tplIconButton function to make icon button}
+     * @return {function(className, title=, body=, footer=):string} return.dialog {@link #tplDialog function to make dialog}
+     */
+    this.getTemplate = function () {
+      return {
+        button: tplButton,
+        iconButton: tplIconButton,
+        dialog: tplDialog
+      };
+    };
+
+    /**
+     * add button information
+     *
+     * @param {String} name button name
+     * @param {Function} buttonInfo function to make button, reference to {@link #tplButton},{@link #tplIconButton}
+     */
+    this.addButtonInfo = function (name, buttonInfo) {
+      tplButtonInfo[name] = buttonInfo;
+    };
+
+    /**
+     *
+     * @param {String} name
+     * @param {Function} dialogInfo function to make dialog, reference to {@link #tplDialog}
+     */
+    this.addDialogInfo = function (name, dialogInfo) {
+      tplDialogInfo[name] = dialogInfo;
+    };
+  };
+
+
+  // jQuery namespace for summernote
+  /**
+   * @class $.summernote 
+   * 
+   * summernote attribute  
+   * 
+   * @mixin defaults
+   * @singleton  
+   * 
+   */
+  $.summernote = $.summernote || {};
+
+  // extends default settings
+  //  - $.summernote.version
+  //  - $.summernote.options
+  //  - $.summernote.lang
+  $.extend($.summernote, defaults);
+
+  var renderer = new Renderer();
+  var eventHandler = new EventHandler();
+
+  $.extend($.summernote, {
+    /** @property {Renderer} */
+    renderer: renderer,
+    /** @property {EventHandler} */
+    eventHandler: eventHandler,
+    /** 
+     * @property {Object} core 
+     * @property {core.agent} core.agent 
+     * @property {core.dom} core.dom
+     * @property {core.range} core.range 
+     */
+    core: {
+      agent: agent,
+      list : list,
+      dom: dom,
+      range: range
+    },
+    /** 
+     * @property {Object} 
+     * pluginEvents event list for plugins
+     * event has name and callback function.
+     * 
+     * ``` 
+     * $.summernote.addPlugin({
+     *     events : {
+     *          'hello' : function(layoutInfo, value, $target) {
+     *              console.log('event name is hello, value is ' + value );
+     *          }
+     *     }     
+     * })
+     * ```
+     * 
+     * * event name is data-event property.
+     * * layoutInfo is a summernote layout information.
+     * * value is data-value property.
+     */
+    pluginEvents: {},
+
+    plugins : []
+  });
+
+  /**
+   * @method addPlugin
+   *
+   * add Plugin in Summernote 
+   * 
+   * Summernote can make a own plugin.
+   *
+   * ### Define plugin
+   * ```
+   * // get template function  
+   * var tmpl = $.summernote.renderer.getTemplate();
+   * 
+   * // add a button   
+   * $.summernote.addPlugin({
+   *     buttons : {
+   *        // "hello"  is button's namespace.      
+   *        "hello" : function(lang, options) {
+   *            // make icon button by template function          
+   *            return tmpl.iconButton(options.iconPrefix + 'header', {
+   *                // callback function name when button clicked 
+   *                event : 'hello',
+   *                // set data-value property                 
+   *                value : 'hello',                
+   *                hide : true
+   *            });           
+   *        }
+   *     
+   *     }, 
+   *     
+   *     events : {
+   *        "hello" : function(layoutInfo, value) {
+   *            // here is event code 
+   *        }
+   *     }     
+   * });
+   * ``` 
+   * ### Use a plugin in toolbar
+   * 
+   * ``` 
+   *    $("#editor").summernote({
+   *    ...
+   *    toolbar : [
+   *        // display hello plugin in toolbar     
+   *        ['group', [ 'hello' ]]
+   *    ]
+   *    ...    
+   *    });
+   * ```
+   *  
+   *  
+   * @param {Object} plugin
+   * @param {Object} [plugin.buttons] define plugin button. for detail, see to Renderer.addButtonInfo
+   * @param {Object} [plugin.dialogs] define plugin dialog. for detail, see to Renderer.addDialogInfo
+   * @param {Object} [plugin.events] add event in $.summernote.pluginEvents 
+   * @param {Object} [plugin.langs] update $.summernote.lang
+   * @param {Object} [plugin.options] update $.summernote.options
+   */
+  $.summernote.addPlugin = function (plugin) {
+
+    // save plugin list
+    $.summernote.plugins.push(plugin);
+
+    if (plugin.buttons) {
+      $.each(plugin.buttons, function (name, button) {
+        renderer.addButtonInfo(name, button);
+      });
+    }
+
+    if (plugin.dialogs) {
+      $.each(plugin.dialogs, function (name, dialog) {
+        renderer.addDialogInfo(name, dialog);
+      });
+    }
+
+    if (plugin.events) {
+      $.each(plugin.events, function (name, event) {
+        $.summernote.pluginEvents[name] = event;
+      });
+    }
+
+    if (plugin.langs) {
+      $.each(plugin.langs, function (locale, lang) {
+        if ($.summernote.lang[locale]) {
+          $.extend($.summernote.lang[locale], lang);
+        }
+      });
+    }
+
+    if (plugin.options) {
+      $.extend($.summernote.options, plugin.options);
+    }
+  };
+
+  /*
+   * extend $.fn
+   */
+  $.fn.extend({
+    /**
+     * @method
+     * Initialize summernote
+     *  - create editor layout and attach Mouse and keyboard events.
+     * 
+     * ```
+     * $("#summernote").summernote( { options ..} );
+     * ```
+     *   
+     * @member $.fn
+     * @param {Object|String} options reference to $.summernote.options
+     * @return {this}
+     */
+    summernote: function () {
+      // check first argument's type
+      //  - {String}: External API call {{module}}.{{method}}
+      //  - {Object}: init options
+      var type = $.type(list.head(arguments));
+      var isExternalAPICalled = type === 'string';
+      var hasInitOptions = type === 'object';
+
+      // extend default options with custom user options
+      var options = hasInitOptions ? list.head(arguments) : {};
+
+      options = $.extend({}, $.summernote.options, options);
+      options.icons = $.extend({}, $.summernote.options.icons, options.icons);
+
+      // Include langInfo in options for later use, e.g. for image drag-n-drop
+      // Setup language info with en-US as default
+      options.langInfo = $.extend(true, {}, $.summernote.lang['en-US'], $.summernote.lang[options.lang]);
+
+      // override plugin options
+      if (!isExternalAPICalled && hasInitOptions) {
+        for (var i = 0, len = $.summernote.plugins.length; i < len; i++) {
+          var plugin = $.summernote.plugins[i];
+
+          if (options.plugin[plugin.name]) {
+            $.summernote.plugins[i] = $.extend(true, plugin, options.plugin[plugin.name]);
+          }
+        }
+      }
+
+      this.each(function (idx, holder) {
+        var $holder = $(holder);
+
+        // if layout isn't created yet, createLayout and attach events
+        if (!renderer.hasNoteEditor($holder)) {
+          renderer.createLayout($holder, options);
+
+          var layoutInfo = renderer.layoutInfoFromHolder($holder);
+          $holder.data('layoutInfo', layoutInfo);
+
+          eventHandler.attach(layoutInfo, options);
+          eventHandler.attachCustomEvent(layoutInfo, options);
+        }
+      });
+
+      var $first = this.first();
+      if ($first.length) {
+        var layoutInfo = renderer.layoutInfoFromHolder($first);
+
+        // external API
+        if (isExternalAPICalled) {
+          var moduleAndMethod = list.head(list.from(arguments));
+          var args = list.tail(list.from(arguments));
+
+          // TODO now external API only works for editor
+          var params = [moduleAndMethod, layoutInfo.editable()].concat(args);
+          return eventHandler.invoke.apply(eventHandler, params);
+        } else if (options.focus) {
+          // focus on first editable element for initialize editor
+          layoutInfo.editable().focus();
+        }
+      }
+
+      return this;
+    },
+
+    /**
+     * @method 
+     * 
+     * get the HTML contents of note or set the HTML contents of note.
+     *
+     * * get contents 
+     * ```
+     * var content = $("#summernote").code();
+     * ```
+     * * set contents 
+     *
+     * ```
+     * $("#summernote").code(html);
+     * ```
+     *
+     * @member $.fn 
+     * @param {String} [html] - HTML contents(optional, set)
+     * @return {this|String} - context(set) or HTML contents of note(get).
+     */
+    code: function (html) {
+      // get the HTML contents of note
+      if (html === undefined) {
+        var $holder = this.first();
+        if (!$holder.length) {
+          return;
+        }
+
+        var layoutInfo = renderer.layoutInfoFromHolder($holder);
+        var $editable = layoutInfo && layoutInfo.editable();
+
+        if ($editable && $editable.length) {
+          var isCodeview = eventHandler.invoke('codeview.isActivated', layoutInfo);
+          eventHandler.invoke('codeview.sync', layoutInfo);
+          return isCodeview ? layoutInfo.codable().val() :
+                              layoutInfo.editable().html();
+        }
+        return dom.value($holder);
+      }
+
+      // set the HTML contents of note
+      this.each(function (i, holder) {
+        var layoutInfo = renderer.layoutInfoFromHolder($(holder));
+        var $editable = layoutInfo && layoutInfo.editable();
+        if ($editable) {
+          $editable.html(html);
+        }
+      });
+
+      return this;
+    },
+
+    /**
+     * @method
+     * 
+     * destroy Editor Layout and detach Key and Mouse Event
+     *
+     * @member $.fn
+     * @return {this}
+     */
+    destroy: function () {
+      this.each(function (idx, holder) {
+        var $holder = $(holder);
+
+        if (!renderer.hasNoteEditor($holder)) {
+          return;
+        }
+
+        var info = renderer.layoutInfoFromHolder($holder);
+        var options = info.editor().data('options');
+
+        eventHandler.detach(info, options);
+        renderer.removeLayout($holder, info, options);
+      });
+
+      return this;
+    }
+  });
+}));
