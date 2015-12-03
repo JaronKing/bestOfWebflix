@@ -18,6 +18,11 @@ class PostType extends AbstractType
             ->add('title', 'text', array(
                 'attr' => array( 'class' => 'form-control' )
             ))
+            ->add('image', 'file', array(
+                'attr' => array( 'style' => 'margin: auto; width: 200px;' ),
+                'data_class' => null,
+                'required' => false,
+            ))
             ->add('body', 'textarea', array(
                 'attr' => array( 'class' => 'form-control wysiwyg' )
             ))

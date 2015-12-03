@@ -3,6 +3,7 @@
 {% set panel = 1 %}
 {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
 {% block body -%}
+    <img src="{{ entity.imagePath }}" style="max-height: 100px;">
     {{ form(edit_form) }}
     <ul class="record_actions">
         <li>

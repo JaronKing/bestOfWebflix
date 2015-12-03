@@ -1,12 +1,12 @@
+blog_main_post:
+    resource: "@BlogMainBundle/Resources/config/routing/post.yml"
+    prefix:   /settings
+
 blog_main_homepage:
     path:     /{page}
     defaults: { _controller: BlogMainBundle:Default:index, page: 1 }
     requirements:
         page: \d+
-
-blog_main_post:
-    path:    /post/{id}
-    defaults: { _controller: BlogMainBundle:Default:post }
 
 blog_main_archives:
     path:   /archive/{date}

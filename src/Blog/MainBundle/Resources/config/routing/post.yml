@@ -1,0 +1,3 @@
+blog_main_post:
+    path:    /post/{id}
+    defaults: { _controller: BlogMainBundle:Default:post }

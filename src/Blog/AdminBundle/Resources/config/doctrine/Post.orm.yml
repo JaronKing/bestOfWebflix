@@ -31,6 +31,17 @@ Blog\AdminBundle\Entity\Post:
         image:
             type: string
             nullable: true
+        updateAt:
+            type: datetime
+            nullable: true
+        image:
+            type: string
+            nullable: true
+            length: 255
+        imagePath:
+            type: string
+            nullable: true
+            length: 255
     manyToOne:
         createdBy:
             targetEntity: Blog\UserBundle\Entity\User

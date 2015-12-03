@@ -175,7 +175,16 @@ class PostController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $entity->setLastEdited(new \DateTime('now'));
+            $entity->setUpdateAt(new \DateTime('now'));
+            if ($editForm->get('image')->getData()) {
+                $file = $entity->getImage();
+                $fileName = sha1(uniqid(mt_rand(), true). '.' .$file->guessExtension());
+                $filePath = $this->container->getParameter('kernel.root_dir').'/../web/uploads/images/';
+                $entityPath = '/uploads/images/'.$fileName;
+                $file->move($filePath,$fileName);
+                $entity->setImagePath($entityPath);
+                $entity->setImage($file);
+            }
             $em->persist($entity);
             $em->flush();
 
