@@ -28,6 +28,9 @@ Blog\AdminBundle\Entity\Post:
         deleted:
             type: boolean
             nullable: false
+        image:
+            type: string
+            nullable: true
     manyToOne:
         createdBy:
             targetEntity: Blog\UserBundle\Entity\User
