@@ -18,7 +18,10 @@ class PostController extends Controller
         if (!$post) {
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
-        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findAll();
+        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findBy(
+            array('deleted' => false),
+            array('dateCreated' => 'DESC')
+        );
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(

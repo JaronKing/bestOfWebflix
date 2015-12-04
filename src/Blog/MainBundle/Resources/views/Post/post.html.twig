@@ -26,7 +26,7 @@
                             </figure>
                             <h5>By Best Of Webflix</h5>
                             <p>
-                                Subdue two bring earth divide morning give sea.
+                                Best Weflix On Instant
                             </p>
                         </div>
                     </div>
@@ -39,9 +39,9 @@
                                     <li><i class="fa fa-calendar"></i>{{ post.dateCreated|date('Y-m-d') }}</li>
                                     <li>
                                         <i class="fa fa-align-justify"></i>
-                                        <a href="#">News, </a>
-                                        <a href="#">Videos, </a>
-                                        <a href="#">Music</a>
+                                        {% for genre in post.tags %}
+                                            <a href="#">{{ genre.name }}</a>
+                                        {% endfor %}
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
