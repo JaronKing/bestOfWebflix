@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <!-- Bread Crumb Start -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">{{ post.title }}</li>
+            </ol>
+        </div>
+        <!-- Bread Crumb End -->
+        <!-- Content Column Start -->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 equalcol conentsection" style="height: 2542px;">
+            <!-- Blog Detail Started -->
+            <div class="blogdetail sections">
+                <div class="row">
+                    <img src="{{ post.imagePath }}" alt="" class="img-responsive" />
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <div class="avatar">
+                            <figure>
+                                {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/avatar.gif' output='assets/img/avatar.gif' %}
+                                    <img src="{{ asset_url }}" alt="" class="img-responsive" />
+                                {% endimage %}
+                            </figure>
+                            <h5>By Best Of Webflix</h5>
+                            <p>
+                                Subdue two bring earth divide morning give sea.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                        <div class="blogtext">
+                            <h2 class="heading">{{ post.title }}</h2>
+                            <div class="clearfix"></div>
+                            <div class="blogmetas">
+                                <ul>
+                                    <li><i class="fa fa-calendar"></i>{{ post.dateCreated|date('Y-m-d') }}</li>
+                                    <li>
+                                        <i class="fa fa-align-justify"></i>
+                                        <a href="#">News, </a>
+                                        <a href="#">Videos, </a>
+                                        <a href="#">Music</a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            {{ post.body|raw }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Blog Detail End -->
+            <div class="clearfix"></div>
+            <!-- Contents Section Started -->
+
+            <!-- Contents Section End -->
+            <div class="clearfix"></div>
+            <!-- Contents Section Started -->
+            <div class="sections">
+                <h2 class="heading">Comments ({{ messages|length() }})</h2>
+                <div class="clearfix"></div>
+                <div id="comments">
+                    {% for message in messages %}
+                    <div class="media">
+                        {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/avatar1.jpg' output='assets/img/images/avatar1.jpg' %}
+                            <img src="{{ asset_url }}" alt="" class="img-responsive" />
+                        {% endimage %}
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="#">{{ message.createdBy.username }}</a></h4>
+                            <time datetime="2014-05-12T17:02">{{ message.dateCreated|date('Y-m-d') }}</time>
+                            <p>
+                                {{ message.message }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Contents Section End -->
+            <div class="clearfix"></div>
+            <!-- Contents Section Started -->
+            <div class="sections">
+                <h2 class="heading">Leave Reply</h2>
+                <div class="clearfix"></div>
+                <div id="leavereply">
+                    {% if app.user %}
+                        <div class="col-md-8">
+                            {{ form(form) }}
+
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Contents Section End -->
+            <div class="clearfix"></div>
+        </div>
+        <!-- Content Column End -->
+        <!-- Gray Sidebar Start -->
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 equalcol graysidebar" style="height: 2542px;">
+            <!-- Recent Post Widget start -->
+            <div class="widget">
+                <h2 class="heading">Recent Posts</h2>
+                <ul class="recentposts">
+                    {% for recent in recentPost|slice(0,4) %}
+                    <li>
+                        <h5><a href="{{ path('blog_main_post', { 'id' : recent.id }) }}">{{ recent.title }}</a></h5>
+                        <p class="date">{{ recent.dateCreated|date('Y-m-d') }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <!-- Recent Post Widget end -->
+            <!-- Advertisement start -->
+            <div class="widget">
+                <img src="images/adv2.gif" class="img-responsive" alt="">
+            </div>
+            <div class="clearfix"></div>
+            <!-- Advertisement End -->
+        </div>
+        <!-- Gray Sidebar End -->
+    </div>
+{% endblock body %}

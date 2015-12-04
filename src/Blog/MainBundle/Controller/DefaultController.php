@@ -21,39 +21,30 @@ class DefaultController extends Controller
         ));
     }
 
-    public function postAction(Request $request, $id)
+    public function navBarTopAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $post = $em->getRepository('BlogAdminBundle:Post')->find($id);
-        if (!$post) {
-            return $this->render('BlogMainBundle:Default:notFound.html.twig');
-        }
-        $messages = $post->getMessages();
-
-        $entity = new Message;
-        $form = $this->createForm(new MessageType(), $entity, array(
-            'action' => $this->generateUrl('blog_main_post', array('id' => $id)),
-            'method' => 'POST',
+        $genres = $em->getRepository('BlogAdminBundle:Tag')->findAll();
+        return $this->render('BlogMainBundle:Default:navBarTop.html.twig', array(
+            'genres' => $genres,
         ));
+    }
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+    public function genresAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $genres = $em->getRepository('BlogAdminBundle:Tag')->findAll();
+        return $this->render('BlogMainBundle:Default:genres.html.twig', array(
+            'genres' => $genres,
+        ));
+    }
 
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setPost($post);
-            $entity->setCreatedBy($this->getUser());
-            $entity->setDateCreated(new \DateTime('now'));
-            $em->persist($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('blog_main_post', array( 'id' => $id )));
-        }
-
-        return $this->render('BlogMainBundle:Default:post.html.twig', array(
-            'post' => $post,
-            'messages' => $messages,
-            'form' => $form->createView()
+    public function browseAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $genres = $em->getRepository('BlogAdminBundle:Tag')->findAll();
+        return $this->render('BlogMainBundle:Default:browse.html.twig', array(
+            'genres' => $genres,
         ));
     }
 
@@ -92,7 +83,7 @@ class DefaultController extends Controller
     public function socialLinksAction()
     {
         $entity = $this->getSettings();
-        return $this->render('socialLinks.html.twig', array(
+        return $this->render('BlogMainBundle:Default:socialLinks.html.twig', array(
             'entity' => $entity,
         ));
     }

@@ -16,6 +16,9 @@ Blog\AdminBundle\Entity\Post:
         body:
             type: text
             nullabe: false
+        metaDescription:
+            type: text
+            nullable: true
         dateCreated:
             type: datetime
             nullable: false
@@ -28,9 +31,6 @@ Blog\AdminBundle\Entity\Post:
         deleted:
             type: boolean
             nullable: false
-        image:
-            type: string
-            nullable: true
         updateAt:
             type: datetime
             nullable: true

@@ -40,25 +40,7 @@
                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
                         <div class="topcategories">
                             <!-- navbar Start -->
-                            <div class="navbar yamm navbar-default">
-                                <div class="navbar-header">
-                                    <button type="button" data-toggle="collapse" data-target="#navbar-collapse-2" class="navbar-toggle">
-                                        <i class="fa fa-bars"></i> Categories
-                                    </button>
-                                </div>
-                                <div id="navbar-collapse-2" class="navbar-collapse collapse">
-                                    <ul class="nav navbar-nav">
-                                        <li><a href="">Music</a></li>
-                                        <li><a href="">Funny</a></li>
-                                        <li><a href="">Movies</a></li>
-                                        <li><a href="">Sport</a></li>
-                                        <li><a href="">News</a></li>
-                                        <li><a href="">Arts</a></li>
-                                        <li><a href="">Gaming</a></li>
-                                        <li><a href="">Tech</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            {{ render(controller('BlogMainBundle:Default:navBarTop')) }}
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -66,33 +48,7 @@
                     <!-- Social Network Start -->
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                         <div class="socialnetworks">
-                            <ul class="pull-right">
-                                <li>
-                                    <a href="#" data-toggle="tooltip" title="Facebook" data-placement="bottom" class="facebook">
-                                        <i class="fa fa-facebook"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-toggle="tooltip" title="Youtube" data-placement="bottom" class="youtube">
-                                        <i class="fa fa-youtube"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-toggle="tooltip" title="Twitter" data-placement="bottom" class="twitter">
-                                        <i class="fa fa-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-toggle="tooltip" title="Vimeo" data-placement="bottom" class="vimeo">
-                                        <i class="fa fa-vimeo-square"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" data-toggle="tooltip" title="Pinterest" data-placement="bottom" class="pinterest">
-                                        <i class="fa fa-pinterest"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                            {{ render(controller('BlogMainBundle:Default:socialLinks')) }}
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -116,18 +72,6 @@
                         </div>
                     </div>
                     <!-- Logo End -->
-                    <!-- Search Start -->
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                        <div class="searchbox">
-                            <form>
-                                <ul>
-                                    <li><input type="text" placeholder="Search Videos" /></li>
-                                    <li class="pull-right"><input type="submit" value="GO" /></li>
-                                </ul>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- Search End -->
                     <!-- Advertisment Start -->
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <figure class="header-adv">
@@ -165,34 +109,7 @@
                                             <li class="dropdown">
                                                 <a href="" data-toggle="dropdown" class="dropdown-toggle">Genres</a>
                                                 <ul class="dropdown-menu">
-                                                    <li>
-                                                        <!-- Content container to add padding -->
-                                                        <div class="yamm-content">
-                                                            <div class="row">
-                                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                                                    <ul class="list-unstyled">
-                                                                        <li><a href="videos-double-sidebar.html">Double Sidebar</a></li>
-                                                                        <li><a href="videos-single-sidebar.html">Single Sidebar</a></li>
-                                                                        <li><a href="videos-fullwidth.html">Fullwidth</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                                                    <ul class="list-unstyled">
-                                                                        <li><a href="videos-carousel-double-sidebar.html">Double Sidebar</a></li>
-                                                                        <li><a href="videos-carousel-single-sidebar.html">Single Sidebar</a></li>
-                                                                        <li><a href="videos-carousel-fullwidth.html">Fullwidth</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                                                                    <ul class="list-unstyled">
-                                                                        <li><a href="video-detail-double-sidebar.html">Double Sidebar</a></li>
-                                                                        <li><a href="video-detail-single-sidebar.html">Single Sidebar</a></li>
-                                                                        <li><a href="video-detail-fullwidth.html">Fullwidth</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
+                                                    {{ render(controller('BlogMainBundle:Default:genres')) }}
                                                 </ul>
                                             </li>
                                             <!-- Video Pages End -->

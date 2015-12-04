@@ -72,7 +72,7 @@
                                             </a>
                                         </div>
                                         <!-- Video Thumbnail End -->
-                                        <a href="#" class="playicon"><i class="fa fa-play-circle-o"></i></a>
+                                        <a href="{{ path('blog_main_post', { 'id' : post.id }) }}" class="playicon"><i class="fa fa-play-circle-o"></i></a>
                                         <!-- Video Title + Info Start -->
                                         <figcaption>
                                             <h2><a href="{{ path('blog_main_post', { 'id' : post.id }) }}">{{ post.title }}</a></h2>
@@ -111,7 +111,7 @@
                                     <img src="{{ post.imagePath }}" alt="" class="img-responsive hovereffect" />
                                 {% else %}
                                     {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img14.jpg' output='assets/img/img6.jpg' %}
-                                    <img src="{{ asset_url }}" alt="" class="img-responsive hovereffect" />
+                                        <img src="{{ asset_url }}" alt="" class="img-responsive hovereffect" />
                                     {% endimage %}
                                 {% endif %}
                             </a>
@@ -147,14 +147,7 @@
             <h2 class="heading">Browse</h2>
             <div class="categorieslist">
                 <ul>
-                    <li><a href="video-list.html">Animals</a></li>
-                    <li><a href="video-list.html">Celebrities</a></li>
-                    <li><a href="video-list.html">Gaming</a></li>
-                    <li><a href="video-list.html">Music</a></li>
-                    <li><a href="video-list.html">Funny</a></li>
-                    <li><a href="video-list.html">Movies</a></li>
-                    <li><a href="video-list.html">Sport</a></li>
-                    <li><a href="video-list.html">Lifestyle</a></li>
+                     {{ render(controller('BlogMainBundle:Default:browse')) }}
                 </ul>
             </div>
         </div>

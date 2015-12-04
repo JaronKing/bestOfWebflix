@@ -1,0 +1,28 @@
+<li>
+    <!-- Content container to add padding -->
+    <div class="yamm-content">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <ul class="list-unstyled">
+                    {% for genre in genres|slice(0,4) %}
+                        <li><a href="">{{ genre.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <ul class="list-unstyled">
+                    {% for genre in genres|slice(4,8) %}
+                        <li><a href="">{{ genre.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <ul class="list-unstyled">
+                    {% for genre in genres|slice(8,12) %}
+                        <li><a href="">{{ genre.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</li>
