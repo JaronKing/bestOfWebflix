@@ -1,6 +1,6 @@
 blog_main_post:
     resource: "@BlogMainBundle/Resources/config/routing/post.yml"
-    prefix:   /settings
+    prefix:   /
 
 blog_main_homepage:
     path:     /{page}
