@@ -60,7 +60,7 @@
                                 <div class="videobox">
                                     <figure>
                                         <!-- Video Thumbnail Start -->
-                                        <div style="width: 100%; height: 200px; overflow: hidden;">
+                                        <div style="width: 100%; max-height: 400px; overflow: hidden;">
                                             <a href="{{ path('blog_main_post', { 'id' : post.id }) }}">
                                                 {% if post.imagePath %}
                                                     <img src="{{ post.imagePath }}" alt="" class="img-responsive hovereffect" />
