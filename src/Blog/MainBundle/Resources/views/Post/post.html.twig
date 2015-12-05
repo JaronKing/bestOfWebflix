@@ -13,9 +13,13 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 equalcol conentsection" style="height: 2542px;">
             <!-- Blog Detail Started -->
             <div class="blogdetail sections">
-                <div class="row">
-                    <img src="{{ post.imagePath }}" alt="" class="img-responsive" />
-                </div>
+                {#<div class="row">#}
+                    <div class="bootstrap-carousel">
+                        <div class="carousel slide">
+                            <img src="{{ post.imagePath }}" alt="" class="img-responsive" />
+                        </div>
+                    </div>
+                {#</div>#}
                 <div class="row">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <div class="avatar">
@@ -102,20 +106,38 @@
             <!-- Recent Post Widget start -->
             <div class="widget">
                 <h2 class="heading">Recent Posts</h2>
-                <ul class="recentposts">
-                    {% for recent in recentPost|slice(0,4) %}
-                    <li>
-                        <h5><a href="{{ path('blog_main_post', { 'id' : recent.id }) }}">{{ recent.title }}</a></h5>
-                        <p class="date">{{ recent.dateCreated|date('Y-m-d') }}</p>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <div class="videolistsmall">
+                    <ul class="bloglist">
+                        {% for recent in recentPost|slice(0,4) %}
+                            {% if recent.id != post.id %}
+                                <li>
+                                    <div class="media">
+                                        <a href="{{ path('blog_main_post', { 'id' : recent.id }) }}" class="pull-left">
+                                            {% if recent.imagePath != null %}
+                                                <img src="{{ post.imagePath }}" alt="" class="media-object img-responsive hovereffect" />
+                                            {% else %}
+                                                {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/img16.jpg' %}
+                                                <img src="{{ asset_url }}" alt="" class="media-object img-responsive hovereffect" />
+                                                {% endimage %}
+                                            {% endif %}
+                                        </a>
+                                        <div class="media-body">
+                                            <h5><a href="{{ path('blog_main_post', { 'id' : recent.id }) }}">{{ recent.title }}</a></h5>
+                                            <ul>
+                                                <li><i class="fa fa-clock-o"></i>{{ recent.dateCreated|date('Y-m-d') }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div class="clearfix"></div>
             <!-- Recent Post Widget end -->
             <!-- Advertisement start -->
             <div class="widget">
-                <img src="images/adv2.gif" class="img-responsive" alt="">
+                {#<img src="images/adv2.gif" class="img-responsive" alt="">#}
             </div>
             <div class="clearfix"></div>
             <!-- Advertisement End -->
