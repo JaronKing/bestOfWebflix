@@ -3,7 +3,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {% for post in posts %}
         <url>{# check if hostname is not alreay in url#}
-            <loc>{%if path('blog_main_post', { 'id' : post.id })|replace({hostname:''}) == path('blog_main_post', { 'id' : post.id })%}{{hostname}}{{path('blog_main_post', { 'id' : post.id })}}{%else%}{{path('blog_main_post', { 'id' : post.id })}}{%endif%}</loc>
+            <loc>http://{%if path('blog_main_post', { 'id' : post.id })|replace({hostname:''}) == path('blog_main_post', { 'id' : post.id })%}{{hostname}}{{path('blog_main_post', { 'id' : post.id })}}{%else%}{{path('blog_main_post', { 'id' : post.id })}}{%endif%}</loc>
             {% if post.lastEdited is defined %}
                 <lastmod>{{post.lastEdited|date('c')}}</lastmod>
             {% endif %}
