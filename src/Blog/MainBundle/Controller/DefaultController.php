@@ -21,6 +21,15 @@ class DefaultController extends Controller
         ));
     }
 
+    public function sitemapAction(){
+        $em = $this->getDoctrine()->getManager();
+        $posts = $em->getRepository('BlogAdminBundle:Post')->findAll();
+        return $this->render('BlogMainBundle:Default:sitemap.xml.twig', array(
+            'posts' => $posts,
+            'hostname' => $this->getRequest()->getHost(),
+        ));
+    }
+
     public function navBarTopAction()
     {
         $em = $this->getDoctrine()->getManager();
