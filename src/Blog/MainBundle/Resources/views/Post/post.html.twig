@@ -114,9 +114,9 @@
                                     <div class="media">
                                         <a href="{{ path('blog_main_post', { 'id' : recent.id }) }}" class="pull-left">
                                             {% if recent.imagePath != null %}
-                                                <img src="{{ post.imagePath }}" alt="" class="media-object img-responsive hovereffect" />
+                                                <img src="{{ recent.imagePath }}" alt="" class="media-object img-responsive hovereffect" />
                                             {% else %}
-                                                {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/img16.jpg' %}
+                                                {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/' %}
                                                 <img src="{{ asset_url }}" alt="" class="media-object img-responsive hovereffect" />
                                                 {% endimage %}
                                             {% endif %}
