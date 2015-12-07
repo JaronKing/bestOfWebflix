@@ -18,21 +18,14 @@ class PostController extends Controller
         if (!$post) {
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
-        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findBy(
-            array('deleted' => false),
-            array('dateCreated' => 'DESC')
-        );
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(
             'action' => $this->generateUrl('blog_main_post', array('id' => $id)),
             'method' => 'POST',
         ));
-
         $form->add('submit', 'submit', array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setPost($post);
@@ -47,7 +40,6 @@ class PostController extends Controller
             'post' => $post,
             'messages' => $messages,
             'form' => $form->createView(),
-            'recentPost' => $recentPost,
         ));
     }
 
@@ -58,16 +50,25 @@ class PostController extends Controller
         if (!$genre) {
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
+        return $this->render('BlogMainBundle:Post:genre.html.twig', array(
+            'genre' => $genre,
+            'posts' => $genre->getPosts(),
+        ));
+    }
+
+    public function sidebarAction($post)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $genre = $em->getRepository('BlogAdminBundle:Tag')->findAll();
         $recentPost = $em->getRepository('BlogAdminBundle:Post')->findBy(
             array('deleted' => false),
             array('dateCreated' => 'DESC')
         );
-        return $this->render('BlogMainBundle:Post:genre.html.twig', array(
+        return $this->render('BlogMainBundle:Post:sidebar.html.twig', array(
             'genre' => $genre,
-            'posts' => $genre->getPosts(),
+            'post' => $post,
             'recentPost' => $recentPost,
         ));
     }
-
 
 }

@@ -157,22 +157,9 @@
         <div class="widget">
             <h2 class="heading">Tags</h2>
             <div class="tagswidget">
-                <a href="#" class="btn btn-primary btn-xs backcolor">Music</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Funny</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Movies</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Sport</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">News</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Arts</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Gaming</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Tech</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Animals</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Auto</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Moto</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Celeb</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">College</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Lifestyle</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Sexy</a>
-                <a href="#" class="btn btn-primary btn-xs backcolor">Sport</a>
+                {% for genre in genres %}
+                    <a href="{{ path('blog_main_genre', { 'id' : genre.id }) }}" class="btn btn-primary btn-xs backcolor">{{ genre.name }}</a>
+                {% endfor %}
             </div>
         </div>
         <div class="clearfix"></div>

@@ -5,3 +5,7 @@ blog_main_post:
 blog_main_genre:
     path:    /genre/{id}
     defaults: { _controller: BlogMainBundle:Post:genre }
+
+blog_main_post_sidebar:
+    path:   /sidebar/{post}
+    defaults: { _controller: BlogMainBundle:Post:sidebar, post : null }
