@@ -11,14 +11,14 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <ul class="list-unstyled">
-                    {% for genre in genres|slice(4,8) %}
+                    {% for genre in genres|slice(4,4) %}
                         <li><a href="{{ path('blog_main_genre', { 'id' : genre.id }) }}">{{ genre.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <ul class="list-unstyled">
-                    {% for genre in genres|slice(8,12) %}
+                    {% for genre in genres|slice(8,4) %}
                         <li><a href="{{ path('blog_main_genre', { 'id' : genre.id }) }}">{{ genre.name }}</a></li>
                     {% endfor %}
                 </ul>
