@@ -51,4 +51,23 @@ class PostController extends Controller
         ));
     }
 
+    public function genreAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $genre = $em->getRepository('BlogAdminBundle:Tag')->find($id);
+        if (!$genre) {
+            return $this->render('BlogMainBundle:Default:notFound.html.twig');
+        }
+        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findBy(
+            array('deleted' => false),
+            array('dateCreated' => 'DESC')
+        );
+        return $this->render('BlogMainBundle:Post:genre.html.twig', array(
+            'genre' => $genre,
+            'posts' => $genre->getPosts(),
+            'recentPost' => $recentPost,
+        ));
+    }
+
+
 }

@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+{% set metaTags = true %}
+{% block metaTagsView %}
+<!-- Update your html tag to include the itemscope and itemtype attributes. -->
+<html itemscope itemtype="http://schema.org/Article">
+
+<!-- Place this data between the <head> tags of your website -->
+<title>{{ genre.name }}</title>
+<meta name="description" content="{{ genre.description }}" />
+
+<!-- Schema.org markup for Google+ -->
+<meta itemprop="name" content="{{ genre.name }}">
+<meta itemprop="description" content="{{ genre.description }}">
+<meta itemprop="image" content="">
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="">
+<meta name="twitter:site" content="@publisher_handle">
+<meta name="twitter:title" content="{{ genre.name }}">
+<meta name="twitter:creator" content="@author_handle">
+<!-- Twitter summary card with large image must be at least 280x150px -->
+<meta name="twitter:image:src" content="">
+
+<!-- Open Graph data -->
+<meta property="og:title" content="{{ genre.name }}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.BestOfWebflix.com/" />
+<meta property="og:image" content="" />
+<meta property="og:description" content="{{ genre.description }}" />
+<meta property="og:site_name" content="Best Of Webflix" />
+<meta property="article:published_time" content="{{ genre.dateCreated|date('c') }}" />
+<meta property="article:modified_time" content="{{ genre.lastEdited|date('c') }}" />
+<meta property="article:section" content="Article Section" />
+<meta property="fb:admins" content="Facebook numberic ID" />
+{% endblock %}
+{% block body %}
+<div class="row">
+    <!-- Bread Crumb Start -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li class="active">{{ genre.name }}</li>
+        </ol>
+    </div>
+    <!-- Bread Crumb End -->
+    <!-- Content Column Start -->
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 equalcol conentsection" style="height: 2542px;">
+        <!-- Blog Detail Started -->
+        <div class="blogdetail sections">
+            <div class="row">
+                {% for post in posts %}
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <!-- Video Box Start -->
+                    <div class="videobox2">
+                        <figure>
+                            <!-- Video Thumbnail Start -->
+                            <a href="{{ path('blog_main_post', { 'id' : post.id }) }}">
+                                {% if post.imagePath != null %}
+                                    <img src="{{ post.imagePath }}" class="img-responsive hovereffect" alt="">
+                                {% else %}
+                                    {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/' %}
+                                    <img src="{{ asset_url }}" class="img-responsive hovereffect" alt="">
+                                    {% endimage %}
+                                {% endif %}
+                            </a>
+                            <!-- Video Thumbnail End -->
+                            <!-- Video Info Start -->
+                            <div class="vidopts">
+                                <ul>
+                                    <li><i class="fa fa-heart"></i>1056</li>
+                                    <li><i class="fa fa-clock-o"></i>12:23</li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- Video Info End -->
+                        </figure>
+                        <!-- Video Title Start -->
+                        <h4><a href="{{ path('blog_main_post', { 'id' : post.id }) }}">Darkness bearings</a></h4>
+                        <!-- Video Title End -->
+                    </div>
+                    <!-- Video Box End -->
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- Content Column End -->
+    <!-- Gray Sidebar Start -->
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 equalcol graysidebar" style="height: 2542px;">
+        <!-- Recent Post Widget start -->
+        <div class="widget">
+            <h2 class="heading">Recent Posts</h2>
+            <div class="videolistsmall">
+                <ul class="bloglist">
+                    {% for recent in recentPost|slice(0,4) %}
+                    <li>
+                        <div class="media">
+                            <a href="{{ path('blog_main_post', { 'id' : recent.id }) }}" class="pull-left">
+                                {% if recent.imagePath != null %}
+                                <img src="{{ recent.imagePath }}" alt="" class="media-object img-responsive hovereffect" />
+                                {% else %}
+                                {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/' %}
+                                <img src="{{ asset_url }}" alt="" class="media-object img-responsive hovereffect" />
+                                {% endimage %}
+                                {% endif %}
+                            </a>
+                            <div class="media-body">
+                                <h5><a href="{{ path('blog_main_post', { 'id' : recent.id }) }}">{{ recent.title }}</a></h5>
+                                <ul>
+                                    <li><i class="fa fa-clock-o"></i>{{ recent.dateCreated|date('Y-m-d') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- Recent Post Widget end -->
+        <!-- Advertisement start -->
+        <div class="widget">
+            {#<img src="images/adv2.gif" class="img-responsive" alt="">#}
+        </div>
+        <div class="clearfix"></div>
+        <!-- Advertisement End -->
+    </div>
+    <!-- Gray Sidebar End -->
+</div>
+{% endblock body %}

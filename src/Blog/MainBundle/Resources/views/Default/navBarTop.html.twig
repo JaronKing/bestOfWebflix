@@ -7,7 +7,7 @@
     <div id="navbar-collapse-2" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
             {% for genre in genres|slice(0,5) %}
-                <li><a href="">{{ genre.name }}</a></li>
+                <li><a href="{{ path('blog_main_genre', { 'id' : genre.id }) }}">{{ genre.name }}</a></li>
             {% endfor %}
         </ul>
     </div>
