@@ -49,6 +49,10 @@ Blog\AdminBundle\Entity\Settings:
             nullable: true
         linkedin:
             type: string
-            lenght: 255
+            length: 255
+            nullable: true
+        pinterest:
+            type: string
+            length: 255
             nullable: true
     lifecycleCallbacks: {  }

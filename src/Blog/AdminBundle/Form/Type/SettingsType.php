@@ -29,6 +29,7 @@ class SettingsType extends AbstractType
             ->add('twitter')
             ->add('facebook')
             ->add('linkedin')
+            ->add('pinterest')
         ;
     }
     
