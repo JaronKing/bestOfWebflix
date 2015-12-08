@@ -1,7 +1,8 @@
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 equalcol graysidebar" style="height: 2542px;">
-
+<div id="postSideBar" class="col-lg-3 col-md-3 col-sm-6 col-xs-12 equalcol graysidebar" style="">
+    <div id="buffer" class="widget"></div>
+    <div class="clearfix"></div>
     <!-- Like Us start -->
-    <div class="widget">
+    <div id="facebookLikes" class="widget">
         <h2 class="heading">Like Us On Facebook</h2>
         <div class="commentslist">
             <ul>
@@ -45,24 +46,24 @@
     <div class="clearfix"></div>
     <!-- Recent Post Widget end -->
     <!-- Newsletter start -->
-    <div class="widget">
-        <h2 class="heading">Signup For Our Newsletter</h2>
-        <div class="commentslist">
-            <ul>
-                <li>
-                    <form class="form-inline" role="form">
-                        <div class="form-group">
-                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-                        </div>
-                        <button type="submit" class="btn btn-primary backcolor">Sign in</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-        {#<img src="images/adv2.gif" class="img-responsive" alt="">#}
-    </div>
-    <div class="clearfix"></div>
+    {#<div class="widget">#}
+        {#<h2 class="heading">Signup For Our Newsletter</h2>#}
+        {#<div class="commentslist">#}
+            {#<ul>#}
+                {#<li>#}
+                    {#<form class="form-inline" role="form">#}
+                        {#<div class="form-group">#}
+                            {#<label class="sr-only" for="exampleInputEmail2">Email address</label>#}
+                            {#<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">#}
+                        {#</div>#}
+                        {#<button type="submit" class="btn btn-primary backcolor">Sign in</button>#}
+                    {#</form>#}
+                {#</li>#}
+            {#</ul>#}
+        {#</div>#}
+        {#&#123;&#35;<img src="images/adv2.gif" class="img-responsive" alt="">&#35;&#125;#}
+    {#</div>#}
+    {#<div class="clearfix"></div>#}
     <!-- Newsletter End -->
     <!-- Advertisement start -->
     <div class="widget">
@@ -71,3 +72,8 @@
     <div class="clearfix"></div>
     <!-- Advertisement End -->
 </div>
+{% block javascripts %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock javascripts%}

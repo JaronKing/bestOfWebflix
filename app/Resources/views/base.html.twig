@@ -313,7 +313,52 @@ output='assets/js/compiled/main.js'
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% block javascripts %}
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(window).scroll(function () {
+                var scrollTop  = $(window).scrollTop(),
+                        elementOffset = $('#facebookLikes').offset().top,
+                        distance      = (elementOffset - scrollTop);
+//                console.log(distance);
+//                console.log(elementOffset);
+                if (distance < 0) {
+
+                    var distanceUse = distance * -1 + "px";
+                    $('#facebookLikes').css({
+                        'padding-top': distanceUse
+                    });
+                } else {
+                    $('#facebookLikes').css({
+                        'padding-top': 0
+                    });
+                }
+//                if (scroll < $('#left').offset().top) {
+//
+//                    $('#facebookLikes').css({
+//                        'position': 'absolute',
+//                        'top': '0'
+//                    });
+//
+//                } else if (scroll > length) {
+//
+//                    $('#facebookLikes').css({
+//                        'position': 'absolute',
+//                        'bottom': '0',
+//                        'top': 'auto'
+//                    });
+//
+//                } else {
+//
+//                    $('#facebookLikes').css({
+//                        'position': 'fixed',
+//                        'top': '0',
+//                        'height': height
+//                    });
+//                }
+            });
+        });
+    </script>
 {% endblock javascripts %}
 </body>
 </html>
