@@ -26,6 +26,7 @@ class PostType extends AbstractType
                 'data_class' => null,
                 'required' => false,
             ))
+            ->add('showImage')
             ->add('body', 'textarea', array(
                 'attr' => array( 'class' => 'form-control wysiwyg' )
             ))

@@ -32,6 +32,9 @@ Blog\AdminBundle\Entity\Post:
         deleted:
             type: boolean
             nullable: false
+        showImage:
+            type: boolean
+            nullable: true
         updateAt:
             type: datetime
             nullable: true
