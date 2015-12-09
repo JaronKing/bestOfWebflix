@@ -166,11 +166,13 @@
                     elementOffset = $('#facebookLikes').offset().top,
                     distance      = (elementOffset - scrollTop),
                     facebookHeight = $('#facebookLikes').height(),
-                    sidebarHeight = ($('#sidebarContent').height() - facebookHeight) * -1;
+                    sidebarHeight = ($('#sidebarContent').height() - facebookHeight) * -1,
+                    bodyHeight = ($('body').height());
                 console.log(distance);
                 console.log(elementOffset);
                 console.log(sidebarHeight);
                 console.log(facebookHeight);
+                console.log(bodyHeight);
             if (distance < 0) {
                 if (distance > sidebarHeight) {
                     var distanceUse = distance * -1 + "px";
