@@ -156,14 +156,34 @@
         $(function () {
             var redirectLink = "{{ path('blog_main_post_redirect') }}";
             $('#blogbody').find('a').each(function(e) {
-                console.log("clicked !");
                 var link = $(this).attr('href'),
                     newLink = redirectLink + "/" + link;
                 $(this).attr('href', newLink);
                 event.preventDefault();
-                console.log(link);
-                console.log(newLink);
             });
+        });
+        $(window).scroll(function () {
+            var scrollTop  = $(window).scrollTop(),
+                    elementOffset = $('#facebookLikes').offset().top,
+                    distance      = (elementOffset - scrollTop),
+                    facebookHeight = $('#facebookLikes').height(),
+                    sidebarHeight = ($('#sidebarContent').height() - facebookHeight) * -1;
+                console.log(distance);
+                console.log(elementOffset);
+                console.log(sidebarHeight);
+                console.log(facebookHeight);
+            if (distance < 0) {
+                if (distance > sidebarHeight) {
+                    var distanceUse = distance * -1 + "px";
+                    $('#facebookLikes').css({
+                        'padding-top': distanceUse
+                    });
+                }
+            } else {
+                $('#facebookLikes').css({
+                    'padding-top': 0
+                });
+            }
         });
     </script>
 {% endblock %}
