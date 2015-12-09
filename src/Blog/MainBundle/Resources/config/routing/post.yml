@@ -9,3 +9,10 @@ blog_main_genre:
 blog_main_post_sidebar:
     path:   /sidebar/{post}
     defaults: { _controller: BlogMainBundle:Post:sidebar, post : null }
+
+blog_main_post_redirect:
+    path:   /r/{url}
+    defaults: { _controller: BlogMainBundle:Post:redirect, url: null }
+    methods: [ GET, POST, PUT ]
+    requirements:
+        url:    .*

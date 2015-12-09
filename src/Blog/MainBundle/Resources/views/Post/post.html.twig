@@ -93,7 +93,9 @@
                                 </ul>
                                 <div class="clearfix"></div>
                             </div>
-                            <p>{{ post.body|raw }}</p>
+                            <div id="blogbody">
+                                <p>{{ post.body|raw }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,3 +151,19 @@
         <!-- Gray Sidebar End -->
     </div>
 {% endblock body %}
+{% block customJavascripts %}
+    <script type="text/javascript">
+        $(function () {
+            var redirectLink = "{{ path('blog_main_post_redirect') }}";
+            $('#blogbody').find('a').each(function(e) {
+                console.log("clicked !");
+                var link = $(this).attr('href'),
+                    newLink = redirectLink + "/" + link;
+                $(this).attr('href', newLink);
+                event.preventDefault();
+                console.log(link);
+                console.log(newLink);
+            });
+        });
+    </script>
+{% endblock %}
