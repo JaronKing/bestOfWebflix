@@ -435,4 +435,33 @@ class Post
     {
         return $this->metaDescription;
     }
+    /**
+     * @var boolean
+     */
+    private $showImage;
+
+
+    /**
+     * Set showImage
+     *
+     * @param boolean $showImage
+     *
+     * @return Post
+     */
+    public function setShowImage($showImage)
+    {
+        $this->showImage = $showImage;
+
+        return $this;
+    }
+
+    /**
+     * Get showImage
+     *
+     * @return boolean
+     */
+    public function getShowImage()
+    {
+        return $this->showImage;
+    }
 }

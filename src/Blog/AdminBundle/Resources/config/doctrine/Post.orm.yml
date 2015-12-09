@@ -35,6 +35,9 @@ Blog\AdminBundle\Entity\Post:
         showImage:
             type: boolean
             nullable: true
+        redirect:
+            type: boolean
+            nullable: true
         updateAt:
             type: datetime
             nullable: true

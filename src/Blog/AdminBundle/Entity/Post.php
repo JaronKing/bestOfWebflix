@@ -464,4 +464,33 @@ class Post
     {
         return $this->showImage;
     }
+    /**
+     * @var boolean
+     */
+    private $redirect;
+
+
+    /**
+     * Set redirect
+     *
+     * @param boolean $redirect
+     *
+     * @return Post
+     */
+    public function setRedirect($redirect)
+    {
+        $this->redirect = $redirect;
+
+        return $this;
+    }
+
+    /**
+     * Get redirect
+     *
+     * @return boolean
+     */
+    public function getRedirect()
+    {
+        return $this->redirect;
+    }
 }
