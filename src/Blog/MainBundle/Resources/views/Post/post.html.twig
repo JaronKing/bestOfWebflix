@@ -56,11 +56,13 @@
             <div class="blogdetail sections">
                 {#<div class="row">#}
                 {% if post.showImage %}
+                    {% if page == 1 %}
                     <div class="bootstrap-carousel">
                         <div class="carousel slide">
                             <img src="{{ post.imagePath }}" alt="" class="img-responsive" />
                         </div>
                     </div>
+                    {% endif %}
                 {% endif %}
                 {#</div>#}
                 <div class="row">
