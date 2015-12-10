@@ -20,7 +20,7 @@ class PostController extends Controller
         }
         $blogbody = explode('<br>', $post->getBody());
         $pager = $page * 14 - 14;
-        $pageMax = ceil(count($blogbody)/10);
+        $pageMax = ceil(count($blogbody)/14);
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(
