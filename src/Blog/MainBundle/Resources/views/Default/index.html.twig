@@ -45,7 +45,7 @@
                     <div class='moving_bg'>
                         <span class="pointer"></span>
                     </div>
-                    {% for post in posts|slice(4,7) %}
+                    {% for post in posts|slice(4,6) %}
                         <div class='tab_item'>
                             <h5>{{ post.title }}</h5>
                             <span class="hidden-xs">{{ post.dateCreated|date('Y-m-d') }}</span>
@@ -54,7 +54,7 @@
                 </div>
                 <div class='slide_content'>
                     <div class='tabslider'>
-                        {% for post in posts|slice(4,7) %}
+                        {% for post in posts|slice(4,6) %}
                             <div class="video">
                                 <!-- Video Box Start -->
                                 <div class="videobox">
