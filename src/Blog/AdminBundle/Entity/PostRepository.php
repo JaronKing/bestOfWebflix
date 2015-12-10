@@ -27,11 +27,16 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 
     public function findPostsByPage($page)
     {
+        $end = new \DateTime('now');
         $pageResult = ($page - 1) * 10;
         $qb = $this->_em->createQueryBuilder();
         $qb->select('m')
             ->from('BlogAdminBundle:Post', 'm')
             ->where('m.enabled = true')
+            ->andWhere('m.dateCreated <= :end')
+            ->setParameters( array(
+                'end' => $end
+            ))
             ->setMaxResults(10)
             ->setFirstResult($pageResult)
             ->orderBy('m.updateAt' , 'DESC');
