@@ -93,8 +93,19 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div id="blogbody">
-                                <p>{{ post.body|raw }}</p>
+                                {{ page }}
+                                {{ pager }}
+                                {{ pageMax }}
+                                {% for blogtext in blogbody|slice( pager,  7) %}
+                                    {{ blogtext|raw }}
+                                {% endfor %}
                             </div>
+                            <a href="{{ path('blog_main_post', { 'id' : post.id, 'page' : page - 1 }) }}" type="button" class="btn btn-primary btn-lg backcolor
+                            {% if page == 1 %} disabled {% endif %}
+                            ">Previous</a>
+                            <a href="{{ path('blog_main_post', { 'id' : post.id, 'page' : page + 1 }) }}" type="button" class="btn btn-primary btn-lg backcolor
+                            {% if page > pageMax %} disabled {% endif %}
+                            ">Next</a>
                         </div>
                     </div>
                 </div>

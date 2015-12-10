@@ -1,6 +1,6 @@
 blog_main_post:
-    path:    /post/{id}
-    defaults: { _controller: BlogMainBundle:Post:post }
+    path:    /post/{id}/{page}
+    defaults: { _controller: BlogMainBundle:Post:post, page : 1 }
 
 blog_main_genre:
     path:    /genre/{id}
