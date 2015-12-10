@@ -19,8 +19,8 @@ class PostController extends Controller
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
         $blogbody = explode('<br>', $post->getBody());
-        $pager = $page * 14 - 14;
-        $pageMax = ceil(count($blogbody)/14);
+        $pager = ($page * 15) - 15;
+        $pageMax = ceil(count($blogbody)/15);
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(
