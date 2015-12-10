@@ -8,7 +8,7 @@
         <div class="col-md-2">
             <img src="{{ entity.imagePath }}" style="max-height: 100px;">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             {{ form_widget(edit_form.title) }}
             {{ form_widget(edit_form.metaDescription) }}
             {{ form_widget(edit_form.image) }}
@@ -17,8 +17,9 @@
             {{ form_widget(edit_form.showImage) }}
             {{ form_widget(edit_form.redirect) }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             {{ form_widget(edit_form.tag) }}
+            {{ form_widget(edit_form.dateCreated) }}
         </div>
     </div>
     {{ form_end(edit_form) }}

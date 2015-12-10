@@ -26,6 +26,7 @@ class PostType extends AbstractType
                 'data_class' => null,
                 'required' => false,
             ))
+            ->add('dateCreated', 'date', array( 'attr' => array( 'class' => 'form-control' )))
             ->add('showImage', 'checkbox', array( 'attr' => array( 'class' => 'form-control' )))
             ->add('redirect', 'checkbox', array( 'attr' => array( 'class' => 'form-control' )))
             ->add('body', 'textarea', array(
