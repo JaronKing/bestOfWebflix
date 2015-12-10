@@ -25,10 +25,10 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
-    public function findPostsByPage($page)
+    public function findPostsByPage($page, $pager = 10)
     {
         $end = new \DateTime('now');
-        $pageResult = ($page - 1) * 10;
+        $pageResult = ($page - 1) * $pager;
         $qb = $this->_em->createQueryBuilder();
         $qb->select('m')
             ->from('BlogAdminBundle:Post', 'm')
@@ -37,7 +37,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
             ->setParameters( array(
                 'end' => $end
             ))
-            ->setMaxResults(10)
+            ->setMaxResults($pager)
             ->setFirstResult($pageResult)
             ->orderBy('m.updateAt' , 'DESC');
         return $qb->getQuery()->getArrayResult();
