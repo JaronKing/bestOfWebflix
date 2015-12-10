@@ -103,7 +103,7 @@
                             {% if page == 1 %} disabled {% endif %}
                             ">Previous</a>
                             <a href="{{ path('blog_main_post', { 'id' : post.id, 'page' : page + 1 }) }}" type="button" class="btn btn-primary btn-lg backcolor
-                            {% if page > pageMax %} disabled {% endif %}
+                            {% if page >= pageMax %} disabled {% endif %}
                             ">Next</a>
                         </div>
                     </div>
