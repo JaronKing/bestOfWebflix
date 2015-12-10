@@ -26,8 +26,8 @@ class PostType extends AbstractType
                 'data_class' => null,
                 'required' => false,
             ))
-            ->add('showImage')
-            ->add('redirect')
+            ->add('showImage', 'checkbox', array( 'attr' => array( 'class' => 'form-control' )))
+            ->add('redirect', 'checkbox', array( 'attr' => array( 'class' => 'form-control' )))
             ->add('body', 'textarea', array(
                 'attr' => array( 'class' => 'form-control wysiwyg' )
             ))
@@ -37,7 +37,7 @@ class PostType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'mapped' => true,
-                'attr' => array( 'class' => 'form-control' )
+                'attr' => array( 'class' => 'form-control multiselect' )
             ))
         ;
     }

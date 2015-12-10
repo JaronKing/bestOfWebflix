@@ -34,7 +34,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
             ->where('m.enabled = true')
             ->setMaxResults(10)
             ->setFirstResult($pageResult)
-            ->orderBy('m.dateCreated' , 'DESC');
+            ->orderBy('m.updateAt' , 'DESC');
         return $qb->getQuery()->getArrayResult();
     }
 }

@@ -3,8 +3,25 @@
 {% set panel = 1 %}
 {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
 {% block body -%}
-    <img src="{{ entity.imagePath }}" style="max-height: 100px;">
-    {{ form(edit_form) }}
+    {{ form_start(edit_form) }}
+    <div class="row">
+        <div class="col-md-2">
+            <img src="{{ entity.imagePath }}" style="max-height: 100px;">
+        </div>
+        <div class="col-md-4">
+            {{ form_widget(edit_form.title) }}
+            {{ form_widget(edit_form.metaDescription) }}
+            {{ form_widget(edit_form.image) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_widget(edit_form.showImage) }}
+            {{ form_widget(edit_form.redirect) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_widget(edit_form.tag) }}
+        </div>
+    </div>
+    {{ form_end(edit_form) }}
     <ul class="record_actions">
         <li>
             <a href="{{ path('post') }}">
@@ -14,3 +31,4 @@
         <li>{{ form(delete_form) }}</li>
     </ul>
 {% endblock %}
+

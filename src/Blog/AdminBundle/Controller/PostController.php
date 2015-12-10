@@ -49,7 +49,7 @@ class PostController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('post_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('post_edit', array('id' => $entity->getId())));
         }
 
         return $this->render('BlogAdminBundle:Post:new.html.twig', array(

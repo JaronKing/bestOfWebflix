@@ -15,6 +15,7 @@
     'bundles/blogadmin/sb-admin-2/bower_components/metisMenu/dist/metisMenu.min.css'
     'bundles/blogadmin/sb-admin-2/dist/css/timeline.css'
     'bundles/blogadmin/sb-admin-2/dist/css/sb-admin-2.css'
+    'bundles/blogadmin/sb-admin-2/dist/css/chosen.css'
     'bundles/blogadmin/sb-admin-2/bower_components/morrisjs/morris.css'
     'bundles/blogadmin/sb-admin-2/bower_components/font-awesome/css/font-awesome.min.css'
     'bundles/blogadmin/summernote/summernote.css'
@@ -147,6 +148,7 @@
 '@BlogAdminBundle/Resources/public/sb-admin-2/bower_components/raphael/raphael-min.js'
 '@BlogAdminBundle/Resources/public/sb-admin-2/bower_components/morrisjs/morris.min.js'
 '@BlogAdminBundle/Resources/public/sb-admin-2/dist/js/sb-admin-2.js'
+'@BlogAdminBundle/Resources/public/sb-admin-2/js/chosen.jquery.js'
 '@BlogAdminBundle/Resources/public/sb-admin-2/bower_components/datatables/media/js/jquery.dataTables.min.js'
 '@BlogAdminBundle/Resources/public/sb-admin-2/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js'
 '@BlogMainBundle/Resources/public/wysiwyg/bootstrap3-wysihtml5.all.min.js'
@@ -164,7 +166,7 @@ output='assets/js/compiled/main.js'
             $('.wysiwyg').summernote({
                 height: 200,
             });
-
+            $('.multiselect').chosen();
         });
     </script>
 {% endblock javascripts %}
