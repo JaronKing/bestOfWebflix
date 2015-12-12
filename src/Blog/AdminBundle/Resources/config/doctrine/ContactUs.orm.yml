@@ -1,0 +1,29 @@
+Blog\AdminBundle\Entity\ContactUs:
+    type: entity
+    table: null
+    repositoryClass: Blog\AdminBundle\Entity\ContactUsRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        email:
+            type: string
+            length: 255
+        subject:
+            type: string
+            length: 255
+        message:
+            type: text
+        seen:
+            type: boolean
+        dateCreated:
+            type: datetime
+        deleted:
+            type: boolean
+    lifecycleCallbacks: {  }

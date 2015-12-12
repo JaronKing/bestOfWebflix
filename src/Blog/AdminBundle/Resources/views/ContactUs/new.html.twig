@@ -1,0 +1,17 @@
+{% extends '::adminBase.html.twig' %}
+{% set title = 'Contact Us Edit' %}
+{% set panel = 1 %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% block body -%}
+    <h1>ContactUs creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('contactus') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

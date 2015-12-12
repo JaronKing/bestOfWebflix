@@ -1,0 +1,30 @@
+contactus:
+    path:     /
+    defaults: { _controller: "BlogAdminBundle:ContactUs:index" }
+
+contactus_show:
+    path:     /{id}/show
+    defaults: { _controller: "BlogAdminBundle:ContactUs:show" }
+
+contactus_new:
+    path:     /new
+    defaults: { _controller: "BlogAdminBundle:ContactUs:new" }
+
+contactus_create:
+    path:     /create
+    defaults: { _controller: "BlogAdminBundle:ContactUs:create" }
+    methods:  POST
+
+contactus_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BlogAdminBundle:ContactUs:edit" }
+
+contactus_update:
+    path:     /{id}/update
+    defaults: { _controller: "BlogAdminBundle:ContactUs:update" }
+    methods:  [POST, PUT]
+
+contactus_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BlogAdminBundle:ContactUs:delete" }
+    methods:  [POST, DELETE]
