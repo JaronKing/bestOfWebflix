@@ -11,7 +11,7 @@ blog_main_post_sidebar:
     defaults: { _controller: BlogMainBundle:Post:sidebar, post : null }
 
 blog_main_post_redirect:
-    path:   /r/{url}
+    path:   /r/{id}/{url}
     defaults: { _controller: BlogMainBundle:Post:redirect, url: null }
     methods: [ GET, POST, PUT ]
     requirements:

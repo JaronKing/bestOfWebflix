@@ -78,10 +78,11 @@ class PostController extends Controller
         ));
     }
 
-    public function redirectAction($url)
+    public function redirectAction($id, $url)
     {
         return $this->render('BlogMainBundle:Post:redirect.html.twig', array(
-            'offer' => $url
+            'offer' => $url,
+            'id' => $id
         ));
     }
 

@@ -163,7 +163,7 @@
 {% block customJavascripts %}
     <script type="text/javascript">
         $(function () {
-            var redirectLink = "{{ path('blog_main_post_redirect') }}";
+            var redirectLink = "{{ path('blog_main_post_redirect', {'id' : post.id }) }}";
             $('#blogbody').find('a').each(function(e) {
                 var link = $(this).attr('href'),
                     newLink = redirectLink + "/" + link;
