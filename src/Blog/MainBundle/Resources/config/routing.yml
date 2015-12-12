@@ -25,3 +25,7 @@ blog_main_sitemap:
 blog_main_social_links:
     path:   /socialLinks
     defaults: { _controller: BlogMainBundle:Default:socialLinks }
+
+blog_main_contact_us_show:
+    path:     /show
+    defaults: { _controller: BlogMainBundle:ContactUs:show }

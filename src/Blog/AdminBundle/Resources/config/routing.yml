@@ -1,3 +1,7 @@
+blog_admin_contactus:
+    resource: "@BlogAdminBundle/Resources/config/routing/contactus.yml"
+    prefix:   /contactus
+
 blog_admin_settings:
     resource: "@BlogAdminBundle/Resources/config/routing/settings.yml"
     prefix:   /settings
