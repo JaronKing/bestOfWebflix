@@ -61,9 +61,10 @@ class DefaultController extends Controller
 
     public function footerAction()
     {
-        $settings = $this->getSettings();
+        $em = $this->getDoctrine()->getManager();
+        $posts = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage(1,6);
         return $this->render('BlogMainBundle:Default:footer.html.twig', array(
-            'settings' => $settings
+            'posts' => $posts
         ));
     }
 

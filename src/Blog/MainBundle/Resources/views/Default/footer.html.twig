@@ -1,6 +1,23 @@
-<footer class="blog-footer">
-    <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-    <p>
-        <a href="#">Back to top</a>
-    </p>
-</footer>
+<div class="row">
+    {% for post in posts %}
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+            <!-- Video Box Start -->
+            <div class="videobox">
+                <figure>
+                    <!-- Video Thumbnail Start -->
+                    <a href="{{ path('blog_main_post', { 'id' : post.id }) }}">
+                        <img src="{{ post.imagePath }}" alt="" class="img-responsive hovereffect">
+                    </a>
+                    <!-- Video Thumbnail End -->
+                    <!-- Video Title + Info Start -->
+                    <figcaption>
+                        <h2><a href="{{ path('blog_main_post', { 'id' : post.id }) }}">{{ post.title }}</a></h2>
+                        <div class="clearfix"></div>
+                    </figcaption>
+                    <!-- Video Title + Info End -->
+                </figure>
+            </div>
+            <!-- Video Box End -->
+        </div>
+    {% endfor %}
+</div>
