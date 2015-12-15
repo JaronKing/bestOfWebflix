@@ -51,7 +51,7 @@ class PostController extends Controller
                 $logger = $this->get('logger');
                 $bodyText = $this->handleCSV($em, $entity);
                 $body = $entity->getBody();
-                $body = $body + $bodyText;
+                $body = $body . $bodyText;
                 $entity->setBody($body);
             }
             $em->persist($entity);
