@@ -41,6 +41,21 @@
         ga('send', 'pageview');
 
     </script>
+    <!--// Javascript //-->
+    {% javascripts
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/jquery-1.11.1.min.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/jquery-ui.min.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/bootstrap.min.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/functions.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/responsiveCarousel.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/slimbox2.js'
+    '@BlogMainBundle/Resources/public/VideoMagazine/js/responsive-paginate.js'
+    output='assets/js/compiled/main.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% block customJavascripts %}{% endblock %}
+    {% block javascripts %}{% endblock javascripts %}
 </head>
 <body>
 <!-- Facebook Start -->
@@ -310,20 +325,5 @@
     <a href="#" class="pull-right gotop btn btn-primary backcolor"> <i class="fa fa-arrow-up"></i> </a>
 </div>
 <!-- Wrapper End -->
-<!--// Javascript //-->
-{% javascripts
-'@BlogMainBundle/Resources/public/VideoMagazine/js/jquery-1.11.1.min.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/jquery-ui.min.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/bootstrap.min.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/functions.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/responsiveCarousel.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/slimbox2.js'
-'@BlogMainBundle/Resources/public/VideoMagazine/js/responsive-paginate.js'
-output='assets/js/compiled/main.js'
-%}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
-{% block customJavascripts %}{% endblock %}
-{% block javascripts %}{% endblock javascripts %}
 </body>
 </html>
