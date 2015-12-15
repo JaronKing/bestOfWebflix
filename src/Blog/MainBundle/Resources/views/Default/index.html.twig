@@ -102,36 +102,39 @@
             <div class="row">
                 {% for post in posts|slice(8,24) %}
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <!-- Video Box Start -->
-                    <div class="videobox2">
-                        <figure>
-                            <!-- Video Thumbnail Start -->
-                            <a href="{{ path('blog_main_post', { 'id' : post.id }) }}">
-                                {% if post.imagePath %}
-                                    <img src="{{ post.imagePath }}" alt="" class="img-responsive hovereffect" />
-                                {% else %}
-                                    {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img14.jpg' output='assets/img/img6.jpg' %}
-                                        <img src="{{ asset_url }}" alt="" class="img-responsive hovereffect" />
-                                    {% endimage %}
-                                {% endif %}
-                            </a>
-                            <!-- Video Thumbnail End -->
-                            <!-- Video Info Start -->
-                            <div class="vidopts">
-                                <ul>
-                                    <li><i class="fa fa-heart"></i>1056</li>
-                                    <li><i class="fa fa-clock-o"></i>{{ post.dateCreated|date('Y-m-d') }}</li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                            <!-- Video Info End -->
-                        </figure>
-                        <!-- Video Title Start -->
-                        <h4><a href="{{ path('blog_main_post', { 'id' : post.id }) }}">{{ post.title|slice(0,60) }}</a></h4>
-                        <!-- Video Title End -->
+                        <!-- Video Box Start -->
+                        <div class="videobox2">
+                            <figure>
+                                <!-- Video Thumbnail Start -->
+                                <a href="{{ path('blog_main_post', { 'id' : post.id }) }}">
+                                    {% if post.imagePath %}
+                                        <img src="{{ post.imagePath }}" alt="" class="img-responsive hovereffect" />
+                                    {% else %}
+                                        {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img14.jpg' output='assets/img/img6.jpg' %}
+                                            <img src="{{ asset_url }}" alt="" class="img-responsive hovereffect" />
+                                        {% endimage %}
+                                    {% endif %}
+                                </a>
+                                <!-- Video Thumbnail End -->
+                                <!-- Video Info Start -->
+                                <div class="vidopts">
+                                    <ul>
+                                        <li><i class="fa fa-heart"></i>1056</li>
+                                        <li><i class="fa fa-clock-o"></i>{{ post.dateCreated|date('Y-m-d') }}</li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <!-- Video Info End -->
+                            </figure>
+                            <!-- Video Title Start -->
+                            <h4><a href="{{ path('blog_main_post', { 'id' : post.id }) }}">{{ post.title|slice(0,60) }}</a></h4>
+                            <!-- Video Title End -->
+                        </div>
+                        <!-- Video Box End -->
                     </div>
-                    <!-- Video Box End -->
-                </div>
+                    {% if loop.index is divisible by(3) %}
+                        <div class="clearfix"></div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
