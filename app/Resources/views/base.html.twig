@@ -58,18 +58,6 @@
     {% block javascripts %}{% endblock javascripts %}
 </head>
 <body>
-<!-- Facebook Start -->
-<div id="fb-root"></div>
-<script defer>
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=201860866566662";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
-<!-- Facebook End -->
 <!-- Wrapper Start -->
 <div class="wrapper">
     <!-- Header Start -->
@@ -326,6 +314,18 @@
     <!-- Footer End -->
     <a href="#" class="pull-right gotop btn btn-primary backcolor"> <i class="fa fa-arrow-up"></i> </a>
 </div>
+<!-- Facebook Start -->
+<div id="fb-root"></div>
+<script defer>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=201860866566662";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- Facebook End -->
 <!-- Wrapper End -->
 </body>
 </html>
