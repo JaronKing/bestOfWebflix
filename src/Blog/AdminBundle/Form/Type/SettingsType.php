@@ -30,6 +30,7 @@ class SettingsType extends AbstractType
             ->add('facebook')
             ->add('linkedin')
             ->add('pinterest')
+            ->add('perPage')
         ;
     }
     

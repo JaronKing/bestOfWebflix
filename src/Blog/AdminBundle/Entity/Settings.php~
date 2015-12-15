@@ -371,4 +371,33 @@ class Settings
     {
         return $this->linkedin;
     }
+    /**
+     * @var string
+     */
+    private $pinterest;
+
+
+    /**
+     * Set pinterest
+     *
+     * @param string $pinterest
+     *
+     * @return Settings
+     */
+    public function setPinterest($pinterest)
+    {
+        $this->pinterest = $pinterest;
+
+        return $this;
+    }
+
+    /**
+     * Get pinterest
+     *
+     * @return string
+     */
+    public function getPinterest()
+    {
+        return $this->pinterest;
+    }
 }

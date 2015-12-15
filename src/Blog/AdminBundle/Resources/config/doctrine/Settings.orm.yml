@@ -55,4 +55,7 @@ Blog\AdminBundle\Entity\Settings:
             type: string
             length: 255
             nullable: true
+        perPage:
+            type: integer
+            nullable: true
     lifecycleCallbacks: {  }

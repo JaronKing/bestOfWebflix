@@ -19,7 +19,12 @@ class PostController extends Controller
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
         $blogbody = explode('</p>', $post->getBody());
-        $perPage = 8;
+        $settings = $em->getRepository('BlogAdminBundle:Settings')->findOneBy(array('id' => 1));
+        if ($settings){
+            $perPage = $settings->getPerPage();
+        } else {
+            $perPage = 7;
+        }
         $pager = ($page * $perPage) - $perPage;
         $pageMax = ceil(count($blogbody)/$perPage);
         $messages = $post->getMessages();

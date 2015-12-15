@@ -400,4 +400,33 @@ class Settings
     {
         return $this->pinterest;
     }
+    /**
+     * @var integer
+     */
+    private $perPage;
+
+
+    /**
+     * Set perPage
+     *
+     * @param integer $perPage
+     *
+     * @return Settings
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
+
+        return $this;
+    }
+
+    /**
+     * Get perPage
+     *
+     * @return integer
+     */
+    public function getPerPage()
+    {
+        return $this->perPage;
+    }
 }
