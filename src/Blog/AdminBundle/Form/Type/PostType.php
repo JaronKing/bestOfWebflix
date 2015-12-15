@@ -46,6 +46,9 @@ class PostType extends AbstractType
                 'mapped' => true,
                 'attr' => array( 'class' => 'form-control multiselect' )
             ))
+            ->add('file', 'file', array(
+                'required' => false,
+            ))
         ;
     }
     

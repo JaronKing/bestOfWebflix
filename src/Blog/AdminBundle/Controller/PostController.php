@@ -46,6 +46,14 @@ class PostController extends Controller
             $entity->setLastEdited(new \DateTime('now'));
             $entity->setDeleted(false);
             $entity->setEnabled(true);
+            $entity->upload();
+            if (null != $entity->getAbsolutePath()) {
+                $logger = $this->get('logger');
+                $bodyText = $this->handleCSV($em, $entity);
+                $body = $entity->getBody();
+                $body = $body + $bodyText;
+                $entity->setBoyd($body);
+            }
             $em->persist($entity);
             $em->flush();
 
@@ -56,6 +64,19 @@ class PostController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
+    }
+
+    private function handleCSV($em, $entity) {
+        $bodyText = "";
+        $file_handle = fopen($entity->getAbsolutePath(), "r");
+        while (!feof($file_handle)) {
+            $col = fgetcsv($file_handle, 1024);
+            if ($col[0] == null) break;
+            $bodyString = "<p><a href=\"$col[1]\" target=\"_blank\"><img src=\"$col[2]\" style=\"width: 267px; height: 374.176px;\" class=\"img-thumbnail\"></a></p><p><span style=\"font-family: arial, sans, sans-serif; font-size: 24px; line-height: 24px; white-space: pre-wrap; text-decoration: underline;\"><a href=\"$col[1]\" target=\"_blank\">$col[0]</a></span></p><p><span style=\"font-family: arial, sans, sans-serif; font-size: 18px; line-height: 18px; white-space: pre-wrap;\">$col[3]</span><br></p>";
+            $bodyText = $bodyText . $bodyString;
+        }
+
+        return $bodyText;
     }
 
     /**
@@ -184,6 +205,14 @@ class PostController extends Controller
                 $file->move($filePath,$fileName);
                 $entity->setImagePath($entityPath);
                 $entity->setImage($file);
+            }
+            $entity->upload();
+            if (null != $entity->getAbsolutePath()) {
+                $logger = $this->get('logger');
+                $bodyText = $this->handleCSV($em, $entity);
+                $body = $entity->getBody();
+                $body = $body . $bodyText;
+                $entity->setBody($body);
             }
             $em->persist($entity);
             $em->flush();
