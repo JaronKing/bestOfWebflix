@@ -110,7 +110,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div id="blogbody">
-                                {% for blogtext in blogbody|slice( pager,  15) %}
+                                {% for blogtext in blogbody|slice( pager,  perPage) %}
                                     {{ blogtext|raw }}
                                 {% endfor %}
                             </div>

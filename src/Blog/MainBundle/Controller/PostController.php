@@ -18,9 +18,10 @@ class PostController extends Controller
         if (!$post) {
             return $this->render('BlogMainBundle:Default:notFound.html.twig');
         }
-        $blogbody = explode('<br>', $post->getBody());
-        $pager = ($page * 15) - 15;
-        $pageMax = ceil(count($blogbody)/15);
+        $blogbody = explode('</p>', $post->getBody());
+        $perPage = 8;
+        $pager = ($page * $perPage) - $perPage;
+        $pageMax = ceil(count($blogbody)/$perPage);
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(
@@ -46,7 +47,8 @@ class PostController extends Controller
             'page' => $page,
             'blogbody' => $blogbody,
             'pager' => $pager,
-            'pageMax' => $pageMax
+            'pageMax' => $pageMax,
+            'perPage' => $perPage,
         ));
     }
 
