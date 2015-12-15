@@ -52,7 +52,7 @@ class PostController extends Controller
                 $bodyText = $this->handleCSV($em, $entity);
                 $body = $entity->getBody();
                 $body = $body + $bodyText;
-                $entity->setBoyd($body);
+                $entity->setBody($body);
             }
             $em->persist($entity);
             $em->flush();
