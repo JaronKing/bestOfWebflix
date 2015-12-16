@@ -74,10 +74,7 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $genre = $em->getRepository('BlogAdminBundle:Tag')->findAll();
-        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findBy(
-            array('deleted' => false),
-            array('dateCreated' => 'DESC')
-        );
+        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage(1,4);
         return $this->render('BlogMainBundle:Post:sidebar.html.twig', array(
             'genre' => $genre,
             'post' => $post,
