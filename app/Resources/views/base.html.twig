@@ -56,6 +56,19 @@
     {% endjavascripts %}
     {% block customJavascripts %}{% endblock %}
     {% block javascripts %}{% endblock javascripts %}
+    <!-- Taboola Start  -->
+    <script type="text/javascript">
+        window._taboola = window._taboola || [];
+        _taboola.push({video:'auto'});
+        !function (e, f, u) {
+            e.async = 1;
+            e.src = u;
+            f.parentNode.insertBefore(e, f);
+        }(document.createElement('script'),
+                document.getElementsByTagName('script')[0],
+                '//cdn.taboola.com/libtrc/bestofwebflix/loader.js');
+    </script>
+    <!-- Taboola End  -->
 </head>
 <body>
 <!-- Wrapper Start -->
@@ -105,16 +118,27 @@
                     <!-- Advertisment Start -->
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 
+                        <div id="taboola-above-article-thumbnails"></div>
                         <script type="text/javascript">
-                            google_ad_client = "ca-pub-5642576944854449";
-                            google_ad_slot = "3751030613";
-                            google_ad_width = 728;
-                            google_ad_height = 90;
+                            window._taboola = window._taboola || [];
+                            _taboola.push({
+                                mode: 'thumbnails-a',
+                                container: 'taboola-above-article-thumbnails',
+                                placement: 'Above Article Thumbnails',
+                                target_type: 'mix'
+                            });
                         </script>
-                        <!-- Leaderboard -->
-                        <script type="text/javascript"
-                                src="//pagead2.googlesyndication.com/pagead/show_ads.js">
-                        </script>
+
+                        {#<script type="text/javascript">#}
+                            {#google_ad_client = "ca-pub-5642576944854449";#}
+                            {#google_ad_slot = "3751030613";#}
+                            {#google_ad_width = 728;#}
+                            {#google_ad_height = 90;#}
+                        {#</script>#}
+                        {#<!-- Leaderboard -->#}
+                        {#<script type="text/javascript"#}
+                                {#src="//pagead2.googlesyndication.com/pagead/show_ads.js">#}
+                        {#</script>#}
                         {#<script type="text/javascript">#}
                             {#amzn_assoc_placement = "adunit0";#}
                             {#amzn_assoc_enable_interest_ads = "true";#}
@@ -327,5 +351,11 @@
 </script>
 <!-- Facebook End -->
 <!-- Wrapper End -->
+<!-- Taboola Start -->
+<script type="text/javascript">
+    window._taboola = window._taboola || [];
+    _taboola.push({flush: true});
+</script>
+<!-- Taboola End -->
 </body>
 </html>
