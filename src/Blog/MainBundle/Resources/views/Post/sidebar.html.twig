@@ -68,16 +68,27 @@
         <!-- Newsletter End -->
         <!-- Advertisement start -->
         <div class="widget">
+            {#<script type="text/javascript">#}
+                {#google_ad_client = "ca-pub-5642576944854449";#}
+                {#google_ad_slot = "2274297417";#}
+                {#google_ad_width = 300;#}
+                {#google_ad_height = 600;#}
+            {#</script>#}
+            {#<!-- Skyscraper -->#}
+            {#<script type="text/javascript"#}
+                    {#src="//pagead2.googlesyndication.com/pagead/show_ads.js">#}
+            {#</script>#}
+            <div id="taboola-right-rail-thumbnails"></div>
             <script type="text/javascript">
-                google_ad_client = "ca-pub-5642576944854449";
-                google_ad_slot = "2274297417";
-                google_ad_width = 300;
-                google_ad_height = 600;
+                window._taboola = window._taboola || [];
+                _taboola.push({
+                    mode: 'thumbnails-rr',
+                    container: 'taboola-right-rail-thumbnails',
+                    placement: 'Right Rail Thumbnails',
+                    target_type: 'mix'
+                });
             </script>
-            <!-- Skyscraper -->
-            <script type="text/javascript"
-                    src="//pagead2.googlesyndication.com/pagead/show_ads.js">
-            </script>
+
         </div>
         <div class="clearfix"></div>
         <!-- Advertisement End -->
@@ -94,6 +105,35 @@
         </div>
         <div class="clearfix"></div>
         <!-- Like Us End -->
+        <div class="widget">
+            <h2 class="heading">Recent Posts</h2>
+            <div class="videolistsmall">
+                <ul class="bloglist">
+                    {% for recent in recentPost|slice(4,8) %}
+                        <li>
+                            <div class="media">
+                                <a href="{{ path('blog_main_post', { 'id' : recent.id }) }}" class="pull-left">
+                                    {% if recent.imagePath != null %}
+                                        <img src="{{ recent.imagePath }}" alt="" class="media-object img-responsive hovereffect" />
+                                    {% else %}
+                                        {% image '@BlogMainBundle/Resources/public/VideoMagazine/images/img16.jpg' output='assets/img/images/' %}
+                                        <img src="{{ asset_url }}" alt="" class="media-object img-responsive hovereffect" />
+                                        {% endimage %}
+                                    {% endif %}
+                                </a>
+                                <div class="media-body">
+                                    <h5><a href="{{ path('blog_main_post', { 'id' : recent.id }) }}">{{ recent.title }}</a></h5>
+                                    <ul>
+                                        <li><i class="fa fa-clock-o"></i>{{ recent.dateCreated|date('Y-m-d') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
 {% block customJavascripts %}

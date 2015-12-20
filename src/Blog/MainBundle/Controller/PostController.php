@@ -74,7 +74,7 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $genre = $em->getRepository('BlogAdminBundle:Tag')->findAll();
-        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage(1,4);
+        $recentPost = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage(1,12);
         return $this->render('BlogMainBundle:Post:sidebar.html.twig', array(
             'genre' => $genre,
             'post' => $post,
