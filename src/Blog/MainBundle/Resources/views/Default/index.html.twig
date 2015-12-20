@@ -168,16 +168,26 @@
         <div class="clearfix"></div>
         <!-- Tags Widget End -->
         <!-- Advertisement start -->
-        <div class="widget">
+        <div class="widget" style="background-color: #ffffff;">
+            {#<script type="text/javascript">#}
+                {#google_ad_client = "ca-pub-5642576944854449";#}
+                {#google_ad_slot = "2274297417";#}
+                {#google_ad_width = 300;#}
+                {#google_ad_height = 600;#}
+            {#</script>#}
+            {#<!-- Skyscraper -->#}
+            {#<script type="text/javascript"#}
+                    {#src="//pagead2.googlesyndication.com/pagead/show_ads.js">#}
+            {#</script>#}
+            <div id="taboola-right-rail-thumbnails"></div>
             <script type="text/javascript">
-                google_ad_client = "ca-pub-5642576944854449";
-                google_ad_slot = "2274297417";
-                google_ad_width = 300;
-                google_ad_height = 600;
-            </script>
-            <!-- Skyscraper -->
-            <script type="text/javascript"
-                    src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+                window._taboola = window._taboola || [];
+                _taboola.push({
+                    mode: 'thumbnails-rr',
+                    container: 'taboola-right-rail-thumbnails',
+                    placement: 'Right Rail Thumbnails',
+                    target_type: 'mix'
+                });
             </script>
         </div>
         <div class="clearfix"></div>
