@@ -27,6 +27,9 @@ class PostController extends Controller
         }
         $pager = ($page * $perPage) - $perPage;
         $pageMax = ceil(count($blogbody)/$perPage);
+        $nextArticles = $recentPost = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage(1,12);
+        shuffle($nextArticles);
+        $nextArticle = $nextArticles[0];
         $messages = $post->getMessages();
         $entity = new Message;
         $form = $this->createForm(new MessageType(), $entity, array(
@@ -54,6 +57,7 @@ class PostController extends Controller
             'pager' => $pager,
             'pageMax' => $pageMax,
             'perPage' => $perPage,
+            'nextArticle' => $nextArticle,
         ));
     }
 
