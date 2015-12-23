@@ -14,7 +14,7 @@ class DefaultController extends Controller
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
-        $posts = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage($page,48);
+        $posts = $em->getRepository('BlogAdminBundle:Post')->findPostsByPage($page,17);
         $genres = $em->getRepository('BlogAdminBundle:Tag')->findAll();
         return $this->render('BlogMainBundle:Default:index.html.twig', array(
             'genres' => $genres,
