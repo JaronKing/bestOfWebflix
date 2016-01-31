@@ -1,5 +1,4 @@
 Best Of Webflix - Blogging Application and CMS
-Users Summer Note wyziwyg and users are able to login and comment on posts created.  There is a tagging system to help organize content and that is automatically linked to the front page.
 =============
 
 
@@ -14,6 +13,8 @@ How To Install
 
 About This Application
 =========================
+
+Users Summer Note wyziwyg and users are able to login and comment on posts created.  There is a tagging system to help organize content and that is automatically linked to the front page.
 
 A Symfony 2 project that includes Blogging CMS, User account creation and Blog post commenting.
 
