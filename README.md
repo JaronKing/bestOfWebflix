@@ -1,4 +1,5 @@
-jaronking.dev
+Best Of Webflix - Blogging Application and CMS
+Users Summer Note wyziwyg and users are able to login and comment on posts created.  There is a tagging system to help organize content and that is automatically linked to the front page.
 =============
 
 
