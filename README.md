@@ -1,5 +1,5 @@
 Best Of Webflix - Blogging Application and CMS
-Visit [BestOfWebflix.com link](https://www.BestOfWebflix.com)
+Visit [BestOfWebflix.com](http://www.BestOfWebflix.com)
 =============
 
 
